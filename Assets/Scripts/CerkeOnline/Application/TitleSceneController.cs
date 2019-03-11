@@ -19,6 +19,8 @@ namespace Azarashi.CerkeOnline.Application
 
             startOnlineButton.OnClickAsObservable().TakeUntilDestroy(this).Subscribe(OnStartOnlineButoon);
             startOfflineButton.OnClickAsObservable().TakeUntilDestroy(this).Subscribe(OnStartOfflineButoon);
+
+            startOnlineButton.interactable = false;
         }
 
         void OnStartOnlineButoon(Unit unit)
