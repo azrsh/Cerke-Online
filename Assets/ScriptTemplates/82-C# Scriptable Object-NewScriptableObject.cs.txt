@@ -1,0 +1,18 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+[CreateAssetMenu(menuName = "ScriptableObject/#NAME#")]
+public class #SCRIPTNAME# : ScriptableObject
+{
+    public static #SCRIPTNAME# Create()
+    {
+        return ScriptableObject.CreateInstance<#NAME#>();
+    }
+
+	//拡張性を阻害している場合はObject.Instantiateを直接利用してください
+	public static #SCRIPTNAME# Instantiate(#SCRIPTNAME# original)
+    {
+        return Object.Instantiate<#SCRIPTNAME#>(original);
+    }
+}
