@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UniRx;
-using Azarashi.CerkeOnline.Application;
+
 namespace Azarashi.CerkeOnline.Presentation.View
 {
     public class ColumnView : MonoBehaviour, IPointerClickHandler

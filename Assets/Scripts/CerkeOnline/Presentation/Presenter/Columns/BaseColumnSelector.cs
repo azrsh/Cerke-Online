@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using Azarashi.CerkeOnline.Domain.UseCase;
 
 namespace Azarashi.CerkeOnline.Presentation.Presenter.Columns
 {
@@ -7,10 +6,11 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.Columns
     {   
         readonly Vector2Int nonePosition = new Vector2Int(-1, -1);
         Vector2Int position = new Vector2Int(-1, -1);
-        
+        protected bool isLockSelecting = false;
+
         public void OnClickColumn(Vector2Int position)
         {
-            if (this.position == nonePosition)
+            if (isLockSelecting || this.position == nonePosition || position == nonePosition)
             {
                 this.position = position;
                 return;

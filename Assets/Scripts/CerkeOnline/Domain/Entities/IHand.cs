@@ -7,7 +7,8 @@ namespace Azarashi.CerkeOnline.Domain.Entities
     /// </summary>
     public interface IHand
     {
+        string Name { get; }
         int Score { get; }
-        bool IsSccess(IReadOnlyList<IPiece> peaces);
+        bool IsSccess(IReadOnlyList<IReadOnlyPiece> pieces);
     }
 }

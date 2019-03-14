@@ -17,7 +17,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
 
         public enum FirstOrSecond
         {
-            FirstMove, SecondMove
+            First, Second
         }
 
         public enum FieldEffect
@@ -27,6 +27,8 @@ namespace Azarashi.CerkeOnline.Domain.Entities
 
         public enum PieceName
         {
+            None         = -1,
+
             Felkana      = 0,
             Elmer        = 1,
             Gustuer      = 2,

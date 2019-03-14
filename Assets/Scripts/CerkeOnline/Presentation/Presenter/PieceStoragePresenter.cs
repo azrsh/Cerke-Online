@@ -16,7 +16,7 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter
         [SerializeField] Vector3 offset = default;
         [SerializeField] Vector3 placeInterval = default;
         [SerializeField] int lineLimit = default;
-        [SerializeField] Terminologies.FirstOrSecond firstOrSecond = Terminologies.FirstOrSecond.FirstMove; //TODO LocalPlayerに変える
+        [SerializeField] Terminologies.FirstOrSecond firstOrSecond = Terminologies.FirstOrSecond.First; //TODO LocalPlayerに変える
 
         IPlayer player;
         

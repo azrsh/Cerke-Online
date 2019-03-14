@@ -1,5 +1,6 @@
-﻿using UniRx;
-using UnityEngine;
+﻿using UnityEngine;
+using UniRx;
+using UniRx.Triggers;
 using Azarashi.CerkeOnline.Application;
 using Azarashi.CerkeOnline.Domain.Entities;
 using Azarashi.CerkeOnline.Domain.UseCase;
@@ -20,6 +21,9 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.Columns
         {   
             valueProvider = GetComponent<IValueInputProvider<int>>();
             GameController.Instance.Game.OnTurnChanged.TakeUntilDestroy(this).Subscribe(OnTurnChanged);
+            this.UpdateAsObservable().TakeUntilDestroy(this).Select(_ => valueProvider.IsRequestCompleted).DistinctUntilChanged().Subscribe(value => isLockSelecting = !value);
+
+            isLockSelecting = !valueProvider.IsRequestCompleted;
             OnTurnChanged(Unit.Default);
         }
 

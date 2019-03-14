@@ -4,6 +4,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
 {
     public class ConstantProvider : IValueInputProvider<int>
     {
+        public bool IsRequestCompleted { get { return true; } }
         readonly int value;
 
         public ConstantProvider(int value)

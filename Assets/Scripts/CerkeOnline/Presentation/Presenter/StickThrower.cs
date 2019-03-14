@@ -9,6 +9,8 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter
 {
     public class StickThrower : MonoBehaviour, IValueInputProvider<int>
     {
+        public bool IsRequestCompleted { get; private set; } = true;
+
         [SerializeField] Button throwStickButton = default;
 
         void Awake()
@@ -24,12 +26,15 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter
 
         public void RequestValue(Action<int> callback)
         {
+            IsRequestCompleted = false;
+
             Action<Unit> action = _ =>
             {
                 throwStickButton.gameObject.SetActive(false);
                 int number = Random.Range(1, 5);
                 Debug.Log("投げ棒の数 : " + number);
                 callback(number);
+                IsRequestCompleted = true;
             };
 
             throwStickButton.gameObject.SetActive(true);

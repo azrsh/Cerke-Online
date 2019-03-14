@@ -28,7 +28,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
 
         public OfficialRuleGame()
         {
-            CurrentTurn = Terminologies.FirstOrSecond.FirstMove;
+            CurrentTurn = Terminologies.FirstOrSecond.First;
             board = new Board(FirstPlayer, SecondPlayer);
         }
 
@@ -36,9 +36,9 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
         {
             switch (firstOrSecond)
             {
-            case Terminologies.FirstOrSecond.FirstMove:
+            case Terminologies.FirstOrSecond.First:
                 return firstPlayer;
-            case Terminologies.FirstOrSecond.SecondMove:
+            case Terminologies.FirstOrSecond.Second:
                 return secondPlayer;
             default:
                 return null;
@@ -49,11 +49,11 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
         {
             switch (CurrentTurn)
             {
-            case Terminologies.FirstOrSecond.FirstMove:
-                CurrentTurn = Terminologies.FirstOrSecond.SecondMove;
+            case Terminologies.FirstOrSecond.First:
+                CurrentTurn = Terminologies.FirstOrSecond.Second;
                 break;
-            case Terminologies.FirstOrSecond.SecondMove:
-                CurrentTurn = Terminologies.FirstOrSecond.FirstMove;
+            case Terminologies.FirstOrSecond.Second:
+                CurrentTurn = Terminologies.FirstOrSecond.First;
                 break;
             }
 
