@@ -4,6 +4,7 @@ using UniRx;
 using Azarashi.CerkeOnline.Application;
 using Azarashi.CerkeOnline.Domain.Entities;
 using Azarashi.CerkeOnline.Presentation.View;
+using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
 
 namespace Azarashi.CerkeOnline.Presentation.Presenter
 {
@@ -16,7 +17,7 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter
         [SerializeField] Vector3 offset = default;
         [SerializeField] Vector3 placeInterval = default;
         [SerializeField] int lineLimit = default;
-        [SerializeField] Terminologies.FirstOrSecond firstOrSecond = Terminologies.FirstOrSecond.First; //TODO LocalPlayerに変える
+        [SerializeField] FirstOrSecond firstOrSecond = FirstOrSecond.First; //TODO LocalPlayerに変える
 
         IPlayer player;
         

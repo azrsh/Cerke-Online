@@ -9,6 +9,9 @@ namespace Azarashi.CerkeOnline.Presentation.View
 {
     public class PieceView : MonoBehaviour
     {
+        readonly Vector3 PieceStrageScale = new Vector3(0.5f, 0.5f, 1f);
+        readonly Vector3 OnBoardScale = new Vector3(1.0f, 1.0f, 1.0f);
+
         [SerializeField] PieceMaterialsObject materials = default;
         IReadOnlyPiece piece;
         IBoard board;
@@ -38,8 +41,11 @@ namespace Azarashi.CerkeOnline.Presentation.View
         {   
             Vector2Int position = piece.Position;
             if (position == new Vector2Int(-1, -1))
+            {
+                transform.localScale = PieceStrageScale;
                 return;
-
+            }
+            
             //TODO マルチ対応
             float positionZ = transform.position.z;
             Vector3 columnPosition = columnMap[position.x, position.y];
@@ -48,6 +54,8 @@ namespace Azarashi.CerkeOnline.Presentation.View
             int pieceAttitude = GetPieceAttitude(piece);
             Quaternion quaternion = Quaternion.AngleAxis(pieceAttitude, Vector3.forward);
             transform.rotation = quaternion;
+
+            transform.localScale = OnBoardScale;
         }
 
         int GetPieceAttitude(IReadOnlyPiece piece)
@@ -57,7 +65,6 @@ namespace Azarashi.CerkeOnline.Presentation.View
             if(piece.Owner == GameController.Instance.Game.SecondPlayer)
                 return 180;
 
-            Debug.Log(piece.PieceName);
             return 90;
         }
     }
