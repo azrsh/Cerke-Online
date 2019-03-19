@@ -65,20 +65,33 @@ namespace Azarashi.CerkeOnline.Domain.Entities
             return false;
         }
 
-        public void SetOwner(IPlayer owner)
+        public virtual void SetOwner(IPlayer owner)
         {
             this.owner = owner;
         }
 
-        public void PickUpFromBoard()
+        public virtual bool PickUpFromBoard()
         {
+            if (!IsPickupable()) return false;
+
             position = new Vector2Int(-1, -1);
+            return true;
         }
 
         public void SetOnBoard(Vector2Int position)
         {
             if (this.position == new Vector2Int(-1, -1))
                 this.position = position;
+        }
+
+        public virtual bool IsOwner(IPlayer player)
+        {
+            return owner == player;
+        }
+
+        public virtual bool IsPickupable()
+        {
+            return true;
         }
     }
 }

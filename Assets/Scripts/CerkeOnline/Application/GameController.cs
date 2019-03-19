@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using Azarashi.CerkeOnline.Domain.Entities;
-using Azarashi.CerkeOnline.Domain.Entities.Official;
+using Azarashi.CerkeOnline.Domain.Entities.NoneRule;
 using Azarashi.CerkeOnline.Networking.Client;
 using Azarashi.CerkeOnline.Networking.Components;
 
@@ -49,7 +49,7 @@ namespace Azarashi.CerkeOnline.Application
 
         void NewGame()
         {
-            game = new OfficialRuleGame();
+            game = new NoneRuleGame();
         }
     }
 }

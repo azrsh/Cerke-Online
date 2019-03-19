@@ -13,7 +13,7 @@ namespace Azarashi.CerkeOnline.Data.DataStructure
 
         void OnValidate()
         {
-            if (prefabs.Length != Enum.GetNames(typeof(Terminologies.PieceName)).Length)
+            if (prefabs.Length != Enum.GetNames(typeof(Terminologies.PieceName)).Length - 1)
                 Debug.LogWarning("要素数が不正です.");
         }
     }

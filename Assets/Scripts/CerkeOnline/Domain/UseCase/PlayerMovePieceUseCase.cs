@@ -29,11 +29,11 @@ namespace Azarashi.CerkeOnline.Domain.UseCase
             board.MovePiece(startPosition, endPosition, player, inputProvider, OnPieceMoved);
         }
 
-        void OnPieceMoved(bool isSuccess, IPiece gottenPiece)
+        void OnPieceMoved(PieceMoveResult pieceMoveResult)
         {
-            player.GivePiece(gottenPiece);
-            if (!isSuccess) Debug.Log(" System > 駒の移動に失敗しました.");
-            if (isSuccess) game.OnTurnEnd();
+            player.GivePiece(pieceMoveResult.gottenPiece);
+            if (!pieceMoveResult.isSuccess) Debug.Log(" System > 駒の移動に失敗しました.");
+            if (pieceMoveResult.isTurnEnd) game.OnTurnEnd();
         }
     }
 }

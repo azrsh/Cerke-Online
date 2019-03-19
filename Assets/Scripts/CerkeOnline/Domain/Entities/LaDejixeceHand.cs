@@ -24,7 +24,12 @@ namespace Azarashi.CerkeOnline.Domain.Entities
             if (pieces.Count < pieceStacks.Count) return false;
 
             IEnumerable<PieceName> pieceNames = pieces.Select(piece => piece.PieceName);
-            return pieceStacks.All(stack => pieceNames.Count(pieceName => stack.PieceName == PieceName.None || pieceName == stack.PieceName) >= stack.StackCount);
+            UnityEngine.Color color = default;
+            return pieceStacks.All(stack =>
+            {
+                //if(color == default) 
+                return pieceNames.Count(pieceName => stack.PieceName == PieceName.None || pieceName == stack.PieceName) >= stack.StackCount;
+            });
         }
     }
 }

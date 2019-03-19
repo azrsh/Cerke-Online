@@ -45,8 +45,20 @@ namespace Azarashi.CerkeOnline.Presentation.View
             Vector3 columnPosition = columnMap[position.x, position.y];
             transform.position = new Vector3(columnPosition.x, columnPosition.y, positionZ);
 
-            Quaternion quaternion = Quaternion.AngleAxis(piece.Owner == GameController.Instance.Game.FirstPlayer ? 0 : 180, Vector3.forward);
+            int pieceAttitude = GetPieceAttitude(piece);
+            Quaternion quaternion = Quaternion.AngleAxis(pieceAttitude, Vector3.forward);
             transform.rotation = quaternion;
+        }
+
+        int GetPieceAttitude(IReadOnlyPiece piece)
+        {
+            if (piece.Owner == GameController.Instance.Game.FirstPlayer)
+                return 0;
+            if(piece.Owner == GameController.Instance.Game.SecondPlayer)
+                return 180;
+
+            Debug.Log(piece.PieceName);
+            return 90;
         }
     }
 }

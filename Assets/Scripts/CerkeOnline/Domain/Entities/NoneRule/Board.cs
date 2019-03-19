@@ -5,7 +5,7 @@ using Azarashi.Utilities.Array2D;
 using Azarashi.CerkeOnline.Domain.Entities.Official.Pieces;
 using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
 
-namespace Azarashi.CerkeOnline.Domain.Entities.Official
+namespace Azarashi.CerkeOnline.Domain.Entities.NoneRule
 {
     public class Board : IBoard
     {
@@ -22,7 +22,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
                 { new Terlsk(1, new Vector2Int(0,1), secondPlayer),  new Gustuer(1, new Vector2Int(1,1), secondPlayer),                                              null,  new Stistyst(1, new Vector2Int(3,1), secondPlayer),                                               null,  new Stistyst(0, new Vector2Int(5,1), secondPlayer),                                              null,  new Gustuer(1, new Vector2Int(7,1), secondPlayer),  new Terlsk(1, new Vector2Int(8,1), secondPlayer) },
                 {  new Elmer(0, new Vector2Int(0,2), secondPlayer),    new Elmer(1, new Vector2Int(1,2), secondPlayer),   new Elmer(0, new Vector2Int(2,2), secondPlayer),     new Elmer(1, new Vector2Int(3,2), secondPlayer),  new Felkana(1, new Vector2Int(4,2), secondPlayer),     new Elmer(1, new Vector2Int(5,2), secondPlayer),   new Elmer(0, new Vector2Int(6,2), secondPlayer),    new Elmer(1, new Vector2Int(7,2), secondPlayer),   new Elmer(0, new Vector2Int(8,2), secondPlayer) },
                 {                                             null,                                               null,                                              null,                                                null,                                               null,                                                null,                                              null,                                               null,                                              null },
-                {                                             null,                                               null,                                              null,                                                null,                                               null,                                                null,                                              null,                                               null,                                              null },
+                {                                             null,                                               null,                                              null,                                                null,              new Tam(0, new Vector2Int(4,4), null),                                                null,                                              null,                                               null,                                              null },
                 {                                             null,                                               null,                                              null,                                                null,                                               null,                                                null,                                              null,                                               null,                                              null },
                 {   new Elmer(0, new Vector2Int(0,6), firstPlayer),     new Elmer(1, new Vector2Int(1,6), firstPlayer),    new Elmer(0, new Vector2Int(2,6), firstPlayer),      new Elmer(1, new Vector2Int(3,6), firstPlayer),   new Felkana(0, new Vector2Int(4,6), firstPlayer),      new Elmer(1, new Vector2Int(5,6), firstPlayer),    new Elmer(0, new Vector2Int(6,6), firstPlayer),     new Elmer(1, new Vector2Int(7,6), firstPlayer),    new Elmer(0, new Vector2Int(8,6), firstPlayer) },
                 {  new Terlsk(0, new Vector2Int(0,7), firstPlayer),   new Gustuer(0, new Vector2Int(1,7), firstPlayer),                                              null,   new Stistyst(0, new Vector2Int(3,7), firstPlayer),                                               null,   new Stistyst(1, new Vector2Int(5,7), firstPlayer),                                              null,   new Gustuer(1, new Vector2Int(7,7), firstPlayer),   new Terlsk(1, new Vector2Int(8,7), firstPlayer) },
@@ -64,7 +64,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
             IPiece movingPiece = pieces.Read(startPosition);
             IPiece originalPiece = pieces.Read(endPosition);     //元からある駒の意味で使っているが, 英語があってるか不明.
             bool isTargetNull = movingPiece == null;
-            bool isOwner = !isTargetNull && movingPiece.Owner == player;
+            bool isOwner = !isTargetNull && movingPiece.IsOwner(player);
             bool isSameOwner = !isTargetNull && originalPiece != null && originalPiece.Owner == movingPiece.Owner;
             PieceMovement pieceMovement = PieceMovement.Default;
             bool isMoveable = !isTargetNull && movingPiece.TryToGetPieceMovement(endPosition, out pieceMovement);
@@ -72,8 +72,8 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
                 return;
 
             isLocked = true;
-            callback += (result) => { isLocked = false; }; 
-            PieceMoveAction pieceMoveAction = new PieceMoveAction(startPosition, endPosition, pieces, columns, valueProvider, pieceMovement, callback, () => onEveryValueChanged.OnNext(Unit.Default));
+            callback += (result) => { isLocked = false; };
+            Official.PieceMoveAction pieceMoveAction = new Official.PieceMoveAction(startPosition, endPosition, pieces, columns, new ConstantProvider(5), pieceMovement, callback, () => onEveryValueChanged.OnNext(Unit.Default));
             pieceMoveAction.StartMove();
         }
         

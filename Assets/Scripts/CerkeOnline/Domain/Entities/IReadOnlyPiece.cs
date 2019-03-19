@@ -42,5 +42,9 @@ namespace Azarashi.CerkeOnline.Domain.Entities
 
 
         bool TryToGetPieceMovement(Vector2Int position, out PieceMovement pieceMovement);
+
+        bool IsOwner(IPlayer player);
+
+        bool IsPickupable();
     }
 }

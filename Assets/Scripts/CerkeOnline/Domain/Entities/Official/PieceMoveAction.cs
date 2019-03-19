@@ -16,14 +16,14 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
         readonly IReadOnlyList<Vector2Int> relativePath;
         readonly IReadOnlyList<Vector2Int> worldPath;
         readonly PieceMovement pieceMovement;
-        readonly Action<bool, IPiece> callback;
+        readonly Action<PieceMoveResult> callback;
         readonly Action onPiecesChanged;
         bool surmounted = false;
 
         readonly Vector2Int startPosition;
 
         public PieceMoveAction(Vector2Int startPosition, Vector2Int endPosition, Vector2ArrayAccessor<IPiece> pieces, Vector2ArrayAccessor<FieldEffect> columns, 
-            IValueInputProvider<int> valueProvider, PieceMovement pieceMovement, Action<bool, IPiece> callback, Action onPiecesChanged)
+            IValueInputProvider<int> valueProvider, PieceMovement pieceMovement, Action<PieceMoveResult> callback, Action onPiecesChanged)
         {
             this.pieces = pieces;
             this.columns = columns;
@@ -47,7 +47,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
                 return null;
             
             IPiece gottenPiece = originalPiece;
-            gottenPiece.PickUpFromBoard();
+            if(!gottenPiece.PickUpFromBoard()) return null;
             gottenPiece.SetOwner(movingPiece.Owner);
             pieces.Write(endWorldPosition, null);
             return gottenPiece;
@@ -69,7 +69,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
             //移動先の駒を取る
             IPiece gottenPiece = PickUpPiece(movingPiece, endWorldPosition);
             ConfirmPiecePosition(movingPiece, startWorldPosition, endWorldPosition);
-            callback(true, gottenPiece);
+            callback(new PieceMoveResult(true, true, gottenPiece));
         }
 
         public void StartMove()
@@ -87,7 +87,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
                 if (index > 1)
                     LastMove(movingPiece, start, worldPath[index - 2]);
                 if (index == 1)
-                    callback(true, null);
+                    callback(new PieceMoveResult(true, true, null));
                 return;
             }
             if (index >= relativePath.Count)
@@ -121,7 +121,14 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
 
             if (piece != null)
             {
-                LastMove(movingPiece, start, worldPath[index]);
+                if (piece.IsPickupable())
+                {
+                    LastMove(movingPiece, start, worldPath[index]);
+                    return;
+                }
+
+                //取ることが出ない駒が移動ルート上にある場合は移動失敗として終了する
+                callback(new PieceMoveResult(isSuccess: false, isTurnEnd : false, gottenPiece : null));
                 return;
             }
 

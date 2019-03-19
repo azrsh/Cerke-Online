@@ -27,5 +27,10 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.Pieces
 
             return expansionPieceMovements;
         }
+
+        public override void SetOwner(IPlayer owner) { }
+        public override bool PickUpFromBoard() { return false; }
+        public override bool IsOwner(IPlayer player) { return true; }
+        public override bool IsPickupable() { return false; }
     }
 }
