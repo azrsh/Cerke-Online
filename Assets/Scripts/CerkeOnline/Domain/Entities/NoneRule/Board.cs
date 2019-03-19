@@ -1,7 +1,7 @@
 ﻿using System;
 using UniRx;
 using UnityEngine;
-using Azarashi.Utilities.Array2D;
+using Azarashi.Utilities.Collections;
 using Azarashi.CerkeOnline.Domain.Entities.Official.Pieces;
 using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
 

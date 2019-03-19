@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Azarashi.Utilities.Array2D
+namespace Azarashi.Utilities.Collections
 {
     public class Array2DSnipper<T>
     {

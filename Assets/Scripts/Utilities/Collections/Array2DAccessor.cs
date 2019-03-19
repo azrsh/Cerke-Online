@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Azarashi.Utilities.Array2D
+namespace Azarashi.Utilities.Collections
 {
     /// <summary>
     /// Vector2Intを利用して二次元配列にアクセスする. array[y, x].
@@ -9,8 +9,8 @@ namespace Azarashi.Utilities.Array2D
     public class Vector2ArrayAccessor<T>
     {
         readonly T[,] array;
-        public int Height { get{ return array.GetLength(0); } }
-        public int Width { get{ return array.GetLength(1); } }
+        public int Height { get { return array.GetLength(0); } }
+        public int Width { get { return array.GetLength(1); } }
 
         public Vector2ArrayAccessor(T[,] array)
         {

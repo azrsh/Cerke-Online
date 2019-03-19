@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UniRx;
-using Azarashi.Utilities.Array2D;
+using Azarashi.Utilities.Collections;
 using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.Official
