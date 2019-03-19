@@ -69,7 +69,10 @@ namespace Azarashi.CerkeOnline.Domain.Entities.NoneRule
             PieceMovement pieceMovement = PieceMovement.Default;
             bool isMoveable = !isTargetNull && movingPiece.TryToGetPieceMovement(endPosition, out pieceMovement);
             if (isTargetNull || !isOwner || isSameOwner || !isMoveable)
+            {
+                callback(new PieceMoveResult(false, false, null));
                 return;
+            }
 
             isLocked = true;
             callback += (result) => { isLocked = false; };

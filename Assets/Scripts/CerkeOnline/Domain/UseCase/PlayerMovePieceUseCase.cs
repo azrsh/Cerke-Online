@@ -25,6 +25,13 @@ namespace Azarashi.CerkeOnline.Domain.UseCase
             }
 
             IBoard board = game.Board;
+            if (board.GetPiece(startPosition) == null)
+            {
+                Debug.Log(" System > 駒が選択されていません.");
+                return;
+
+            }
+
             Debug.Log(" System > " + startPosition + " " + board.GetPiece(startPosition)?.PieceName.ToString() + "を" + endPosition + "へ移動");
             board.MovePiece(startPosition, endPosition, player, inputProvider, OnPieceMoved);
         }
