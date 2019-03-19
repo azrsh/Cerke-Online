@@ -36,6 +36,9 @@ namespace Azarashi.CerkeOnline.Application
         }
         IServerDelegate serverDelegate;
 
+        public ILogger SystemLogger => systemLogger;
+        readonly ILogger systemLogger = new Logger(new SystemLogHandler());
+
         private void Awake()
         {
             if (Instance != null)
@@ -45,6 +48,8 @@ namespace Azarashi.CerkeOnline.Application
             }
 
             Instance = this;
+
+            new Logger(Debug.unityLogger.logHandler).Log("nanndenannde");
         }
 
         void NewGame()

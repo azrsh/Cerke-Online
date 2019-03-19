@@ -20,7 +20,8 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.Commands
 
         public CommandResult Execute()
         {
-            new PlayerMovePieceUseCase(null, null, null);
+            //MovePieceUseCaseFactory.Create(,)
+            new PlayerMovePieceUseCase(null, null, null, null);
             return new CommandResult(true, "Move" + "[piece]" + " from " + startPosition + " to " + endPosition + "");
         }
     }
