@@ -30,7 +30,13 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.Commands
             commandInputField.gameObject.SetActive(false);
 
             ICommand command = factory.CreateInstance(value);
-            CommandResult result = command?.Execute();
+            if (command == null)
+            {
+                Application.GameController.Instance.SystemLogger.Log("Invalid Command");
+                return;
+            }
+
+            CommandResult result = command.Execute();
             Debug.Log("Command Executed : " + result?.message);
         }
 

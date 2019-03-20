@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
 using Azarashi.CerkeOnline.Domain.UseCase;
 
 namespace Azarashi.CerkeOnline.Presentation.Presenter.Commands
@@ -7,22 +8,23 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.Commands
     public class MoveCommand : ICommand
     {
         readonly Vector2Int startPosition;
+        readonly PieceName pieceName;
         readonly Vector2Int endPosition;
 
-        public MoveCommand(Vector2Int startPosition, Type pieceType, Vector2Int endPosition)
+        public MoveCommand(Vector2Int startPosition, PieceName pieceName, Vector2Int endPosition)
         {
-            //if (pieceType.GetInterface(nameof(IPiece)) == null)
-            //    throw new InvalidOperationException();
+            if (pieceName == PieceName.None)
+                throw new InvalidOperationException();
 
             this.startPosition = startPosition;
+            this.pieceName = pieceName;
             this.endPosition = endPosition;
         }
 
         public CommandResult Execute()
         {
-            //MovePieceUseCaseFactory.Create(,)
-            new PlayerMovePieceUseCase(null, null, null, null);
-            return new CommandResult(true, "Move" + "[piece]" + " from " + startPosition + " to " + endPosition + "");
+            MovePieceUseCaseFactory.Create(FirstOrSecond.First, null).RequestToMovePiece(startPosition, endPosition);
+            return new CommandResult(true, "Move " + pieceName.ToString() + " from " + startPosition + " to " + endPosition + ".");
         }
     }
 }

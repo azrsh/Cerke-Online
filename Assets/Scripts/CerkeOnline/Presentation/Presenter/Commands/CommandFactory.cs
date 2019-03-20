@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Linq;
 using UnityEngine;
 using Azarashi.CerkeOnline.Domain.Entities;
+using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
 
 namespace Azarashi.CerkeOnline.Presentation.Presenter.Commands
 {
@@ -13,7 +13,7 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.Commands
         {
             string[] words = value.Split(' ');
             CommandEnum commandEnum = CommandEnum.none;
-            Enum.TryParse(words[0], out commandEnum);
+            Enum.TryParse(words[0], true, out commandEnum);
             
             switch(commandEnum)
             {
@@ -40,9 +40,10 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.Commands
                 return null;
 
             Vector2Int startPosition = analyzer.GetPosition(words[1]);
-            string pieceName = words[2];
+            PieceName pieceName = PieceName.None;
+            Enum.TryParse(words[2], true, out pieceName);
             Vector2Int endPosition = analyzer.GetPosition(words[3]);
-            return new MoveCommand(startPosition, typeof(IPiece), endPosition);
+            return new MoveCommand(startPosition, pieceName, endPosition);
         }
 
         public ICommand CreateSetCommandInstance(string[] words)

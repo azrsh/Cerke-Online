@@ -9,7 +9,10 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.Commands
         public Vector2Int GetPosition(string word)
         {
             if (word.IndexOf('-') >= 0)
-                return new Vector2Int(NumberStringToInt(word.Split('-')[0]), NumberStringToInt(word.Split('-')[1]));
+            {
+                string[] xy = word.Split('-');
+                return new Vector2Int(NumberStringToInt(xy[0]), NumberStringToInt(xy[1]));
+            }
 
             Vector2Int result = new Vector2Int(-1, -1);
             result.x = EnumNameToInt<Terminologies.BoardRow>((name) => word.StartsWith(name));
@@ -22,7 +25,7 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.Commands
         {
             return words.Length == wordCount;
         }
-
+        
         int NumberStringToInt(string value, int exception = -1)
         {
             int result = exception;
@@ -36,7 +39,7 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.Commands
             foreach (string name in Enum.GetNames(typeof(T)))
             {
                 if (!compare(name)) continue;
-                return (int)Enum.Parse(typeof(T), name);
+                return (int)Enum.Parse(typeof(T), name, true);
             }
 
             return exception;

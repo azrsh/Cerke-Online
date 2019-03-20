@@ -48,8 +48,6 @@ namespace Azarashi.CerkeOnline.Application
             }
 
             Instance = this;
-
-            new Logger(Debug.unityLogger.logHandler).Log("nanndenannde");
         }
 
         void NewGame()
