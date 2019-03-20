@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UniRx;
 using Azarashi.CerkeOnline.Application;
 using Azarashi.CerkeOnline.Data.DataStructure;
@@ -7,7 +8,8 @@ using Azarashi.CerkeOnline.Domain.Entities;
 
 namespace Azarashi.CerkeOnline.Presentation.View
 {
-    public class PieceView : MonoBehaviour
+    [RequireComponent(typeof(Collider2D))]
+    public class PieceView : MonoBehaviour, IPointerClickHandler
     {
         readonly Vector3 PieceStrageScale = new Vector3(0.5f, 0.5f, 1f);
         readonly Vector3 OnBoardScale = new Vector3(1.0f, 1.0f, 1.0f);
@@ -17,6 +19,8 @@ namespace Azarashi.CerkeOnline.Presentation.View
         IBoard board;
         Vector3[,] columnMap = default;
 
+        Collider2D collider;
+
         void Start()
         {
             if (materials == default)
@@ -24,6 +28,9 @@ namespace Azarashi.CerkeOnline.Presentation.View
 
             board = GameController.Instance.Game.Board;
             board.OnEveruValueChanged.TakeUntilDestroy(this).Subscribe(UpdateView);
+
+            collider = GetComponent<Collider2D>();
+            collider.enabled = false;
         }
 
         public void Initialize(IReadOnlyPiece piece, Vector3[,] columnMap)
@@ -43,6 +50,7 @@ namespace Azarashi.CerkeOnline.Presentation.View
             if (position == new Vector2Int(-1, -1))
             {
                 transform.localScale = PieceStrageScale;
+                if (collider != null) collider.enabled = true;
                 return;
             }
             
@@ -56,6 +64,8 @@ namespace Azarashi.CerkeOnline.Presentation.View
             transform.rotation = quaternion;
 
             transform.localScale = OnBoardScale;
+
+            if (collider != null) collider.enabled = false;
         }
 
         int GetPieceAttitude(IReadOnlyPiece piece)
@@ -66,6 +76,11 @@ namespace Azarashi.CerkeOnline.Presentation.View
                 return 180;
 
             return 90;
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+
         }
     }
 }
