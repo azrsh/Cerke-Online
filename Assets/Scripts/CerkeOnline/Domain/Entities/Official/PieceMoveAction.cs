@@ -57,7 +57,6 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
         {
              movingPiece.MoveTo(endWorldPosition);
 
-            //SetPieceを利用すべき？
             pieces.Write(endWorldPosition, movingPiece);
             pieces.Write(startWorldPosition, null);
 

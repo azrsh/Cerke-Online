@@ -85,9 +85,10 @@ namespace Azarashi.CerkeOnline.Domain.Entities.NoneRule
             if (!IsOnBoard(position) || pieces.Read(position) != null)
                 return false;
 
-            if (piece.Position == new Vector2Int(-1, -1))
-                piece.SetOnBoard(position);
+            if (piece.Position != new Vector2Int(-1, -1))
+                return false;
 
+            piece.SetOnBoard(position);
             pieces.Write(position, piece);
             onEveryValueChanged.OnNext(Unit.Default);
             return true;
