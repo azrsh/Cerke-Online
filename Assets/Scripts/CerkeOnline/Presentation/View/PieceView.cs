@@ -19,7 +19,7 @@ namespace Azarashi.CerkeOnline.Presentation.View
         IBoard board;
         Vector3[,] columnMap = default;
 
-        Collider2D collider;
+        Collider2D pieceCollider;
 
         void Start()
         {
@@ -29,8 +29,8 @@ namespace Azarashi.CerkeOnline.Presentation.View
             board = GameController.Instance.Game.Board;
             board.OnEveruValueChanged.TakeUntilDestroy(this).Subscribe(UpdateView);
 
-            collider = GetComponent<Collider2D>();
-            collider.enabled = false;
+            pieceCollider = GetComponent<Collider2D>();
+            pieceCollider.enabled = false;
         }
 
         public void Initialize(IReadOnlyPiece piece, Vector3[,] columnMap)
@@ -50,7 +50,7 @@ namespace Azarashi.CerkeOnline.Presentation.View
             if (position == new Vector2Int(-1, -1))
             {
                 transform.localScale = PieceStrageScale;
-                if (collider != null) collider.enabled = true;
+                if (GetComponent<Collider>() != null) GetComponent<Collider>().enabled = true;
                 return;
             }
             
@@ -65,7 +65,7 @@ namespace Azarashi.CerkeOnline.Presentation.View
 
             transform.localScale = OnBoardScale;
 
-            if (collider != null) collider.enabled = false;
+            if (pieceCollider != null) pieceCollider.enabled = false;
         }
 
         int GetPieceAttitude(IReadOnlyPiece piece)
