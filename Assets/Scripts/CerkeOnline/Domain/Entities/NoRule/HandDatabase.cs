@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
 
-namespace Azarashi.CerkeOnline.Domain.Entities.NoneRule
+namespace Azarashi.CerkeOnline.Domain.Entities.NoRule
 {
     public class HandDatabase : IHandDatabase
     {

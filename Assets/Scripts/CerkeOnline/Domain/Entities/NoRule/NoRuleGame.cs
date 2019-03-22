@@ -1,9 +1,9 @@
 ﻿using System;
 using UniRx;
 
-namespace Azarashi.CerkeOnline.Domain.Entities.NoneRule
+namespace Azarashi.CerkeOnline.Domain.Entities.NoRule
 {
-    public class NoneRuleGame : IGame
+    public class NoRuleGame : IGame
     {
         public IBoard Board => board;
         readonly IBoard board;
@@ -26,7 +26,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.NoneRule
             }
         }
 
-        public NoneRuleGame()
+        public NoRuleGame()
         {
             CurrentTurn = Terminologies.FirstOrSecond.First;
             board = new Board(FirstPlayer, SecondPlayer);

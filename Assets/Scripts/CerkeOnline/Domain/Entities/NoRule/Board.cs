@@ -5,7 +5,7 @@ using Azarashi.Utilities.Collections;
 using Azarashi.CerkeOnline.Domain.Entities.Official.Pieces;
 using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
 
-namespace Azarashi.CerkeOnline.Domain.Entities.NoneRule
+namespace Azarashi.CerkeOnline.Domain.Entities.NoRule
 {
     public class Board : IBoard
     {
