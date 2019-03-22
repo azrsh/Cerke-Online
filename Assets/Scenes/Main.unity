@@ -2342,6 +2342,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pieceViewPrefabs: {fileID: 11400000, guid: 8108e51f10ad48e488c233a8865c1784, type: 2}
+  onPieceClicked:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 809378392}
+        m_MethodName: OnStoredPieceClicked
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: Azarashi.CerkeOnline.Presentation.Presenter.IReadOnlyPieceUnityEvent,
+      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!114 &607789514
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2745,6 +2761,7 @@ GameObject:
   - component: {fileID: 809378390}
   - component: {fileID: 809378389}
   - component: {fileID: 809378391}
+  - component: {fileID: 809378392}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -2827,6 +2844,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 255296969582634499afdb08cad3579f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &809378392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 809378385}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d97b83d8bac244943bb51cb5f60f6272, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &836835885
@@ -4036,6 +4065,17 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 809378391}
+        m_MethodName: OnClickColumn
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 809378392}
         m_MethodName: OnClickColumn
         m_Mode: 0
         m_Arguments:

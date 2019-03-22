@@ -10,6 +10,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
 {
     public class PieceMoveAction
     {
+        readonly IPlayer player;
         readonly Vector2ArrayAccessor<IPiece> pieces;
         readonly Vector2ArrayAccessor<FieldEffect> columns;
         readonly IValueInputProvider<int> valueProvider;
@@ -22,18 +23,19 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
 
         readonly Vector2Int startPosition;
 
-        public PieceMoveAction(Vector2Int startPosition, Vector2Int endPosition, Vector2ArrayAccessor<IPiece> pieces, Vector2ArrayAccessor<FieldEffect> columns, 
+        public PieceMoveAction(IPlayer player,Vector2Int startPosition, Vector2Int endPosition, Vector2ArrayAccessor<IPiece> pieces, Vector2ArrayAccessor<FieldEffect> columns, 
             IValueInputProvider<int> valueProvider, PieceMovement pieceMovement, Action<PieceMoveResult> callback, Action onPiecesChanged)
         {
-            this.pieces = pieces;
-            this.columns = columns;
-            this.valueProvider = valueProvider;
+            this.player = player ?? throw new ArgumentNullException();
+            this.pieces = pieces ?? throw new ArgumentNullException();
+            this.columns = columns ?? throw new ArgumentNullException();
+            this.valueProvider = valueProvider ?? throw new ArgumentNullException();
 
             this.startPosition = startPosition;
-            bool isLocalPlayer = pieces.Read(startPosition).Owner == Application.GameController.Instance.Game.FirstPlayer;
-            Vector2Int relativePosition = (endPosition - startPosition) * (isLocalPlayer ? -1 : 1);
+            bool isLocalPlayersPiece = pieces.Read(startPosition).Owner == Application.GameController.Instance.Game.FirstPlayer;
+            Vector2Int relativePosition = (endPosition - startPosition) * (isLocalPlayersPiece ? -1 : 1);
             this.relativePath = pieceMovement.GetPath(relativePosition);
-            this.worldPath = relativePath.Select(value => startPosition + value * (isLocalPlayer ? -1 : 1)).ToArray();
+            this.worldPath = relativePath.Select(value => startPosition + value * (isLocalPlayersPiece ? -1 : 1)).ToArray();
 
             this.pieceMovement = pieceMovement;
             this.callback = callback;
@@ -43,12 +45,12 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
         IPiece PickUpPiece(IPiece movingPiece,Vector2Int endWorldPosition)
         {
             IPiece originalPiece = pieces.Read(endWorldPosition);     //命名が分かりにくい. 行先にある駒.
-            if (originalPiece == null || originalPiece.Owner == movingPiece.Owner)
+            if (originalPiece == null || originalPiece.Owner == player)
                 return null;
             
             IPiece gottenPiece = originalPiece;
             if(!gottenPiece.PickUpFromBoard()) return null;
-            gottenPiece.SetOwner(movingPiece.Owner);
+            gottenPiece.SetOwner(player);
             pieces.Write(endWorldPosition, null);
             return gottenPiece;
         }

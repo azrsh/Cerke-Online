@@ -24,5 +24,10 @@ namespace Azarashi.CerkeOnline.Domain.Entities
                 onPieceStrageCahnged.OnNext(Unit.Default);
             }
         }
+
+        public void PickOut(IPiece piece)
+        {
+            pieces.Remove(piece);
+        }
     }
 }

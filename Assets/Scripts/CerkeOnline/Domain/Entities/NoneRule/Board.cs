@@ -76,7 +76,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.NoneRule
 
             isLocked = true;
             callback += (result) => { isLocked = false; };
-            Official.PieceMoveAction pieceMoveAction = new Official.PieceMoveAction(startPosition, endPosition, pieces, columns, new ConstantProvider(5), pieceMovement, callback, () => onEveryValueChanged.OnNext(Unit.Default));
+            Official.PieceMoveAction pieceMoveAction = new Official.PieceMoveAction(player, startPosition, endPosition, pieces, columns, new ConstantProvider(5), pieceMovement, callback, () => onEveryValueChanged.OnNext(Unit.Default));
             pieceMoveAction.StartMove();
         }
         

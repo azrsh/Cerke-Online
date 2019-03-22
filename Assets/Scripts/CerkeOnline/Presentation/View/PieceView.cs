@@ -11,15 +11,18 @@ namespace Azarashi.CerkeOnline.Presentation.View
     [RequireComponent(typeof(Collider2D))]
     public class PieceView : MonoBehaviour, IPointerClickHandler
     {
-        readonly Vector3 PieceStrageScale = new Vector3(0.5f, 0.5f, 1f);
-        readonly Vector3 OnBoardScale = new Vector3(1.0f, 1.0f, 1.0f);
+        static readonly Vector3 PieceStrageScale = new Vector3(0.5f, 0.5f, 1f);
+        static readonly Vector3 OnBoardScale = new Vector3(1.0f, 1.0f, 1.0f);
 
         [SerializeField] PieceMaterialsObject materials = default;
         IReadOnlyPiece piece;
         IBoard board;
         Vector3[,] columnMap = default;
-
+        
         Collider2D pieceCollider;
+
+        readonly Subject<IReadOnlyPiece> onClicked = new Subject<IReadOnlyPiece>();
+        public IObservable<IReadOnlyPiece> OnClicked => onClicked;
 
         void Start()
         {
@@ -27,6 +30,9 @@ namespace Azarashi.CerkeOnline.Presentation.View
                 throw new NullReferenceException();
 
             board = GameController.Instance.Game.Board;
+            //IObservable<Vector2Int> observable = board.OnEveruValueChanged.TakeUntilDestroy(this).Select(_ => piece.Position).DistinctUntilChanged();
+            //observable.Where(position => position != new Vector2Int(-1, -1)).Subscribe(UpdateOnBoard);
+            //observable.Where(position => position == new Vector2Int(-1, -1)).Subscribe(UpdateOutOfBoard);
             board.OnEveruValueChanged.TakeUntilDestroy(this).Subscribe(UpdateView);
 
             pieceCollider = GetComponent<Collider2D>();
@@ -49,11 +55,15 @@ namespace Azarashi.CerkeOnline.Presentation.View
             Vector2Int position = piece.Position;
             if (position == new Vector2Int(-1, -1))
             {
-                transform.localScale = PieceStrageScale;
-                if (GetComponent<Collider>() != null) GetComponent<Collider>().enabled = true;
+                UpdateOutOfBoard(position);
                 return;
             }
-            
+
+            UpdateOnBoard(position);
+        }
+
+        void UpdateOnBoard(Vector2Int position)
+        {
             //TODO マルチ対応
             float positionZ = transform.position.z;
             Vector3 columnPosition = columnMap[position.x, position.y];
@@ -68,6 +78,12 @@ namespace Azarashi.CerkeOnline.Presentation.View
             if (pieceCollider != null) pieceCollider.enabled = false;
         }
 
+        void UpdateOutOfBoard(Vector2Int position)
+        {
+            transform.localScale = PieceStrageScale;
+            if (pieceCollider != null) pieceCollider.enabled = true;
+        }
+
         int GetPieceAttitude(IReadOnlyPiece piece)
         {
             if (piece.Owner == GameController.Instance.Game.FirstPlayer)
@@ -80,7 +96,7 @@ namespace Azarashi.CerkeOnline.Presentation.View
 
         public void OnPointerClick(PointerEventData eventData)
         {
-
+            onClicked.OnNext(piece);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UniRx;
 using Azarashi.CerkeOnline.Application;
 using Azarashi.CerkeOnline.Data.DataStructure;
 using Azarashi.CerkeOnline.Domain.Entities;
@@ -10,6 +11,8 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter
     public class PiecePresenter : MonoBehaviour
     {
         [SerializeField] PiecePrefabsObject pieceViewPrefabs = default;
+        [SerializeField] IReadOnlyPieceUnityEvent onPieceClicked = default;
+
         readonly Dictionary<IReadOnlyPiece, PieceView> database = new Dictionary<IReadOnlyPiece, PieceView>();
         public IReadOnlyDictionary<IReadOnlyPiece, PieceView> ViewDatabese => database;
 
@@ -36,7 +39,10 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter
 
             PieceView pieceViewComponent = pieceViewObject.GetComponent<PieceView>();
             pieceViewComponent.Initialize(piece, columnMap);
+            pieceViewComponent.OnClicked.TakeUntilDestroy(this).Subscribe(onPieceClicked.Invoke);
             database.Add(piece, pieceViewComponent);
         }
     }
+
+    [System.Serializable] public class IReadOnlyPieceUnityEvent : UnityEngine.Events.UnityEvent<IReadOnlyPiece> { }
 }
