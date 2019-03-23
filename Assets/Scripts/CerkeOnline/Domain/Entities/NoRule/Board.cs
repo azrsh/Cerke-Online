@@ -14,6 +14,9 @@ namespace Azarashi.CerkeOnline.Domain.Entities.NoRule
         public IObservable<Unit> OnEveruValueChanged => onEveryValueChanged;
         readonly Subject<Unit> onEveryValueChanged = new Subject<Unit>();
 
+        //これ、Boardが保持すべき情報ではない
+        readonly OperationStatus operationStatus = new OperationStatus();
+
         public Board(IPlayer firstPlayer, IPlayer secondPlayer)
         {
             IPiece[,] pieces = new IPiece[,]
@@ -74,9 +77,32 @@ namespace Azarashi.CerkeOnline.Domain.Entities.NoRule
                 return;
             }
 
+            //1ターンに複数回動作する駒のためのロジック
+            if (movingPiece == operationStatus.PreviousPiece)
+            {
+                operationStatus.AddCount();
+            }
+            else
+            {
+                if (operationStatus.PreviousPiece != null)
+                {
+                    callback(new PieceMoveResult(false, false, null));
+                    return;
+                }
+                else
+                {
+                    operationStatus.Reset(movingPiece);
+                }
+            }
+            bool isTurnEnd = operationStatus.Count >= movingPiece.NumberOfMoves;
+            if (isTurnEnd)
+                operationStatus.Reset(null);
+            
+
             isLocked = true;
             callback += (result) => { isLocked = false; };
-            Official.PieceMoveAction pieceMoveAction = new Official.PieceMoveAction(player, startPosition, endPosition, pieces, columns, new ConstantProvider(5), pieceMovement, callback, () => onEveryValueChanged.OnNext(Unit.Default));
+            Official.PieceMoveAction pieceMoveAction = 
+                new Official.PieceMoveAction(player, startPosition, endPosition, pieces, columns, new ConstantProvider(5), pieceMovement, callback, () => onEveryValueChanged.OnNext(Unit.Default), isTurnEnd);
             pieceMoveAction.StartMove();
         }
         

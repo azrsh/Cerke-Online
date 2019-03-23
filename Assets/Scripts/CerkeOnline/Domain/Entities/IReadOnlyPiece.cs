@@ -40,6 +40,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         /// <returns></returns>
         int Color { get; }
 
+        int NumberOfMoves { get; }
 
         bool TryToGetPieceMovement(Vector2Int position, out PieceMovement pieceMovement);
 

@@ -17,6 +17,8 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         public int Color => color;
         readonly int color;
 
+        public virtual int NumberOfMoves { get { return 1; } }
+
         /// <summary>
         /// 初期座標を設定する.
         /// </summary>

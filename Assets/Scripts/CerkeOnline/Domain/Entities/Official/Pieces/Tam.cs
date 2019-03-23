@@ -5,6 +5,8 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.Pieces
 {
     public class Tam : DefaultPiece
     {
+        public override int NumberOfMoves => 2;
+
         readonly PieceMovement[] normalPieceMovements;
         readonly PieceMovement[] expansionPieceMovements;
 

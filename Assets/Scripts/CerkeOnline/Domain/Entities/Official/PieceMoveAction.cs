@@ -19,12 +19,13 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
         readonly PieceMovement pieceMovement;
         readonly Action<PieceMoveResult> callback;
         readonly Action onPiecesChanged;
+        readonly bool isTurnEnd;
         bool surmounted = false;
 
         readonly Vector2Int startPosition;
 
         public PieceMoveAction(IPlayer player,Vector2Int startPosition, Vector2Int endPosition, Vector2ArrayAccessor<IPiece> pieces, Vector2ArrayAccessor<FieldEffect> columns, 
-            IValueInputProvider<int> valueProvider, PieceMovement pieceMovement, Action<PieceMoveResult> callback, Action onPiecesChanged)
+            IValueInputProvider<int> valueProvider, PieceMovement pieceMovement, Action<PieceMoveResult> callback, Action onPiecesChanged, bool isTurnEnd)
         {
             this.player = player ?? throw new ArgumentNullException();
             this.pieces = pieces ?? throw new ArgumentNullException();
@@ -40,6 +41,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
             this.pieceMovement = pieceMovement;
             this.callback = callback;
             this.onPiecesChanged = onPiecesChanged;
+            this.isTurnEnd = isTurnEnd;
         }
 
         IPiece PickUpPiece(IPiece movingPiece,Vector2Int endWorldPosition)
@@ -70,7 +72,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
             //移動先の駒を取る
             IPiece gottenPiece = PickUpPiece(movingPiece, endWorldPosition);
             ConfirmPiecePosition(movingPiece, startWorldPosition, endWorldPosition);
-            callback(new PieceMoveResult(true, true, gottenPiece));
+            callback(new PieceMoveResult(true, isTurnEnd, gottenPiece));
         }
 
         public void StartMove()
@@ -88,7 +90,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
                 if (index > 1)
                     LastMove(movingPiece, start, worldPath[index - 2]);
                 if (index == 1)
-                    callback(new PieceMoveResult(true, true, null));
+                    callback(new PieceMoveResult(true, isTurnEnd, null));
                 return;
             }
             if (index >= relativePath.Count)
