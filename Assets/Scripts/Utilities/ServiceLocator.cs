@@ -49,4 +49,12 @@ namespace Azarashi.Utilities
             return (T)instance;
         }
     }
+
+    /// <summary>
+    /// 同じようなものをだれか作ってるはずなので, 将来的には置き換える.
+    /// </summary>
+    public interface IServiceLocatorProvider
+    {
+        IServiceLocator ServiceLocator { get; }
+    }
 }
