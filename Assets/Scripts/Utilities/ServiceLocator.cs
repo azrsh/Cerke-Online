@@ -6,7 +6,7 @@ namespace Azarashi.Utilities
     /// <summary>
     /// 同じようなものをだれか作ってるはずなので, 将来的には置き換える.
     /// </summary>
-    public interface IReadOnlyContainer
+    public interface IReadOnlyServiceLocator
     {
         T GetInstance<T>();
     }
@@ -14,7 +14,7 @@ namespace Azarashi.Utilities
     /// <summary>
     /// 同じようなものをだれか作ってるはずなので, 将来的には置き換える.
     /// </summary>
-    public interface IContainer : IReadOnlyContainer
+    public interface IServiceLocator : IReadOnlyServiceLocator
     {
         bool SetInstance<T>(T instance, bool forceAdd = false);
     }
@@ -22,11 +22,11 @@ namespace Azarashi.Utilities
     /// <summary>
     /// 同じようなものをだれか作ってるはずなので, 将来的には置き換える.
     /// </summary>
-    public class Container : IContainer
+    public class DefaultServiceLocator : IServiceLocator
     {
         readonly Dictionary<Type, object> dictionary;
 
-        public Container(int initialCapacity = 16)
+        public DefaultServiceLocator(int initialCapacity = 16)
         {
             dictionary = new Dictionary<Type, object>(initialCapacity);
         }
