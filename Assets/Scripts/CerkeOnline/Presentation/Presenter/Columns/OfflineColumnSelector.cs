@@ -20,9 +20,14 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.Columns
         protected void Start()
         {   
             valueProvider = GetComponent<IValueInputProvider<int>>();
-            GameController.Instance.Game.OnTurnChanged.TakeUntilDestroy(this).Subscribe(OnTurnChanged);
             this.UpdateAsObservable().TakeUntilDestroy(this).Select(_ => valueProvider.IsRequestCompleted).DistinctUntilChanged().Subscribe(value => isLockSelecting = !value);
 
+            GameController.Instance.OnGameReset.TakeUntilDestroy(this).Subscribe(OnGameReset);
+        }
+
+        void OnGameReset(IGame game)
+        {
+            game.OnTurnChanged.TakeUntilDestroy(this).Subscribe(OnTurnChanged);
             isLockSelecting = !valueProvider.IsRequestCompleted;
             OnTurnChanged(Unit.Default);
         }

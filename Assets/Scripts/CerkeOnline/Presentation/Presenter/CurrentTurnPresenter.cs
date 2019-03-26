@@ -13,7 +13,11 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter
 
         void Start()
         {
-            IGame game = GameController.Instance.Game;
+            GameController.Instance.OnGameReset.TakeUntilDestroy(this).Subscribe(OnGameReset);
+        }
+
+        void OnGameReset(IGame game)
+        {
             this.UpdateAsObservable().TakeUntilDestroy(this)
                 .Select(_ => game.CurrentTurn).DistinctUntilChanged().Subscribe(value =>
                 {

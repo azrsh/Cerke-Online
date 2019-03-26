@@ -1,8 +1,12 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+using UniRx;
+using Azarashi.Utilities;
 using Azarashi.CerkeOnline.Domain.Entities;
 using Azarashi.CerkeOnline.Domain.Entities.NoRule;
 using Azarashi.CerkeOnline.Networking.Client;
 using Azarashi.CerkeOnline.Networking.Components;
+using Azarashi.CerkeOnline.Data.DataStructure;
 
 namespace Azarashi.CerkeOnline.Application
 {
@@ -10,16 +14,13 @@ namespace Azarashi.CerkeOnline.Application
     {
         public static GameController Instance { get; private set; }
 
-        [SerializeField] GameControllerInitilizeObject initilizeObject = default;
+        public IObservable<IGame> OnGameReset => onGameReset;
+        readonly Subject<IGame> onGameReset = new Subject<IGame>();
 
-        public IGame Game
-        {
-            get
-            {
-                if (game == null) NewGame();
-                return game;
-            }
-        }
+        [SerializeField] GameControllerInitilizeObject initilizeObject = default;
+        [SerializeField] PreGameSettings preGameSettings = default;
+
+        public IGame Game => game;
         IGame game = null;
 
         public IServerDelegate ServerDelegate
@@ -39,6 +40,9 @@ namespace Azarashi.CerkeOnline.Application
         public ILogger SystemLogger => systemLogger;
         readonly ILogger systemLogger = new Logger(new SystemLogHandler());
 
+        public IReadOnlyServiceLocator ServiceLocator => serviceLocator;
+        readonly IServiceLocator serviceLocator = new DefaultServiceLocator();
+
         private void Awake()
         {
             if (Instance != null)
@@ -50,9 +54,15 @@ namespace Azarashi.CerkeOnline.Application
             Instance = this;
         }
 
+        private void Start()
+        {
+            preGameSettings.OnStartButtonClicked.TakeUntilDestroy(this).Subscribe(_ => NewGame());
+        }
+
         void NewGame()
         {
             game = new NoRuleGame();
+            onGameReset.OnNext(game);
         }
     }
 }

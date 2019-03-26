@@ -20,10 +20,15 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter
         [SerializeField] FirstOrSecond firstOrSecond = FirstOrSecond.First; //TODO LocalPlayerに変える
 
         IPlayer player;
-        
+
         private void Start()
         {
-            player = GameController.Instance.Game.GetPlayer(firstOrSecond);
+            GameController.Instance.OnGameReset.TakeUntilDestroy(this).Subscribe(OnGameReset);
+        }
+
+        void OnGameReset(IGame game)
+        {
+            player = game.GetPlayer(firstOrSecond);
             player.OnPieceStrageCahnged.TakeUntilDestroy(this).Subscribe(OnPieceStrageChanged);
         }
 
