@@ -12,7 +12,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
     {
         readonly IPlayer player;
         readonly Vector2ArrayAccessor<IPiece> pieces;
-        readonly Vector2ArrayAccessor<FieldEffect> columns;
+        readonly IFieldEffectChecker fieldEffectChecker;
         readonly IValueInputProvider<int> valueProvider;
         readonly IReadOnlyList<Vector2Int> relativePath;
         readonly IReadOnlyList<Vector2Int> worldPath;
@@ -24,12 +24,12 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
 
         readonly Vector2Int startPosition;
 
-        public PieceMoveAction(IPlayer player,Vector2Int startPosition, Vector2Int endPosition, Vector2ArrayAccessor<IPiece> pieces, Vector2ArrayAccessor<FieldEffect> columns, 
+        public PieceMoveAction(IPlayer player,Vector2Int startPosition, Vector2Int endPosition, Vector2ArrayAccessor<IPiece> pieces, IFieldEffectChecker fieldEffectChecker, 
             IValueInputProvider<int> valueProvider, PieceMovement pieceMovement, Action<PieceMoveResult> callback, Action onPiecesChanged, bool isTurnEnd)
         {
             this.player = player ?? throw new ArgumentNullException();
             this.pieces = pieces ?? throw new ArgumentNullException();
-            this.columns = columns ?? throw new ArgumentNullException();
+            this.fieldEffectChecker = fieldEffectChecker ?? throw new ArgumentNullException();
             this.valueProvider = valueProvider ?? throw new ArgumentNullException();
 
             this.startPosition = startPosition;
@@ -102,8 +102,8 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
             IPiece piece = pieces.Read(worldPath[index]);
 
             //入水判定の必要があるか
-            bool isInWater = (index > 0 && IsInWater(worldPath[index - 1])) || (index == 0 && IsInWater(start));
-            bool isIntoWater = IsInWater(worldPath[index]);
+            bool isInWater = (index > 0 && fieldEffectChecker.IsInTammua(worldPath[index - 1])) || (index == 0 && fieldEffectChecker.IsInTammua(start));
+            bool isIntoWater = fieldEffectChecker.IsInTammua(worldPath[index]);
             if (!isInWater && isIntoWater)
             {
                 if (index > 0) ConfirmPiecePosition(movingPiece, start, worldPath[index - 1]);
@@ -136,11 +136,6 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
             }
 
             Move(true, start, ++index);
-        }
-
-        bool IsInWater(Vector2Int position)
-        {
-            return columns.Read(position) == FieldEffect.Tammua || columns.Read(position) == FieldEffect.Tanzo;
         }
     }
 }

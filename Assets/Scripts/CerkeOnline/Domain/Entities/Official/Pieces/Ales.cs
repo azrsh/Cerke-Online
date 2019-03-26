@@ -8,7 +8,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.Pieces
         readonly PieceMovement[] normalPieceMovements;
         readonly PieceMovement[] expansionPieceMovements;
 
-        public Ales(int color, Vector2Int position, IPlayer owner) : base(position, color, owner, Terminologies.PieceName.Ales)
+        public Ales(int color, Vector2Int position, IPlayer owner, IExpandingMoveFieldChecker fieldChecker) : base(position, color, owner, Terminologies.PieceName.Ales, fieldChecker)
         {
             normalPieceMovements = new PieceMovement[]
             {

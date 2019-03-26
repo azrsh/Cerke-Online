@@ -5,19 +5,19 @@ namespace Azarashi.CerkeOnline.Domain.Entities
 {
     public abstract class DefaultPiece : IPiece
     {
+        //駒の情報
         public IPlayer Owner => owner;
         IPlayer owner;
-
         public Terminologies.PieceName PieceName => pieceName;
         readonly Terminologies.PieceName pieceName;
-
         public Vector2Int Position => position;
         Vector2Int position;
-
         public int Color => color;
         readonly int color;
-
         public virtual int NumberOfMoves { get { return 1; } }
+
+        //外部へのアクセス
+        readonly IExpandingMoveFieldChecker fieldChecker;
 
         /// <summary>
         /// 初期座標を設定する.
@@ -25,12 +25,13 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         /// <param name="position"></param>
         /// <param name="normalPieceMovements"></param>
         /// <param name="expansionPieceMovements"></param>
-        public DefaultPiece(Vector2Int position, int color, IPlayer owner, Terminologies.PieceName pieceName)
+        public DefaultPiece(Vector2Int position, int color, IPlayer owner, Terminologies.PieceName pieceName, IExpandingMoveFieldChecker fieldChecker)
         {
             this.pieceName = pieceName;
             this.position = position;
             this.color = color;
             this.owner = owner;
+            this.fieldChecker = fieldChecker;
         }
 
         public abstract IReadOnlyList<PieceMovement> GetMoveablePosition(bool isExpanded = false);
@@ -50,7 +51,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
 
         public bool TryToGetPieceMovement(Vector2Int position, out PieceMovement pieceMovement)
         {
-            bool isExpanded = false;//this.position == imperialArea;
+            bool isExpanded = fieldChecker != null && fieldChecker.IsExpandedMoveField(position);
             bool isLocalPlayer = Owner == Application.GameController.Instance.Game.FirstPlayer;//仮の条件
             Vector2Int relativePosition = position - this.position;
             if (isLocalPlayer) relativePosition *= -1;                                          //逆にしたい（!isLocalPlayerのとき-1をかける）

@@ -10,7 +10,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.NoRule
     public class Board : IBoard
     {
         readonly Vector2ArrayAccessor<IPiece> pieces;
-        readonly Vector2ArrayAccessor<FieldEffect> columns;
+        readonly Official.IFieldEffectChecker fieldChecker;
         public IObservable<Unit> OnEveruValueChanged => onEveryValueChanged;
         readonly Subject<Unit> onEveryValueChanged = new Subject<Unit>();
 
@@ -19,19 +19,8 @@ namespace Azarashi.CerkeOnline.Domain.Entities.NoRule
 
         public Board(IPlayer firstPlayer, IPlayer secondPlayer)
         {
-            IPiece[,] pieces = new IPiece[,]
-            {
-                {    new Kua(0, new Vector2Int(0,0), secondPlayer),    new Dodor(0, new Vector2Int(1,0), secondPlayer),  new Vadyrd(0, new Vector2Int(2,0), secondPlayer),    new Varxle(0, new Vector2Int(3,0), secondPlayer),     new Ales(1, new Vector2Int(4,0), secondPlayer),    new Varxle(1, new Vector2Int(5,0), secondPlayer),  new Vadyrd(1, new Vector2Int(6,0), secondPlayer),    new Dodor(1, new Vector2Int(7,0), secondPlayer),     new Kua(1, new Vector2Int(8,0), secondPlayer) },
-                { new Terlsk(1, new Vector2Int(0,1), secondPlayer),  new Gustuer(1, new Vector2Int(1,1), secondPlayer),                                              null,  new Stistyst(1, new Vector2Int(3,1), secondPlayer),                                               null,  new Stistyst(0, new Vector2Int(5,1), secondPlayer),                                              null,  new Gustuer(1, new Vector2Int(7,1), secondPlayer),  new Terlsk(1, new Vector2Int(8,1), secondPlayer) },
-                {  new Elmer(0, new Vector2Int(0,2), secondPlayer),    new Elmer(1, new Vector2Int(1,2), secondPlayer),   new Elmer(0, new Vector2Int(2,2), secondPlayer),     new Elmer(1, new Vector2Int(3,2), secondPlayer),  new Felkana(1, new Vector2Int(4,2), secondPlayer),     new Elmer(1, new Vector2Int(5,2), secondPlayer),   new Elmer(0, new Vector2Int(6,2), secondPlayer),    new Elmer(1, new Vector2Int(7,2), secondPlayer),   new Elmer(0, new Vector2Int(8,2), secondPlayer) },
-                {                                             null,                                               null,                                              null,                                                null,                                               null,                                                null,                                              null,                                               null,                                              null },
-                {                                             null,                                               null,                                              null,                                                null,              new Tam(0, new Vector2Int(4,4), null),                                                null,                                              null,                                               null,                                              null },
-                {                                             null,                                               null,                                              null,                                                null,                                               null,                                                null,                                              null,                                               null,                                              null },
-                {   new Elmer(0, new Vector2Int(0,6), firstPlayer),     new Elmer(1, new Vector2Int(1,6), firstPlayer),    new Elmer(0, new Vector2Int(2,6), firstPlayer),      new Elmer(1, new Vector2Int(3,6), firstPlayer),   new Felkana(0, new Vector2Int(4,6), firstPlayer),      new Elmer(1, new Vector2Int(5,6), firstPlayer),    new Elmer(0, new Vector2Int(6,6), firstPlayer),     new Elmer(1, new Vector2Int(7,6), firstPlayer),    new Elmer(0, new Vector2Int(8,6), firstPlayer) },
-                {  new Terlsk(0, new Vector2Int(0,7), firstPlayer),   new Gustuer(0, new Vector2Int(1,7), firstPlayer),                                              null,   new Stistyst(0, new Vector2Int(3,7), firstPlayer),                                               null,   new Stistyst(1, new Vector2Int(5,7), firstPlayer),                                              null,   new Gustuer(1, new Vector2Int(7,7), firstPlayer),   new Terlsk(1, new Vector2Int(8,7), firstPlayer) },
-                {     new Kua(1, new Vector2Int(0,8), firstPlayer),     new Dodor(1, new Vector2Int(1,8), firstPlayer),   new Vadyrd(1, new Vector2Int(2,8), firstPlayer),     new Varxle(1, new Vector2Int(3,8), firstPlayer),      new Ales(0, new Vector2Int(4,8), firstPlayer),     new Varxle(0, new Vector2Int(5,8), firstPlayer),   new Vadyrd(0, new Vector2Int(6,8), firstPlayer),     new Dodor(0, new Vector2Int(7,8), firstPlayer),      new Kua(0, new Vector2Int(8,8), firstPlayer) }
-            };
-            this.pieces = new Vector2ArrayAccessor<IPiece>(pieces);
+            IPiece tam = new Tam(0, new Vector2Int(4, 4), null, null); //fieldEffectCheckerに渡すため別途生成
+
             FieldEffect[,] columns = new FieldEffect[,]
             {
                 { FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal },
@@ -44,7 +33,22 @@ namespace Azarashi.CerkeOnline.Domain.Entities.NoRule
                 { FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal },
                 { FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal },
             };
-            this.columns = new Vector2ArrayAccessor<FieldEffect>(columns);
+            fieldChecker = new Official.FieldEffectChecker(new Vector2ArrayAccessor<FieldEffect>(columns), tam);
+
+            IPiece[,] pieces = new IPiece[,]
+            {
+                {    new Kua(0, new Vector2Int(0,0), secondPlayer, fieldChecker),    new Dodor(0, new Vector2Int(1,0), secondPlayer, fieldChecker),  new Vadyrd(0, new Vector2Int(2,0), secondPlayer, fieldChecker),    new Varxle(0, new Vector2Int(3,0), secondPlayer, fieldChecker),     new Ales(1, new Vector2Int(4,0), secondPlayer, fieldChecker),    new Varxle(1, new Vector2Int(5,0), secondPlayer, fieldChecker),  new Vadyrd(1, new Vector2Int(6,0), secondPlayer, fieldChecker),    new Dodor(1, new Vector2Int(7,0), secondPlayer, fieldChecker),     new Kua(1, new Vector2Int(8,0), secondPlayer, fieldChecker) },
+                { new Terlsk(1, new Vector2Int(0,1), secondPlayer, fieldChecker),  new Gustuer(1, new Vector2Int(1,1), secondPlayer, fieldChecker),                                                            null,  new Stistyst(1, new Vector2Int(3,1), secondPlayer, fieldChecker),                                                             null,  new Stistyst(0, new Vector2Int(5,1), secondPlayer, fieldChecker),                                                            null,  new Gustuer(1, new Vector2Int(7,1), secondPlayer, fieldChecker),  new Terlsk(1, new Vector2Int(8,1), secondPlayer, fieldChecker) },
+                {  new Elmer(0, new Vector2Int(0,2), secondPlayer, fieldChecker),    new Elmer(1, new Vector2Int(1,2), secondPlayer, fieldChecker),   new Elmer(0, new Vector2Int(2,2), secondPlayer, fieldChecker),     new Elmer(1, new Vector2Int(3,2), secondPlayer, fieldChecker),  new Felkana(1, new Vector2Int(4,2), secondPlayer, fieldChecker),     new Elmer(1, new Vector2Int(5,2), secondPlayer, fieldChecker),   new Elmer(0, new Vector2Int(6,2), secondPlayer, fieldChecker),    new Elmer(1, new Vector2Int(7,2), secondPlayer, fieldChecker),   new Elmer(0, new Vector2Int(8,2), secondPlayer, fieldChecker) },
+                {                                                           null,                                                             null,                                                            null,                                                              null,                                                             null,                                                              null,                                                            null,                                                             null,                                                            null },
+                {                                                           null,                                                             null,                                                            null,                                                              null,                                                              tam,                                                              null,                                                            null,                                                             null,                                                            null },
+                {                                                           null,                                                             null,                                                            null,                                                              null,                                                             null,                                                              null,                                                            null,                                                             null,                                                            null },
+                {   new Elmer(0, new Vector2Int(0,6), firstPlayer, fieldChecker),     new Elmer(1, new Vector2Int(1,6), firstPlayer, fieldChecker),    new Elmer(0, new Vector2Int(2,6), firstPlayer, fieldChecker),      new Elmer(1, new Vector2Int(3,6), firstPlayer, fieldChecker),   new Felkana(0, new Vector2Int(4,6), firstPlayer, fieldChecker),      new Elmer(1, new Vector2Int(5,6), firstPlayer, fieldChecker),    new Elmer(0, new Vector2Int(6,6), firstPlayer, fieldChecker),     new Elmer(1, new Vector2Int(7,6), firstPlayer, fieldChecker),    new Elmer(0, new Vector2Int(8,6), firstPlayer, fieldChecker) },
+                {  new Terlsk(0, new Vector2Int(0,7), firstPlayer, fieldChecker),   new Gustuer(0, new Vector2Int(1,7), firstPlayer, fieldChecker),                                                            null,   new Stistyst(0, new Vector2Int(3,7), firstPlayer, fieldChecker),                                                             null,   new Stistyst(1, new Vector2Int(5,7), firstPlayer, fieldChecker),                                                            null,   new Gustuer(1, new Vector2Int(7,7), firstPlayer, fieldChecker),   new Terlsk(1, new Vector2Int(8,7), firstPlayer, fieldChecker) },
+                {     new Kua(1, new Vector2Int(0,8), firstPlayer, fieldChecker),     new Dodor(1, new Vector2Int(1,8), firstPlayer, fieldChecker),   new Vadyrd(1, new Vector2Int(2,8), firstPlayer, fieldChecker),     new Varxle(1, new Vector2Int(3,8), firstPlayer, fieldChecker),      new Ales(0, new Vector2Int(4,8), firstPlayer, fieldChecker),     new Varxle(0, new Vector2Int(5,8), firstPlayer, fieldChecker),   new Vadyrd(0, new Vector2Int(6,8), firstPlayer, fieldChecker),     new Dodor(0, new Vector2Int(7,8), firstPlayer, fieldChecker),      new Kua(0, new Vector2Int(8,8), firstPlayer, fieldChecker) }
+            };
+            this.pieces = new Vector2ArrayAccessor<IPiece>(pieces);
+
             onEveryValueChanged.OnNext(Unit.Default);
         }
 
@@ -102,7 +106,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.NoRule
             isLocked = true;
             callback += (result) => { isLocked = false; };
             Official.PieceMoveAction pieceMoveAction = 
-                new Official.PieceMoveAction(player, startPosition, endPosition, pieces, columns, new ConstantProvider(5), pieceMovement, callback, () => onEveryValueChanged.OnNext(Unit.Default), isTurnEnd);
+                new Official.PieceMoveAction(player, startPosition, endPosition, pieces, fieldChecker, new ConstantProvider(5), pieceMovement, callback, () => onEveryValueChanged.OnNext(Unit.Default), isTurnEnd);
             pieceMoveAction.StartMove();
         }
         
@@ -123,11 +127,6 @@ namespace Azarashi.CerkeOnline.Domain.Entities.NoRule
         bool IsOnBoard(Vector2Int position)
         {
             return position.x >= 0 && position.y >= 0 && position.x < pieces.Width && position.y < pieces.Height;
-        }
-
-        bool IsInWater(Vector2Int position)
-        {
-            return columns.Read(position) == FieldEffect.Tammua || columns.Read(position) == FieldEffect.Tanzo;
         }
     }
 }

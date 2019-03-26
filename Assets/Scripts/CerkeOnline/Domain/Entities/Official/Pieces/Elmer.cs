@@ -9,7 +9,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.Pieces
         protected readonly PieceMovement[] normalPieceMovements;
         protected readonly PieceMovement[] expansionPieceMovements;
 
-        public Elmer(int color, Vector2Int position, IPlayer owner) : base(position, color, owner, Terminologies.PieceName.Elmer)
+        public Elmer(int color, Vector2Int position, IPlayer owner, IExpandingMoveFieldChecker fieldChecker) : base(position, color, owner, Terminologies.PieceName.Elmer, fieldChecker)
         {
             normalPieceMovements = new PieceMovement[]
             {
