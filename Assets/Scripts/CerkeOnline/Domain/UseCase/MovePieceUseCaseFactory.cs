@@ -9,6 +9,8 @@ namespace Azarashi.CerkeOnline.Domain.UseCase
         public static IMovePieceUseCase Create(FirstOrSecond firstOrSecond, IValueInputProvider<int> valueProvider)
         {
             var game = GameController.Instance.Game;
+            if (game == null) return null;
+
             var player = game.GetPlayer(firstOrSecond);
             var logger = GameController.Instance.SystemLogger;
             return new PlayerMovePieceUseCase(game, player, valueProvider, logger);
