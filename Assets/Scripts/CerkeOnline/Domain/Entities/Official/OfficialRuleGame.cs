@@ -13,13 +13,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
         public IObservable<Unit> OnTurnChanged => onTurnChanged;
         readonly Subject<Unit> onTurnChanged = new Subject<Unit>();
 
-        public IPlayer CurrentPlayer
-        {
-            get
-            {
-                return GetPlayer(CurrentTurn);
-            }
-        }
+        public IPlayer CurrentPlayer => GetPlayer(CurrentTurn);
 
         public OfficialRuleGame(Terminologies.Encampment firstPlayerEncampment)
         {

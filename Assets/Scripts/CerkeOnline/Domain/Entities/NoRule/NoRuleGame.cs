@@ -13,14 +13,8 @@ namespace Azarashi.CerkeOnline.Domain.Entities.NoRule
         public IObservable<Unit> OnTurnChanged => onTurnChanged;
         readonly Subject<Unit> onTurnChanged = new Subject<Unit>();
 
-        public IPlayer CurrentPlayer
-        {
-            get
-            {
-                return GetPlayer(CurrentTurn);
-            }
-        }
-        
+        public IPlayer CurrentPlayer => GetPlayer(CurrentTurn);
+
         public NoRuleGame(Terminologies.Encampment firstPlayerEncampment)
         {
             FirstPlayer = new Player(firstPlayerEncampment);

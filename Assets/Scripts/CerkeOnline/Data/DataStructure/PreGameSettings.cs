@@ -15,9 +15,6 @@ namespace Azarashi.CerkeOnline.Data.DataStructure
         public FirstOrSecond firstOrSecond;
         public bool isZeroDistanceMovementPermitted;
 
-        public void OnStartButton()
-        {
-            onStartButtonClicked.OnNext(Unit.Default);
-        }
+        public void OnStartButton() => onStartButtonClicked.OnNext(Unit.Default);
     }
 }
