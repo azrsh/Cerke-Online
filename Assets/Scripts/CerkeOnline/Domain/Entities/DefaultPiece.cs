@@ -6,14 +6,10 @@ namespace Azarashi.CerkeOnline.Domain.Entities
     public abstract class DefaultPiece : IPiece
     {
         //駒の情報
-        public IPlayer Owner => owner;
-        IPlayer owner;
-        public Terminologies.PieceName PieceName => pieceName;
-        readonly Terminologies.PieceName pieceName;
-        public Vector2Int Position => position;
-        Vector2Int position;
-        public int Color => color;
-        readonly int color;
+        public IPlayer Owner { get; private set; }
+        public Terminologies.PieceName PieceName { get; }
+        public Vector2Int Position { get; private set; }
+        public int Color { get; }
         public virtual int NumberOfMoves { get { return 1; } }
 
         //外部へのアクセス
@@ -27,10 +23,10 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         /// <param name="expansionPieceMovements"></param>
         public DefaultPiece(Vector2Int position, int color, IPlayer owner, Terminologies.PieceName pieceName, IExpandingMoveFieldChecker fieldChecker)
         {
-            this.pieceName = pieceName;
-            this.position = position;
-            this.color = color;
-            this.owner = owner;
+            this.PieceName = pieceName;
+            this.Position = position;
+            this.Color = color;
+            this.Owner = owner;
             this.fieldChecker = fieldChecker;
         }
 
@@ -39,7 +35,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         public bool MoveTo(Vector2Int position)
         {
             if (!IsMoveable(position)) return false;
-            this.position = position;
+            this.Position = position;
             return true;
         }
 
@@ -53,7 +49,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         {
             bool isExpanded = fieldChecker != null && fieldChecker.IsExpandedMoveField(position);
             bool isFrontPlayer = Owner != null && Owner.Encampment == Terminologies.Encampment.Front;//仮の条件
-            Vector2Int relativePosition = position - this.position;
+            Vector2Int relativePosition = position - this.Position;
             if (isFrontPlayer) relativePosition *= -1;                                          //逆にしたい（!isLocalPlayerのとき-1をかける）
             foreach (PieceMovement moveable in GetMoveablePosition(isExpanded))
             {
@@ -70,26 +66,26 @@ namespace Azarashi.CerkeOnline.Domain.Entities
 
         public virtual void SetOwner(IPlayer owner)
         {
-            this.owner = owner;
+            this.Owner = owner;
         }
 
         public virtual bool PickUpFromBoard()
         {
             if (!IsPickupable()) return false;
 
-            position = new Vector2Int(-1, -1);
+            Position = new Vector2Int(-1, -1);
             return true;
         }
 
         public void SetOnBoard(Vector2Int position)
         {
-            if (this.position == new Vector2Int(-1, -1))
-                this.position = position;
+            if (this.Position == new Vector2Int(-1, -1))
+                this.Position = position;
         }
 
         public virtual bool IsOwner(IPlayer player)
         {
-            return owner == player;
+            return Owner == player;
         }
 
         public virtual bool IsPickupable()

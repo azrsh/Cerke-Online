@@ -5,11 +5,8 @@ namespace Azarashi.CerkeOnline.Domain.Entities.NoRule
 {
     public class NoRuleGame : IGame
     {
-        public IBoard Board => board;
-        readonly IBoard board;
-
+        public IBoard Board { get; }
         public Terminologies.FirstOrSecond CurrentTurn { get; private set; }
-
         public IPlayer FirstPlayer { get; }
         public IPlayer SecondPlayer { get; }
         
@@ -32,7 +29,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.NoRule
 
             var frontPlayer = GetPlayer(Terminologies.Encampment.Front);
             var backPlayer = GetPlayer(Terminologies.Encampment.Back);
-            board = new Board(frontPlayer, backPlayer);
+            Board = new Board(frontPlayer, backPlayer);
         }
 
         public IPlayer GetPlayer(Terminologies.FirstOrSecond firstOrSecond)

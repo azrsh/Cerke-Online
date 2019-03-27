@@ -3,7 +3,6 @@ using UnityEngine;
 using UniRx;
 using Azarashi.Utilities;
 using Azarashi.CerkeOnline.Domain.Entities;
-using Azarashi.CerkeOnline.Domain.Entities.NoRule;
 using Azarashi.CerkeOnline.Networking.Client;
 using Azarashi.CerkeOnline.Networking.Components;
 using Azarashi.CerkeOnline.Data.DataStructure;
@@ -20,8 +19,7 @@ namespace Azarashi.CerkeOnline.Application
         [SerializeField] GameControllerInitilizeObject initilizeObject = default;
         [SerializeField] PreGameSettings preGameSettings = default;
 
-        public IGame Game => game;
-        IGame game = null;
+        public IGame Game { get; private set; } = null;
 
         public IServerDelegate ServerDelegate
         {
@@ -37,8 +35,7 @@ namespace Azarashi.CerkeOnline.Application
         }
         IServerDelegate serverDelegate;
 
-        public ILogger SystemLogger => systemLogger;
-        readonly ILogger systemLogger = new Logger(new SystemLogHandler());
+        public ILogger SystemLogger { get; } = new Logger(new SystemLogHandler());
 
         public IReadOnlyServiceLocator ServiceLocator => serviceLocator;
         readonly IServiceLocator serviceLocator = new DefaultServiceLocator();
@@ -65,8 +62,8 @@ namespace Azarashi.CerkeOnline.Application
         {
             preGameSettings.rulesetId = 0;
             var ruleset = rulesetList.GetRuleset(preGameSettings.rulesetId);
-            game = ruleset.CreateGameInstance((Terminologies.Encampment)preGameSettings.firstOrSecond);
-            onGameReset.OnNext(game);
+            Game = ruleset.CreateGameInstance((Terminologies.Encampment)preGameSettings.firstOrSecond);
+            onGameReset.OnNext(Game);
         }
     }
 }
