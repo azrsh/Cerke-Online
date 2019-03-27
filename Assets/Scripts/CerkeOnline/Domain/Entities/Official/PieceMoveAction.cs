@@ -27,16 +27,17 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
         public PieceMoveAction(IPlayer player,Vector2Int startPosition, Vector2Int endPosition, Vector2ArrayAccessor<IPiece> pieces, IFieldEffectChecker fieldEffectChecker, 
             IValueInputProvider<int> valueProvider, PieceMovement pieceMovement, Action<PieceMoveResult> callback, Action onPiecesChanged, bool isTurnEnd)
         {
-            this.player = player ?? throw new ArgumentNullException();
-            this.pieces = pieces ?? throw new ArgumentNullException();
-            this.fieldEffectChecker = fieldEffectChecker ?? throw new ArgumentNullException();
-            this.valueProvider = valueProvider ?? throw new ArgumentNullException();
+            this.player = player ?? throw new ArgumentNullException("駒を操作するプレイヤーを指定してください.");
+            this.pieces = pieces ?? throw new ArgumentNullException("盤面の情報を入力してください.");
+            this.fieldEffectChecker = fieldEffectChecker ?? throw new ArgumentNullException("フィールド効果の情報を入力してください.");
+            this.valueProvider = valueProvider ?? throw new ArgumentNullException("投げ棒の値を提供するインスタンスを指定してください.");
 
             this.startPosition = startPosition;
-            bool isLocalPlayersPiece = pieces.Read(startPosition).Owner == Application.GameController.Instance.Game.FirstPlayer;
-            Vector2Int relativePosition = (endPosition - startPosition) * (isLocalPlayersPiece ? -1 : 1);
-            this.relativePath = pieceMovement.GetPath(relativePosition);
-            this.worldPath = relativePath.Select(value => startPosition + value * (isLocalPlayersPiece ? -1 : 1)).ToArray();
+            bool isFrontPlayersPiece = pieces.Read(startPosition).Owner != null && pieces.Read(startPosition).Owner.Encampment == Encampment.Front;
+            Debug.Log(isFrontPlayersPiece);
+            Vector2Int relativePosition = (endPosition - startPosition) * (isFrontPlayersPiece ? -1 : 1);
+            this.relativePath = pieceMovement.GetPath(relativePosition) ?? throw new ArgumentException("移動不可能な移動先が指定されました.");
+            this.worldPath = relativePath.Select(value => startPosition + value * (isFrontPlayersPiece ? -1 : 1)).ToArray();
 
             this.pieceMovement = pieceMovement;
             this.callback = callback;

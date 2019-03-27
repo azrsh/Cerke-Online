@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UniRx;
+using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
 
 namespace Azarashi.CerkeOnline.Domain.Entities
 {
@@ -10,6 +11,13 @@ namespace Azarashi.CerkeOnline.Domain.Entities
 
         public IObservable<Unit> OnPieceStrageCahnged => onPieceStrageCahnged;
         readonly Subject<Unit> onPieceStrageCahnged = new Subject<Unit>();
+
+        public Encampment Encampment { get; }
+
+        public Player(Encampment encampment)
+        {
+            Encampment = encampment;
+        }
 
         public IReadOnlyList<IReadOnlyPiece> GetPieceList()
         {

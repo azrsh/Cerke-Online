@@ -86,12 +86,18 @@ namespace Azarashi.CerkeOnline.Presentation.View
 
         int GetPieceAttitude(IReadOnlyPiece piece)
         {
-            if (piece.Owner == GameController.Instance.Game.FirstPlayer)
-                return 0;
-            if(piece.Owner == GameController.Instance.Game.SecondPlayer)
-                return 180;
+            var owner = piece.Owner;
+            if (owner == null) return -90;
 
-            return 90;
+            switch (owner.Encampment)
+            {
+            case Terminologies.Encampment.Front:
+                return 0;
+            case Terminologies.Encampment.Back:
+                return 180;
+            }
+
+            return -90;
         }
 
         public void OnPointerClick(PointerEventData eventData)

@@ -15,9 +15,20 @@ namespace Azarashi.CerkeOnline.Domain.Entities
             A = 0, E = 1, I = 2, U = 3, O = 4, Y = 5, AI = 6, AU = 7, IA = 8
         }
 
+        /// <summary>
+        /// 先攻後攻を区別する.
+        /// </summary>
         public enum FirstOrSecond
         {
             First, Second
+        }
+
+        /// <summary>
+        /// 陣地の手前と奥を区別する. 盤上座標のy成分が大きいほうを手前, 小さいほうを奥とする.
+        /// </summary>
+        public enum Encampment
+        {
+            Front, Back
         }
 
         public enum FieldEffect
@@ -53,5 +64,31 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         public const string Varxle       = "将";
         public const string Ales         = "王";
         public const string Tam          = "皇";
+
+        public static FirstOrSecond GetReversal(FirstOrSecond firstOrSecond)
+        {
+            switch (firstOrSecond)
+            {
+            case FirstOrSecond.First:
+                return FirstOrSecond.Second;
+            case FirstOrSecond.Second:
+                return FirstOrSecond.First;
+            default:
+                throw new System.ArgumentException("値が無効です.");
+            }
+        }
+
+        public static Encampment GetReversal(Encampment encampment)
+        {
+            switch (encampment)
+            {
+            case Encampment.Front:
+                return Encampment.Back;
+            case Encampment.Back:
+                return Encampment.Front;
+            default:
+                throw new System.ArgumentException("値が無効です.");
+            }
+        }
     }
 }

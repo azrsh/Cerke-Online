@@ -10,10 +10,8 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
 
         public Terminologies.FirstOrSecond CurrentTurn { get; private set; }
 
-        public IPlayer FirstPlayer => firstPlayer;
-        readonly IPlayer firstPlayer = new Player();
-        public IPlayer SecondPlayer => secondPlayer;
-        readonly IPlayer secondPlayer = new Player();
+        public IPlayer FirstPlayer { get; }
+        public IPlayer SecondPlayer { get; }
 
         public IObservable<Unit> OnTurnChanged => onTurnChanged;
         readonly Subject<Unit> onTurnChanged = new Subject<Unit>();
@@ -26,10 +24,15 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
             }
         }
 
-        public OfficialRuleGame()
+        public OfficialRuleGame(Terminologies.Encampment firstPlayerEncampment)
         {
+            FirstPlayer = new Player(firstPlayerEncampment);
+            SecondPlayer = new Player(Terminologies.GetReversal(firstPlayerEncampment));
             CurrentTurn = Terminologies.FirstOrSecond.First;
-            board = new Board(FirstPlayer, SecondPlayer);
+        
+            var frontPlayer = GetPlayer(Terminologies.Encampment.Front);
+            var backPlayer = GetPlayer(Terminologies.Encampment.Back);
+            board = new Board(frontPlayer, backPlayer);
         }
 
         public IPlayer GetPlayer(Terminologies.FirstOrSecond firstOrSecond)
@@ -37,12 +40,19 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
             switch (firstOrSecond)
             {
             case Terminologies.FirstOrSecond.First:
-                return firstPlayer;
+                return FirstPlayer;
             case Terminologies.FirstOrSecond.Second:
-                return secondPlayer;
+                return SecondPlayer;
             default:
                 return null;
             }
+        }
+
+        public IPlayer GetPlayer(Terminologies.Encampment encampment)
+        {
+            if (FirstPlayer.Encampment == encampment) return FirstPlayer;
+            if (SecondPlayer.Encampment == encampment) return SecondPlayer;
+            return null;
         }
 
         public void OnTurnEnd()

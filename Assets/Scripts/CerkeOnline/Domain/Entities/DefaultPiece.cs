@@ -52,9 +52,9 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         public bool TryToGetPieceMovement(Vector2Int position, out PieceMovement pieceMovement)
         {
             bool isExpanded = fieldChecker != null && fieldChecker.IsExpandedMoveField(position);
-            bool isLocalPlayer = Owner == Application.GameController.Instance.Game.FirstPlayer;//仮の条件
+            bool isFrontPlayer = Owner != null && Owner.Encampment == Terminologies.Encampment.Front;//仮の条件
             Vector2Int relativePosition = position - this.position;
-            if (isLocalPlayer) relativePosition *= -1;                                          //逆にしたい（!isLocalPlayerのとき-1をかける）
+            if (isFrontPlayer) relativePosition *= -1;                                          //逆にしたい（!isLocalPlayerのとき-1をかける）
             foreach (PieceMovement moveable in GetMoveablePosition(isExpanded))
             {
                 if (moveable.IsMoveable(relativePosition))

@@ -33,8 +33,11 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.UI
             firstOrSecondSelectionView.OnDropDownChanged.TakeUntilDestroy(this).Subscribe(value => preGameSettings.firstOrSecond = (FirstOrSecond)value);
 
             ZeroDistanceMovementPermissionToggle.OnValueChangedAsObservable().TakeUntilDestroy(this).Subscribe(value => preGameSettings.isZeroDistanceMovementPermitted = value);
-            startButton.OnClickAsObservable().TakeUntilDestroy(this).Subscribe(_ => preGameSettings.OnStartButton());
-            preGameSettings.OnStartButtonClicked.TakeUntilDestroy(this).Subscribe(_ => Destroy(gameObject));
+            startButton.OnClickAsObservable().TakeUntilDestroy(this).Subscribe(_ => 
+            {
+                preGameSettings.OnStartButton();
+                Destroy(gameObject);
+            });
         }
     }
 }

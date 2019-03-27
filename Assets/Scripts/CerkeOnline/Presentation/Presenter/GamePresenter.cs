@@ -14,8 +14,8 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter
 
         void Start()
         {
-            IGame game = new OfficialRuleGame();
-            scoreUseCase = new ScoreUseCase(game.FirstPlayer, null);
+            //IGame game = new OfficialRuleGame();
+            //scoreUseCase = new ScoreUseCase(game.FirstPlayer, null);
         }
 
         void Update()

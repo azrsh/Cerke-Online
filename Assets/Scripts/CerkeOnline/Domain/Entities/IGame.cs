@@ -11,6 +11,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         IPlayer SecondPlayer { get; }
         IPlayer CurrentPlayer { get; }
         IPlayer GetPlayer(Terminologies.FirstOrSecond firstOrSecond);
+        IPlayer GetPlayer(Terminologies.Encampment encampment);
         IObservable<Unit> OnTurnChanged { get; }
         void OnTurnEnd();
     }

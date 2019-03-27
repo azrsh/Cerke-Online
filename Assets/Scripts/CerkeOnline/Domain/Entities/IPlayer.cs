@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using UniRx;
+using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
 
 namespace Azarashi.CerkeOnline.Domain.Entities
 {
     public interface IPlayer
     {
+        Encampment Encampment { get; }
+
         /// <summary>
         /// Playerが盤外に所持している駒が変更されたとき呼ばれる.
         /// </summary>

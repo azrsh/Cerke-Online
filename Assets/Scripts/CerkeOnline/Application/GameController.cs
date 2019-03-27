@@ -54,6 +54,8 @@ namespace Azarashi.CerkeOnline.Application
             Instance = this;
         }
 
+        readonly RulesetList rulesetList = new RulesetList();
+
         private void Start()
         {
             preGameSettings.OnStartButtonClicked.TakeUntilDestroy(this).Subscribe(_ => NewGame());
@@ -61,7 +63,9 @@ namespace Azarashi.CerkeOnline.Application
 
         void NewGame()
         {
-            game = new NoRuleGame();
+            preGameSettings.rulesetId = 0;
+            var ruleset = rulesetList.GetRuleset(preGameSettings.rulesetId);
+            game = ruleset.CreateGameInstance((Terminologies.Encampment)preGameSettings.firstOrSecond);
             onGameReset.OnNext(game);
         }
     }
