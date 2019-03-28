@@ -6,13 +6,15 @@ namespace Azarashi.CerkeOnline.Application
     public struct Ruleset
     {
         public readonly int id;
-        public readonly string rulesetName;
+        public readonly string name;
+        public readonly string description;
         readonly IGameInstanceFactory factory;
 
-        public Ruleset(int id, string rulesetName, IGameInstanceFactory factory)
+        public Ruleset(int id, string name, string description, IGameInstanceFactory factory)
         {   
             this.id = id;
-            this.rulesetName = rulesetName ?? throw new ArgumentNullException();
+            this.name = name ?? throw new ArgumentNullException();
+            this.description = description ?? throw new ArgumentNullException();
             this.factory = factory ?? throw new ArgumentNullException();
         }
 

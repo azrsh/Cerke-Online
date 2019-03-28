@@ -60,10 +60,22 @@ namespace Azarashi.CerkeOnline.Application
 
         void NewGame()
         {
-            preGameSettings.rulesetId = 0;
-            var ruleset = rulesetList.GetRuleset(preGameSettings.rulesetId);
-            Game = ruleset.CreateGameInstance((Terminologies.Encampment)preGameSettings.firstOrSecond);
+            preGameSettings.ruleseName = 0;
+            var ruleset = rulesetList.GetRuleset((int)preGameSettings.ruleseName);
+            Game = ruleset.CreateGameInstance((Terminologies.Encampment)GetFirstOrSecond(preGameSettings.firstOrSecond));
             onGameReset.OnNext(Game);
+        }
+
+        Terminologies.FirstOrSecond GetFirstOrSecond(Terminologies.FirstOrSecond firstOrSecond)
+        {
+            switch (firstOrSecond)
+            {
+            case Terminologies.FirstOrSecond.First:
+            case Terminologies.FirstOrSecond.Second:
+                return firstOrSecond;
+            default:
+                return (Terminologies.FirstOrSecond)UnityEngine.Random.Range(0, 1);
+            }
         }
     }
 }

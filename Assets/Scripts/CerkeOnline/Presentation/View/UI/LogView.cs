@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace Azarashi.CerkeOnline.Presentation.View
+namespace Azarashi.CerkeOnline.Presentation.View.UI
 {
     public class LogView : MonoBehaviour
     {

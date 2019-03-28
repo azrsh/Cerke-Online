@@ -29,7 +29,7 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.UI
 
         void Bind()
         {
-            gameRuleSelectionView.OnDropDownChanged.TakeUntilDestroy(this).Subscribe(value => preGameSettings.rulesetId = value);
+            gameRuleSelectionView.OnDropDownChanged.TakeUntilDestroy(this).Subscribe(value => preGameSettings.ruleseName = (RulesetName)value);
             firstOrSecondSelectionView.OnDropDownChanged.TakeUntilDestroy(this).Subscribe(value => preGameSettings.firstOrSecond = (FirstOrSecond)value);
 
             ZeroDistanceMovementPermissionToggle.OnValueChangedAsObservable().TakeUntilDestroy(this).Subscribe(value => preGameSettings.isZeroDistanceMovementPermitted = value);

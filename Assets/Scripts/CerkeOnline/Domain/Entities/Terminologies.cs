@@ -53,6 +53,13 @@ namespace Azarashi.CerkeOnline.Domain.Entities
             Tam          = 10
         }
 
+        public enum RulesetName
+        {
+            NoRule = 0,     //ルール無し
+            celterno = 1,   //官定
+            tamajtel = 2,   //硬皇力
+        }
+
         public const string Felkana      = "船";
         public const string Elmer        = "兵";
         public const string Gustuer      = "弓";
