@@ -1,7 +1,7 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using UniRx;
-using UniRx.Triggers;
+using Azarashi.CerkeOnline.Application;
 using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
 using Azarashi.CerkeOnline.Presentation.View.UI;
 using Azarashi.CerkeOnline.Data.DataStructure;
@@ -36,7 +36,7 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.UI
             startButton.OnClickAsObservable().TakeUntilDestroy(this).Subscribe(_ => 
             {
                 preGameSettings.OnStartButton();
-                Destroy(gameObject);
+                SceneManager.UnloadSceneAsync(SceneName.MainSceneUI.PreGameSettings);
             });
         }
     }

@@ -12,8 +12,11 @@ namespace Azarashi.CerkeOnline.Presentation
     {   
         void Start()
         {
-            var sceneLoader = new SceneAsyncLoader(SceneName.MainSceneUI.PauseMenu, LoadSceneMode.Additive);
-            GetComponent<IInputEventProvider>().OnPauseButton.TakeUntilDestroy(this).Subscribe(_ => sceneLoader.ChangeScene());
+            //本当はこっちでやりたいけどこれじゃできない
+            //var sceneLoader = new SceneAsyncLoader(SceneName.MainSceneUI.PauseMenu, LoadSceneMode.Additive);
+            //GetComponent<IInputEventProvider>().OnPauseButton.TakeUntilDestroy(this).Subscribe(_ => sceneLoader.ChangeScene());
+            GetComponent<IInputEventProvider>().OnPauseButton.TakeUntilDestroy(this)
+                .Subscribe(_ => SceneManager.LoadScene(SceneName.MainSceneUI.PauseMenu, LoadSceneMode.Additive));
         }
     }
 }

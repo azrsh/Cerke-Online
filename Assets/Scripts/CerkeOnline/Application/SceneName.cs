@@ -9,6 +9,7 @@
         public static class MainSceneUI
         {
             public static readonly string PauseMenu = "PauseMenu";
+            public static readonly string PreGameSettings = "PreGameSettings";
         }
     }
 }
