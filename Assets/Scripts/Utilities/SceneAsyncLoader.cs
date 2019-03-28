@@ -30,6 +30,7 @@ namespace Azarashi.Utilities
         //分離すべき
         bool ContainsScene(string sceneName)
         {
+#if UNITY_EDITOR
             List<string> sceneNameList = EditorBuildSettings.scenes.Where(scene => scene.enabled).Select(scene => scene.path).Select(path =>
             {
                 int slash = path.LastIndexOf("/");
@@ -38,6 +39,9 @@ namespace Azarashi.Utilities
             }).ToList();
 
             return sceneNameList.Contains(sceneName);
+#else
+            return true;
+#endif
         }
     }
 }
