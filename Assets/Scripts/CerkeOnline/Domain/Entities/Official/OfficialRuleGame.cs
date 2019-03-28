@@ -1,12 +1,13 @@
 ﻿using System;
 using UniRx;
+using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.Official
 {
     public class OfficialRuleGame : IGame
     {
         public IBoard Board { get; }
-        public Terminologies.FirstOrSecond CurrentTurn { get; private set; }
+        public FirstOrSecond CurrentTurn { get; private set; }
         public IPlayer FirstPlayer { get; }
         public IPlayer SecondPlayer { get; }
 
@@ -15,31 +16,31 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
 
         public IPlayer CurrentPlayer => GetPlayer(CurrentTurn);
 
-        public OfficialRuleGame(Terminologies.Encampment firstPlayerEncampment)
+        public OfficialRuleGame(Encampment firstPlayerEncampment)
         {
             FirstPlayer = new Player(firstPlayerEncampment);
             SecondPlayer = new Player(Terminologies.GetReversal(firstPlayerEncampment));
-            CurrentTurn = Terminologies.FirstOrSecond.First;
+            CurrentTurn = FirstOrSecond.First;
         
-            var frontPlayer = GetPlayer(Terminologies.Encampment.Front);
-            var backPlayer = GetPlayer(Terminologies.Encampment.Back);
+            var frontPlayer = GetPlayer(Encampment.Front);
+            var backPlayer = GetPlayer(Encampment.Back);
             Board = new Board(frontPlayer, backPlayer);
         }
 
-        public IPlayer GetPlayer(Terminologies.FirstOrSecond firstOrSecond)
+        public IPlayer GetPlayer(FirstOrSecond firstOrSecond)
         {
             switch (firstOrSecond)
             {
-            case Terminologies.FirstOrSecond.First:
+            case FirstOrSecond.First:
                 return FirstPlayer;
-            case Terminologies.FirstOrSecond.Second:
+            case FirstOrSecond.Second:
                 return SecondPlayer;
             default:
                 return null;
             }
         }
 
-        public IPlayer GetPlayer(Terminologies.Encampment encampment)
+        public IPlayer GetPlayer(Encampment encampment)
         {
             if (FirstPlayer.Encampment == encampment) return FirstPlayer;
             if (SecondPlayer.Encampment == encampment) return SecondPlayer;
@@ -48,16 +49,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
 
         public void OnTurnEnd()
         {
-            switch (CurrentTurn)
-            {
-            case Terminologies.FirstOrSecond.First:
-                CurrentTurn = Terminologies.FirstOrSecond.Second;
-                break;
-            case Terminologies.FirstOrSecond.Second:
-                CurrentTurn = Terminologies.FirstOrSecond.First;
-                break;
-            }
-
+            CurrentTurn = Terminologies.GetReversal(CurrentTurn);
             onTurnChanged.OnNext(Unit.Default);
         }
     }

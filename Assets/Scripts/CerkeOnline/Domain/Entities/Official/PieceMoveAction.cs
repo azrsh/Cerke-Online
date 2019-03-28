@@ -34,7 +34,6 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
 
             this.startPosition = startPosition;
             bool isFrontPlayersPiece = pieces.Read(startPosition).Owner != null && pieces.Read(startPosition).Owner.Encampment == Encampment.Front;
-            Debug.Log(isFrontPlayersPiece);
             Vector2Int relativePosition = (endPosition - startPosition) * (isFrontPlayersPiece ? -1 : 1);
             this.relativePath = pieceMovement.GetPath(relativePosition) ?? throw new ArgumentException("移動不可能な移動先が指定されました.");
             this.worldPath = relativePath.Select(value => startPosition + value * (isFrontPlayersPiece ? -1 : 1)).ToArray();
