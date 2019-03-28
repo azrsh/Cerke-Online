@@ -17,7 +17,7 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter
         [SerializeField] Vector3 offset = default;
         [SerializeField] Vector3 placeInterval = default;
         [SerializeField] int lineLimit = default;
-        [SerializeField] FirstOrSecond firstOrSecond = FirstOrSecond.First; //TODO LocalPlayerに変える
+        [SerializeField] Encampment encampment = Encampment.Front;
 
         IPlayer player;
 
@@ -28,7 +28,7 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter
 
         void OnGameReset(IGame game)
         {
-            player = game.GetPlayer(firstOrSecond);
+            player = game.GetPlayer(encampment);
             player.OnPieceStrageCahnged.TakeUntilDestroy(this).Subscribe(OnPieceStrageChanged);
         }
 
