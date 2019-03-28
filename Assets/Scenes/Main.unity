@@ -3348,7 +3348,7 @@ MonoBehaviour:
     m_HighlightedTrigger: Highlighted
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 1486577504}
   toggleTransition: 1
   graphic: {fileID: 689300419}
@@ -5952,7 +5952,7 @@ MonoBehaviour:
   offset: {x: 6, y: 0, z: 0}
   placeInterval: {x: 0.75, y: -0.75, z: 0}
   lineLimit: 5
-  firstOrSecond: 0
+  encampment: 0
 --- !u!114 &1253445458
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5969,7 +5969,7 @@ MonoBehaviour:
   offset: {x: 6, y: 5, z: 0}
   placeInterval: {x: 0.75, y: -0.75, z: 0}
   lineLimit: 5
-  firstOrSecond: 1
+  encampment: 1
 --- !u!1 &1266935115
 GameObject:
   m_ObjectHideFlags: 0
@@ -7621,7 +7621,7 @@ MonoBehaviour:
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 1
+  m_ScrollSensitivity: 10
   m_Viewport: {fileID: 363737127}
   m_HorizontalScrollbar: {fileID: 258307678}
   m_VerticalScrollbar: {fileID: 1855965104}
@@ -7647,6 +7647,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   logField: {fileID: 251858170}
+  contentSizeFitter: {fileID: 251858169}
+  scrollRect: {fileID: 1540434931}
 --- !u!1 &1544535908
 GameObject:
   m_ObjectHideFlags: 0
@@ -8230,7 +8232,7 @@ MonoBehaviour:
     m_HighlightedTrigger: Highlighted
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 1635527693}
   m_Template: {fileID: 1202304489}
   m_CaptionText: {fileID: 1078948722}

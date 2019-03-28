@@ -6,6 +6,8 @@ namespace Azarashi.CerkeOnline.Presentation.View
     public class LogView : MonoBehaviour
     {
         [SerializeField] Text logField = default;
+        [SerializeField] ContentSizeFitter contentSizeFitter = default;
+        [SerializeField] ScrollRect scrollRect = default;
 
         void Awake()
         {
@@ -18,6 +20,8 @@ namespace Azarashi.CerkeOnline.Presentation.View
                 return;
 
             logField.text += message + System.Environment.NewLine;
+            contentSizeFitter.SetLayoutVertical();
+            scrollRect.verticalNormalizedPosition = 0f;
         }
     }
 }
