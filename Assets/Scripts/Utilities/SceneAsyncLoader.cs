@@ -10,7 +10,7 @@ namespace Azarashi.Utilities
     {
         AsyncOperation asyncOperation;
 
-        public SceneAsyncLoader(string sceneName)
+        public SceneAsyncLoader(string sceneName, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
         {
             if (!ContainsScene(sceneName))
             {
@@ -18,7 +18,7 @@ namespace Azarashi.Utilities
                 return;
             }
 
-            asyncOperation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
+            asyncOperation = SceneManager.LoadSceneAsync(sceneName, loadSceneMode);
             asyncOperation.allowSceneActivation = false;
         }
 

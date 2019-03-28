@@ -10,10 +10,13 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.Inputs
         bool userInputPermition = true;
 
         public IObservable<Unit> OnCommandButton { get { return onCommandButton; } }
-        Subject<Unit> onCommandButton = new Subject<Unit>();
+        readonly Subject<Unit> onCommandButton = new Subject<Unit>();
+
+        public IObservable<Unit> OnPauseButton { get { return onPauseButton; } }
+        readonly Subject<Unit> onPauseButton = new Subject<Unit>();
 
         public IObservable<Unit> OnMouseClicked { get { return onMouseClicked; } }
-        Subject<Unit> onMouseClicked = new Subject<Unit>();
+        readonly Subject<Unit> onMouseClicked = new Subject<Unit>();
 
         void Start()
         {
@@ -21,6 +24,10 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.Inputs
                 .Where(_ => userInputPermition)
                 .Where(_ => Input.GetKeyDown(KeyCode.Return))
                 .Subscribe(onCommandButton.OnNext);
+            this.UpdateAsObservable().TakeUntilDestroy(this)
+                .Where(_ => userInputPermition)
+                .Where(_ => Input.GetKeyDown(KeyCode.Escape))
+                .Subscribe(onPauseButton.OnNext);
             this.UpdateAsObservable().TakeUntilDestroy(this)
                 .Where(_ => userInputPermition)
                 .Where(_ => Input.GetButtonDown("Fire1"))
