@@ -17,6 +17,7 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.UI
 
         [SerializeField] GameRuleSelectionView gameRuleSelectionView = default;
         [SerializeField] FirstOrSecondSelectionView firstOrSecondSelectionView = default;
+        [SerializeField] EncampmentSelectionView encampmentSelectionView = default;
 
         //Viewコンポーネントをはさむべき？（描画のための特別な処理はないので迷う）
         [SerializeField] Toggle ZeroDistanceMovementPermissionToggle = default;
@@ -31,7 +32,8 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.UI
         {
             gameRuleSelectionView.OnDropDownChanged.TakeUntilDestroy(this).Subscribe(value => preGameSettings.ruleseName = (RulesetName)value);
             firstOrSecondSelectionView.OnDropDownChanged.TakeUntilDestroy(this).Subscribe(value => preGameSettings.firstOrSecond = (FirstOrSecond)value);
-
+            encampmentSelectionView.OnDropDownChanged.TakeUntilDestroy(this).Subscribe(value => preGameSettings.encampment = (Encampment)value);
+            
             ZeroDistanceMovementPermissionToggle.OnValueChangedAsObservable().TakeUntilDestroy(this).Subscribe(value => preGameSettings.isZeroDistanceMovementPermitted = value);
             startButton.OnClickAsObservable().TakeUntilDestroy(this).Subscribe(_ => 
             {

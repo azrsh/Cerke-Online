@@ -40,6 +40,8 @@ namespace Azarashi.CerkeOnline.Application
         public IReadOnlyServiceLocator ServiceLocator => serviceLocator;
         readonly IServiceLocator serviceLocator = new DefaultServiceLocator();
 
+        public IPlayer LocalPlayer { get; private set; }
+
         private void Awake()
         {
             if (Instance != null)
@@ -60,9 +62,16 @@ namespace Azarashi.CerkeOnline.Application
 
         void NewGame()
         {
-            preGameSettings.ruleseName = 0;
+            //preGameSettings.ruleseName = 0;
             var ruleset = rulesetList.GetRuleset((int)preGameSettings.ruleseName);
-            Game = ruleset.CreateGameInstance((Terminologies.Encampment)GetFirstOrSecond(preGameSettings.firstOrSecond));
+            var localPlayerFirstOrSecond = GetFirstOrSecond(preGameSettings.firstOrSecond);
+            var localPlayerEncampment = GetEncampment(preGameSettings.encampment);
+            var remotePlayerEncampment = Terminologies.GetReversal(localPlayerEncampment);
+
+            var firstPlayerEncampment = localPlayerFirstOrSecond == Terminologies.FirstOrSecond.First ? localPlayerEncampment : remotePlayerEncampment;
+
+            Game = ruleset.CreateGameInstance(firstPlayerEncampment);
+            LocalPlayer = Game.GetPlayer(localPlayerFirstOrSecond);
             onGameReset.OnNext(Game);
         }
 
@@ -75,6 +84,18 @@ namespace Azarashi.CerkeOnline.Application
                 return firstOrSecond;
             default:
                 return (Terminologies.FirstOrSecond)UnityEngine.Random.Range(0, 1);
+            }
+        }
+
+        Terminologies.Encampment GetEncampment(Terminologies.Encampment encampment)
+        {
+            switch (encampment)
+            {
+            case Terminologies.Encampment.Front:
+            case Terminologies.Encampment.Back:
+                return encampment;
+            default:
+                return (Terminologies.Encampment)UnityEngine.Random.Range(0, 1);
             }
         }
     }
