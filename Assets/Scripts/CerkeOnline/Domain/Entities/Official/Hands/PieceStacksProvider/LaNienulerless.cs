@@ -1,6 +1,6 @@
 ﻿using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
 
-namespace Azarashi.CerkeOnline.Domain.Entities.Official.Hands.PieceProviders
+namespace Azarashi.CerkeOnline.Domain.Entities.Official.Hands.PieceStackProviders
 {
     public class LaNienulerless : DefaultPieceStacksProviderr
     {
