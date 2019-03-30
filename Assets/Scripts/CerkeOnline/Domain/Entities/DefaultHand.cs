@@ -17,7 +17,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         public DefaultHand(IPieceStacksProvider pieceStacksProvider, int score)
         {
             this.pieceStacksProvider = pieceStacksProvider;
-            Name = pieceStacksProvider.GetType().Name;
+            Name = HandNameDictionary.PascalToJapanese[pieceStacksProvider.GetType().Name];
             Score = score;
         }
 

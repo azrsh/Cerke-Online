@@ -41,7 +41,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
             for (int i = 0; i < NumberOfPieceStacksProviders; i++)
             {
                 hands[i * 2] = new DefaultHand(pieceStacksProviders[i], baseScores[i]);
-                hands[i * 2 + 1] = new DefaultHand(pieceStacksProviders[i], bounus);
+                hands[i * 2 + 1] = new LaDejixeceHand(pieceStacksProviders[i], bounus);
             }
             hands[NumberOfPieceStacksProviders * 2] = null;// new 撃皇();
             hands[NumberOfPieceStacksProviders * 2 + 1] = null;// new 皇再来();

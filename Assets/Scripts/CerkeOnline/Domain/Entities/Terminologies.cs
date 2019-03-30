@@ -1,4 +1,5 @@
-﻿
+﻿using System.Collections.Generic;
+
 namespace Azarashi.CerkeOnline.Domain.Entities
 {
     public class Terminologies
@@ -60,17 +61,51 @@ namespace Azarashi.CerkeOnline.Domain.Entities
             tamajtel = 2,   //硬皇力
         }
 
-        public const string Felkana      = "船";
-        public const string Elmer        = "兵";
-        public const string Gustuer      = "弓";
-        public const string Vadyrd       = "車";
-        public const string Stistyst     = "虎";
-        public const string Dodor        = "馬";
-        public const string Kua          = "筆";
-        public const string Terlsk       = "巫";
-        public const string Varxle       = "将";
-        public const string Ales         = "王";
-        public const string Tam          = "皇";
+        public static class Pieces
+        {
+            public const string Felkana = "船";
+            public const string Elmer = "兵";
+            public const string Gustuer = "弓";
+            public const string Vadyrd = "車";
+            public const string Stistyst = "虎";
+            public const string Dodor = "馬";
+            public const string Kua = "筆";
+            public const string Terlsk = "巫";
+            public const string Varxle = "将";
+            public const string Ales = "王";
+            public const string Tam = "皇";
+        }
+
+        public static class HandNameDictionary
+        {
+            /*
+            理日辞書より引用
+
+            《役名》　役はvoklisolと言う。
+            -加点役　il vynut voklisol
+            無抗行処(la als)、筆兵無傾(la ny anknish)、地心(la meunerfergal)、行行(la nienulerless)、王(la nermetixaler)、獣(la pysess)、
+            闇戦之集(la phertarsa'd elmss)、馬弓兵(la vefisait)、戦集(la elmss)、助友(la celdinerss)
+
+            -減点役
+            撃皇(la tama'd semorkovo)、皇再来(tamen mako)
+
+            -複合役
+            同色(la dejixece)
+
+            -官定ルールで採用されていない役
+            声無行処(la ytartanerfergal) 
+            */
+            public static readonly IReadOnlyDictionary<string, string> PascalToLineparine = new Dictionary<string, string>()
+            {
+                {"LaAls", "la als"}, {"LaNyAnknish", "la ny anknish"}, {"LaMeunerfergal", "la meunerfergal"}, {"LaNienulerless", "la nienulerless" }, {"LaNermetixaler", "la nermetixaler"}, {"LaPysess", "la pysess"},
+                {"LaPhertarsadElmss", "la phertarsa'd elmss" }, {"LaVefisait", "la vefisait"}, {"LaElmss", "la elmss"}, {"LaCeldinerss", "la celdinerss" }
+            };
+            public static readonly IReadOnlyDictionary<string, string> PascalToJapanese = new Dictionary<string, string>()
+            {
+                {"LaAls", "無抗行処"}, {"LaNyAnknish", "筆兵無傾"}, {"LaMeunerfergal", "地心"}, {"LaNienulerless", "行行" }, {"LaNermetixaler", "王"}, {"LaPysess", "獣"},
+                {"LaPhertarsadElmss", "闇戦之集" }, {"LaVefisait", "馬弓兵"}, {"LaElmss", "戦集"}, {"LaCeldinerss", "助友" }
+            };
+        }
 
         public static FirstOrSecond GetReversal(FirstOrSecond firstOrSecond)
         {
