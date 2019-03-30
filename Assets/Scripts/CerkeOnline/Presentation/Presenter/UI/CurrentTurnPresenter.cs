@@ -5,7 +5,7 @@ using UniRx.Triggers;
 using Azarashi.CerkeOnline.Domain.Entities;
 using Azarashi.CerkeOnline.Application;
 
-namespace Azarashi.CerkeOnline.Presentation.Presenter
+namespace Azarashi.CerkeOnline.Presentation.Presenter.UI
 {
     public class CurrentTurnPresenter : MonoBehaviour
     {

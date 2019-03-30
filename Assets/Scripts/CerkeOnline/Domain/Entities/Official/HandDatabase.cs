@@ -24,7 +24,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
     */
     public class HandDatabase : IHandDatabase
     {
-        readonly IHand[] hands = { };
+        readonly IHand[] hands;
 
         public HandDatabase()
         {
@@ -41,15 +41,15 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
             for (int i = 0; i < NumberOfPieceStacksProviders; i++)
             {
                 hands[i * 2] = new DefaultHand(pieceStacksProviders[i], baseScores[i]);
-                hands[i * 2 + 1] = new DefaultHand(pieceStacksProviders[i], baseScores[i] + bounus);
+                hands[i * 2 + 1] = new DefaultHand(pieceStacksProviders[i], bounus);
             }
             hands[NumberOfPieceStacksProviders * 2] = null;// new 撃皇();
             hands[NumberOfPieceStacksProviders * 2 + 1] = null;// new 皇再来();
         }
 
         public IHand[] SearchHands(IReadOnlyList<IReadOnlyPiece> pieces)
-        {
-            return hands.Where(hand => hand.IsSccess(pieces)).ToArray();
+        {   
+            return hands.Where(hand => hand != null && hand.IsSccess(pieces)).ToArray();
         }
     }
 }
