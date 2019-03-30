@@ -4,16 +4,20 @@ using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
 
 namespace Azarashi.CerkeOnline.Domain.Entities
 {
+    /// <summary>
+    /// 通常役
+    /// </summary>
     public class DefaultHand : IHand
-    {   
+    {
         readonly IPieceStacksProvider pieceStacksProvider;
 
-        public string Name { get { return pieceStacksProvider.GetType().Name; } }
-        public int Score { get; private set; }
+        public string Name { get; }
+        public int Score { get; }
 
-        protected DefaultHand(IPieceStacksProvider pieceStacksProvider, int score)
+        public DefaultHand(IPieceStacksProvider pieceStacksProvider, int score)
         {
             this.pieceStacksProvider = pieceStacksProvider;
+            Name = pieceStacksProvider.GetType().Name;
             Score = score;
         }
 

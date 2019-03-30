@@ -4,16 +4,20 @@ using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
 
 namespace Azarashi.CerkeOnline.Domain.Entities
 {
+    /// <summary>
+    /// 同色役
+    /// </summary>
     public class LaDejixeceHand : IHand
     {
         readonly IPieceStacksProvider pieceStacksProvider;
 
-        public string Name { get { return pieceStacksProvider.GetType().Name; } }
-        public int Score { get; private set; }
+        public string Name { get; }
+        public int Score { get; }
 
-        protected LaDejixeceHand(IPieceStacksProvider pieceStacksProvider, int score)
+        public LaDejixeceHand(IPieceStacksProvider pieceStacksProvider, int score)
         {
             this.pieceStacksProvider = pieceStacksProvider;
+            Name = pieceStacksProvider.GetType().Name;
             Score = score;
         }
 
@@ -23,13 +27,16 @@ namespace Azarashi.CerkeOnline.Domain.Entities
 
             if (pieces.Count < pieceStacks.Count) return false;
 
-            IEnumerable<PieceName> pieceNames = pieces.Select(piece => piece.PieceName);
-            //UnityEngine.Color color = default;
-            return pieceStacks.All(stack =>
+            bool black = pieceStacks.All(stack =>
             {
-                //if(color == default) 
-                return pieceNames.Count(pieceName => stack.PieceName == PieceName.None || pieceName == stack.PieceName) >= stack.StackCount;
+                return pieces.Count(piece => piece.Color == 0 && (stack.PieceName == PieceName.None || piece.PieceName == stack.PieceName)) >= stack.StackCount;
             });
+            bool red = pieceStacks.All(stack =>
+            {
+                return pieces.Count(piece => piece.Color == 1 && (stack.PieceName == PieceName.None || piece.PieceName == stack.PieceName)) >= stack.StackCount;
+            });
+
+            return black || red;
         }
     }
 }
