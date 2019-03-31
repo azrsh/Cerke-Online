@@ -4912,7 +4912,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f110ffea44ac614783a0d3ed66598b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentTurnText: {fileID: 605091721}
+  scoreText: {fileID: 605091721}
 --- !u!1 &1372319182
 GameObject:
   m_ObjectHideFlags: 0

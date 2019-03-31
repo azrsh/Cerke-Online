@@ -62,7 +62,6 @@ namespace Azarashi.CerkeOnline.Application
 
         void NewGame()
         {
-            preGameSettings.ruleseName = Terminologies.RulesetName.celterno;
             var ruleset = rulesetList.GetRuleset((int)preGameSettings.ruleseName);
             var localPlayerFirstOrSecond = GetFirstOrSecond(preGameSettings.firstOrSecond);
             var localPlayerEncampment = GetEncampment(preGameSettings.encampment);

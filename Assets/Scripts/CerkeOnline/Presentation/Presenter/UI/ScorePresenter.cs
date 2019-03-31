@@ -9,20 +9,28 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.UI
 {
     public class ScorePresenter : MonoBehaviour
     {
-        [SerializeField] Text currentTurnText = default;
+        [SerializeField] Text scoreText = default;
 
         void Start()
         {
             GameController.Instance.OnGameReset.TakeUntilDestroy(this).Subscribe(OnGameReset);
+            scoreText.enabled = false;
         }
 
         void OnGameReset(IGame game)
         {
+            var scoreUseCase = ScoreeUseCaseFactory.Create(Terminologies.FirstOrSecond.First);
+            if (scoreUseCase == null)
+            {
+                scoreText.enabled = false;
+                return;
+            }
+
+            scoreText.enabled = true;
             game.OnTurnChanged.TakeUntilDestroy(this).Subscribe(_ =>
                 {
-                    var scoreUseCase = ScoreeUseCaseFactory.Create(Terminologies.FirstOrSecond.First);
                     var score = scoreUseCase.GetScore();
-                    currentTurnText.text = "現在のスコア : " + score.ToString();
+                    scoreText.text = "現在のスコア : " + score.ToString();
                 });
         }
     }
