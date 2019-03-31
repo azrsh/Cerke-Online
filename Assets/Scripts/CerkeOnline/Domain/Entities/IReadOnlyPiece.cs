@@ -47,5 +47,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         bool IsOwner(IPlayer player);
 
         bool IsPickupable();
+
+        bool CanLittuaWithoutJudge();
     }
 }

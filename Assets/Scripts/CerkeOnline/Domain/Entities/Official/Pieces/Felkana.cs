@@ -28,5 +28,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.Pieces
 
             return expansionPieceMovements;
         }
+        
+        public override bool CanLittuaWithoutJudge() => true;
     }
 }
