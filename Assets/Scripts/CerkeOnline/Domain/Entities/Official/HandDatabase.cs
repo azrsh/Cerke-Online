@@ -1,6 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Collections.Generic;
+using UniRx;
 using Azarashi.Utilities.Collections;
+using Azarashi.CerkeOnline.Domain.Entities.Official.Hands;
 using Azarashi.CerkeOnline.Domain.Entities.Official.Hands.PieceStackProviders;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.Official
@@ -26,7 +29,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
     {
         readonly IHand[] hands;
 
-        public HandDatabase()
+        public HandDatabase(IBoard board, IObservable<Unit> onTurnChanged)
         {
             const int NumberOfPieceStacksProviders = 10;
             IPieceStacksProvider[] pieceStacksProviders = new IPieceStacksProvider[NumberOfPieceStacksProviders]
@@ -43,8 +46,11 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
                 hands[i * 2] = new DefaultHand(pieceStacksProviders[i], baseScores[i]);
                 hands[i * 2 + 1] = new LaDejixeceHand(pieceStacksProviders[i], bounus);
             }
-            hands[NumberOfPieceStacksProviders * 2] = null;// new 撃皇();
-            hands[NumberOfPieceStacksProviders * 2 + 1] = null;// new 皇再来();
+
+            var tam = board.SearchPiece(Terminologies.PieceName.Tam);
+            var tamObserver = new TamObserver(onTurnChanged, board.OnEveruValueChanged, tam);
+            hands[NumberOfPieceStacksProviders * 2] = new LaTamadSemorkovo(-5);
+            hands[NumberOfPieceStacksProviders * 2 + 1] = new TamenMako(-3, tamObserver);
         }
 
         public IHand[] SearchHands(IReadOnlyList<IReadOnlyPiece> pieces)

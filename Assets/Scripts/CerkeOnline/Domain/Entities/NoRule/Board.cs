@@ -60,6 +60,21 @@ namespace Azarashi.CerkeOnline.Domain.Entities.NoRule
             return pieces.Read(position);
         }
 
+        public IReadOnlyPiece SearchPiece(PieceName pieceName)
+        {
+            for (int i = 0; i < pieces.Width; i++)
+            {
+                for (int j = 0; j < pieces.Height; j++)
+                {
+                    IReadOnlyPiece piece = pieces.Read(new Vector2Int(i, j));
+                    if (piece != null && piece.PieceName == pieceName)
+                        return piece;
+                }
+            }
+
+            return null;
+        }
+
         bool isLocked = false;
         public void MovePiece(Vector2Int startPosition, Vector2Int endPosition, IPlayer player, IValueInputProvider<int> valueProvider, Action<PieceMoveResult> callback)
         {

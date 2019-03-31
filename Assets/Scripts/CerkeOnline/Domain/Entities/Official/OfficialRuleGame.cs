@@ -7,6 +7,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
     public class OfficialRuleGame : IGame
     {
         public IBoard Board { get; }
+        public IHandDatabase HandDatabase { get; }
         public FirstOrSecond CurrentTurn { get; private set; }
         public IPlayer FirstPlayer { get; }
         public IPlayer SecondPlayer { get; }
@@ -25,6 +26,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
             var frontPlayer = GetPlayer(Encampment.Front);
             var backPlayer = GetPlayer(Encampment.Back);
             Board = new Board(frontPlayer, backPlayer);
+            HandDatabase = new HandDatabase(Board, OnTurnChanged);
         }
 
         public IPlayer GetPlayer(FirstOrSecond firstOrSecond)

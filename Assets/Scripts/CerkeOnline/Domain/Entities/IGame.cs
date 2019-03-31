@@ -6,6 +6,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
     public interface IGame
     {
         IBoard Board { get; }
+        IHandDatabase HandDatabase { get; }
         Terminologies.FirstOrSecond CurrentTurn { get; }
         IPlayer FirstPlayer { get; }
         IPlayer SecondPlayer { get; }

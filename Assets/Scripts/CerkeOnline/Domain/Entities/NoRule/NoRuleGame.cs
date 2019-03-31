@@ -7,6 +7,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.NoRule
     public class NoRuleGame : IGame
     {
         public IBoard Board { get; }
+        public IHandDatabase HandDatabase { get; } = null;
         public FirstOrSecond CurrentTurn { get; private set; }
         public IPlayer FirstPlayer { get; }
         public IPlayer SecondPlayer { get; }

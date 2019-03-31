@@ -32,6 +32,13 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         IReadOnlyPiece GetPiece(Vector2Int position);
 
         /// <summary>
+        /// 指定された種類の駒を検索する. 同種の駒が複数ある場合の動作は不定.
+        /// </summary>
+        /// <param name="pieceName"></param>
+        /// <returns></returns>
+        IReadOnlyPiece SearchPiece(Terminologies.PieceName pieceName);
+
+        /// <summary>
         /// 盤の更新イベント.
         /// </summary>
         IObservable<Unit> OnEveruValueChanged { get; }

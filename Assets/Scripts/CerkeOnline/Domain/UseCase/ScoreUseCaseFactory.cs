@@ -8,10 +8,10 @@ namespace Azarashi.CerkeOnline.Domain.UseCase
         public static IScoreUseCase Create(FirstOrSecond firstOrSecond)
         {
             var game = GameController.Instance.Game;
-            if (game == null) return null;
+            var handDatabase = game.HandDatabase;
+            if (game == null || handDatabase == null) return null;
 
             var player = game.GetPlayer(firstOrSecond);
-            var handDatabase = new Entities.Official.HandDatabase();
             var logger = GameController.Instance.SystemLogger;
             return new ScoreUseCase(player, handDatabase, logger);
         }
