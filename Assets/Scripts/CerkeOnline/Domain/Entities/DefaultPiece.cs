@@ -92,5 +92,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         {
             return true;
         }
+
+        public virtual bool CanLittuaWithoutJudge() => false;
     }
 }

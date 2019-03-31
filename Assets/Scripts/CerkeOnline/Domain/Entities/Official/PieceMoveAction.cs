@@ -104,7 +104,8 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
             //入水判定の必要があるか
             bool isInWater = (index > 0 && fieldEffectChecker.IsInTammua(worldPath[index - 1])) || (index == 0 && fieldEffectChecker.IsInTammua(start));
             bool isIntoWater = fieldEffectChecker.IsInTammua(worldPath[index]);
-            if (!isInWater && isIntoWater)
+            bool canLittuaWithoutJudge = movingPiece.CanLittuaWithoutJudge();
+            if (!isInWater && isIntoWater && !canLittuaWithoutJudge)
             {
                 if (index > 0) ConfirmPiecePosition(movingPiece, start, worldPath[index - 1]);
                 valueProvider.RequestValue(value => Move(value >= 3, movingPiece.Position, ++index));
