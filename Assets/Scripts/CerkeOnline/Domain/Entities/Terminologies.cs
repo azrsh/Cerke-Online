@@ -98,12 +98,16 @@ namespace Azarashi.CerkeOnline.Domain.Entities
             public static readonly IReadOnlyDictionary<string, string> PascalToLineparine = new Dictionary<string, string>()
             {
                 {"LaAls", "la als"}, {"LaNyAnknish", "la ny anknish"}, {"LaMeunerfergal", "la meunerfergal"}, {"LaNienulerless", "la nienulerless" }, {"LaNermetixaler", "la nermetixaler"}, {"LaPysess", "la pysess"},
-                {"LaPhertarsadElmss", "la phertarsa'd elmss" }, {"LaVefisait", "la vefisait"}, {"LaElmss", "la elmss"}, {"LaCeldinerss", "la celdinerss" }
+                {"LaPhertarsadElmss", "la phertarsa'd elmss" }, {"LaVefisait", "la vefisait"}, {"LaElmss", "la elmss"}, {"LaCeldinerss", "la celdinerss" },
+                {"LaTamadSemorkovo", "la tama'd semorkovo" }, {"TamenMako", "tamen mako" },
+                {"LaYtartanerfergal", "la ytartanerfergal" }
             };
             public static readonly IReadOnlyDictionary<string, string> PascalToJapanese = new Dictionary<string, string>()
             {
                 {"LaAls", "無抗行処"}, {"LaNyAnknish", "筆兵無傾"}, {"LaMeunerfergal", "地心"}, {"LaNienulerless", "行行" }, {"LaNermetixaler", "王"}, {"LaPysess", "獣"},
-                {"LaPhertarsadElmss", "闇戦之集" }, {"LaVefisait", "馬弓兵"}, {"LaElmss", "戦集"}, {"LaCeldinerss", "助友" }
+                {"LaPhertarsadElmss", "闇戦之集" }, {"LaVefisait", "馬弓兵"}, {"LaElmss", "戦集"}, {"LaCeldinerss", "助友" },
+                {"LaTamadSemorkovo", "撃皇" }, {"TamenMako", "皇再来" },
+                {"LaYtartanerfergal", "声無行処" }
             };
         }
 
