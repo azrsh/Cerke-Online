@@ -22,7 +22,7 @@ namespace Azarashi.CerkeOnline.Domain.UseCase
         public int GetScore()
         {
             var establishedHands = handDatabase.SearchHands(player.GetPieceList());
-            var score = establishedHands.Sum(hand => hand.Score);
+            var score = establishedHands.Sum(hand => hand.Score * hand.GetNumberOfSuccesses(player.GetPieceList()));
 
             var increasedDifference = establishedHands?.Except(previousHands ?? new IHand[] { })?.ToArray() ?? establishedHands;
             var decreasedDifference = previousHands?.Except(establishedHands)?.ToArray() ?? new IHand[]{ };

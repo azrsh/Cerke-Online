@@ -17,9 +17,9 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.Hands
             Score = score;
         }
 
-        public bool IsSccess(IReadOnlyList<IReadOnlyPiece> pieces)
+        public int GetNumberOfSuccesses(IReadOnlyList<IReadOnlyPiece> pieces)
         {
-            return false;
+            return 0;
         }
     }
 }

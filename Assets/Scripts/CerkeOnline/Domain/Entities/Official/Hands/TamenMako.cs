@@ -23,9 +23,9 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.Hands
             this.tamObserver = tamObserver;
         }
 
-        public bool IsSccess(IReadOnlyList<IReadOnlyPiece> pieces)
+        public int GetNumberOfSuccesses(IReadOnlyList<IReadOnlyPiece> pieces)
         {
-            return tamObserver.IsTamenMako();
+            return tamObserver.GetNumberOfTamenMako();
         }
     }
 }

@@ -9,7 +9,8 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.Hands
     /// 皇が取られた場合の動作は未定義.
     /// </summary>
     public class TamObserver
-    {   
+    {
+        int numberOfTamenMako = 0;
         bool isMoved = false;                   //現在のターン中に駒が動いたか
         bool isPrevoiusMoved = false;           //前回のターンに駒が動いたか
         bool isTamenMako = false;               //皇再来が成立したか
@@ -25,7 +26,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.Hands
         
         void OnTamMoved(Vector2Int position)
         {
-            isTamenMako = isPrevoiusMoved || (isMoved && previousTurnPosition == position);
+            if (isPrevoiusMoved || (isMoved && previousTurnPosition == position)) numberOfTamenMako++;
             isMoved = true;
             currentPosition = position;
         }
@@ -37,9 +38,9 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.Hands
             previousTurnPosition = currentPosition;
         }
 
-        public bool IsTamenMako()
+        public int GetNumberOfTamenMako()
         {
-            return isTamenMako;
+            return numberOfTamenMako;
         }
     }
 }

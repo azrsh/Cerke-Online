@@ -21,14 +21,15 @@ namespace Azarashi.CerkeOnline.Domain.Entities
             Score = score;
         }
 
-        public bool IsSccess(IReadOnlyList<IReadOnlyPiece> pieces)
+        public int GetNumberOfSuccesses(IReadOnlyList<IReadOnlyPiece> pieces)
         {
             IReadOnlyList<PieceStack> pieceStacks = pieceStacksProvider.GetPieceStacks();
 
-            if (pieces.Count < pieceStacks.Count) return false;
+            if (pieces.Count < pieceStacks.Count) return 0;
 
             IEnumerable<PieceName> pieceNames = pieces.Select(piece => piece.PieceName);
-            return pieceStacks.All(stack => pieceNames.Count(pieceName => stack.PieceName == PieceName.None || pieceName == stack.PieceName) >= stack.StackCount);
+            bool isSuccess = pieceStacks.All(stack => pieceNames.Count(pieceName => stack.PieceName == PieceName.None || pieceName == stack.PieceName) >= stack.StackCount);
+            return isSuccess ? 1 : 0;
         }
     }
 }

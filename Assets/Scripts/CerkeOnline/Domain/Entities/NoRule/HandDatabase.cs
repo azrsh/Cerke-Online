@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.NoRule
 {
@@ -9,7 +8,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.NoRule
 
         public IHand[] SearchHands(IReadOnlyList<IReadOnlyPiece> pieces)
         {
-            return hands.Where(hand => hand.IsSccess(pieces)).ToArray();
+            return  hands;
         }
     }
 }

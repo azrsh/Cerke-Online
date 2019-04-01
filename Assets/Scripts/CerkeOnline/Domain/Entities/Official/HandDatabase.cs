@@ -55,7 +55,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
 
         public IHand[] SearchHands(IReadOnlyList<IReadOnlyPiece> pieces)
         {   
-            return hands.Where(hand => hand != null && hand.IsSccess(pieces)).ToArray();
+            return hands.Where(hand => hand != null && hand.GetNumberOfSuccesses(pieces) > 0).ToArray();
         }
     }
 }

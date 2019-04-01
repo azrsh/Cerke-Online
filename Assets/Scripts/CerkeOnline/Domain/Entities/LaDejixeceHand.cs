@@ -21,11 +21,11 @@ namespace Azarashi.CerkeOnline.Domain.Entities
             Score = score;
         }
 
-        public bool IsSccess(IReadOnlyList<IReadOnlyPiece> pieces)
+        public int GetNumberOfSuccesses(IReadOnlyList<IReadOnlyPiece> pieces)
         {
             IReadOnlyList<PieceStack> pieceStacks = pieceStacksProvider.GetPieceStacks();
 
-            if (pieces.Count < pieceStacks.Count) return false;
+            if (pieces.Count < pieceStacks.Count) return 0;
 
             bool black = pieceStacks.All(stack =>
             {
@@ -36,7 +36,8 @@ namespace Azarashi.CerkeOnline.Domain.Entities
                 return pieces.Count(piece => piece.Color == 1 && (stack.PieceName == PieceName.None || piece.PieceName == stack.PieceName)) >= stack.StackCount;
             });
 
-            return black || red;
+            bool isSuccess = black || red;
+            return isSuccess ? 1 : 0;
         }
     }
 }

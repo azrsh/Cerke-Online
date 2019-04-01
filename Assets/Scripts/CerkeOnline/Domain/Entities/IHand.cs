@@ -9,6 +9,6 @@ namespace Azarashi.CerkeOnline.Domain.Entities
     {
         string Name { get; }
         int Score { get; }
-        bool IsSccess(IReadOnlyList<IReadOnlyPiece> pieces);
+        int GetNumberOfSuccesses(IReadOnlyList<IReadOnlyPiece> pieces);
     }
 }
