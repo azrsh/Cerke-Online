@@ -9,7 +9,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         /// </summary>
         /// <param name="position"></param>
         /// <returns></returns>
-        bool MoveTo(Vector2Int position);
+        bool MoveTo(Vector2Int position, bool isForceMove = false);
 
         /// <summary>
         /// 駒の所有者を変更する. この情報は駒が持つべきではない気もする.
