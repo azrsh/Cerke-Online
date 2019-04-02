@@ -10,10 +10,9 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.Hands
     /// </summary>
     public class TamObserver
     {
-        int numberOfTamenMako = 0;
+        int numberOfTamenMako = 0;              //皇再来の成立回数
         bool isMoved = false;                   //現在のターン中に駒が動いたか
         bool isPrevoiusMoved = false;           //前回のターンに駒が動いたか
-        bool isTamenMako = false;               //皇再来が成立したか
         Vector2Int previousTurnPosition;        //前回のターン終了時の皇の座標
         Vector2Int currentPosition;             //現在のtamの座標
 
