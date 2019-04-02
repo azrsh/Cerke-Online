@@ -62,6 +62,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
             Vector2Int startWorldPosition = movingPiece.Position;
             movingPiece.MoveTo(endWorldPosition, isForceMove);
 
+            //この順で書きまないと現在いる座標と同じ座標をendWorldPositionに指定されたとき盤上から駒の判定がなくなる
             pieces.Write(startWorldPosition, null);
             pieces.Write(endWorldPosition, movingPiece);
             
