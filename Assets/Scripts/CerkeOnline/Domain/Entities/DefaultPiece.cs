@@ -32,9 +32,9 @@ namespace Azarashi.CerkeOnline.Domain.Entities
 
         public abstract IReadOnlyList<PieceMovement> GetMoveablePosition(bool isExpanded = false);
 
-        public bool MoveTo(Vector2Int position)
+        public bool MoveTo(Vector2Int position, bool isForceMove = false)
         {
-            if (!IsMoveable(position)) return false;
+            if (!isForceMove && !IsMoveable(position)) return false;
             this.Position = position;
             return true;
         }

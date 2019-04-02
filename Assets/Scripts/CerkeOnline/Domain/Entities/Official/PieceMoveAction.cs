@@ -57,21 +57,22 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
             return gottenPiece;
         }
 
-        void ConfirmPiecePosition(IPiece movingPiece, Vector2Int startWorldPosition, Vector2Int endWorldPosition)
+        void ConfirmPiecePosition(IPiece movingPiece, Vector2Int endWorldPosition, bool isForceMove = false)
         {
-             movingPiece.MoveTo(endWorldPosition);
+            Vector2Int startWorldPosition = movingPiece.Position;
+            movingPiece.MoveTo(endWorldPosition, isForceMove);
 
-            pieces.Write(endWorldPosition, movingPiece);
             pieces.Write(startWorldPosition, null);
-
+            pieces.Write(endWorldPosition, movingPiece);
+            
             onPiecesChanged();
         }
 
-        void LastMove(IPiece movingPiece, Vector2Int startWorldPosition, Vector2Int endWorldPosition)
+        void LastMove(IPiece movingPiece, Vector2Int endWorldPosition)
         {
             //移動先の駒を取る
             IPiece gottenPiece = PickUpPiece(movingPiece, endWorldPosition);
-            ConfirmPiecePosition(movingPiece, startWorldPosition, endWorldPosition);
+            ConfirmPiecePosition(movingPiece, endWorldPosition);
             callback(new PieceMoveResult(true, isTurnEnd, gottenPiece));
         }
 
@@ -88,14 +89,14 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
             if (!condition)
             {
                 if (index > 1)
-                    LastMove(movingPiece, start, worldPath[index - 2]);
+                    LastMove(movingPiece, worldPath[index - 2]);
                 if (index == 1)
                     callback(new PieceMoveResult(true, isTurnEnd, null));
                 return;
             }
             if (index >= relativePath.Count)
             {
-                LastMove(movingPiece, start, worldPath[index - 1]);
+                LastMove(movingPiece, worldPath[index - 1]);
                 return;
             }
             
@@ -107,19 +108,31 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
             bool canLittuaWithoutJudge = movingPiece.CanLittuaWithoutJudge();
             if (!isInWater && isIntoWater && !canLittuaWithoutJudge)
             {
-                if (index > 0) ConfirmPiecePosition(movingPiece, start, worldPath[index - 1]);
+                if (index > 0) ConfirmPiecePosition(movingPiece, worldPath[index - 1]);
                 valueProvider.RequestValue(value => Move(value >= 3, movingPiece.Position, ++index));
                 return;
             }
 
             //PieceMovementが踏み越えに対応しているか
-            if (piece != null && !surmounted && pieceMovement.surmountable)
+            if (piece != null && !surmounted && pieceMovement.surmountable && index < worldPath.Count - 1)
             {
                 Debug.Log("Surmount");
                 surmounted = true;
 
-                if (index > 0) ConfirmPiecePosition(movingPiece, start, worldPath[index - 1]);
-                valueProvider.RequestValue(value => Move(value >= 3, worldPath[index], ++index));
+                Vector2Int currentPosition = index > 0 ? worldPath[index - 1] : start;
+                if (index > 0) ConfirmPiecePosition(movingPiece, worldPath[index - 1]);
+                valueProvider.RequestValue(value => 
+                {
+                    const int Threshold = 3;
+                    if (value < Threshold)
+                    {
+                        callback(new PieceMoveResult(false, true, null));
+                        return;
+                    }
+
+                    ConfirmPiecePosition(movingPiece, worldPath[index + 1], isForceMove: true);
+                    Move(value >= Threshold, worldPath[index + 1], index + 2);
+                });
                 return;
             }
 
@@ -127,7 +140,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
             {
                 if (piece.IsPickupable())
                 {
-                    LastMove(movingPiece, start, worldPath[index]);
+                    LastMove(movingPiece, worldPath[index]);
                     return;
                 }
 
