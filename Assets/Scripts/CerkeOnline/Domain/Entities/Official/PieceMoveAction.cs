@@ -107,19 +107,56 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
             bool isInWater = (index > 0 && fieldEffectChecker.IsInTammua(worldPath[index - 1])) || (index == 0 && fieldEffectChecker.IsInTammua(start));
             bool isIntoWater = fieldEffectChecker.IsInTammua(worldPath[index]);
             bool canLittuaWithoutJudge = movingPiece.CanLittuaWithoutJudge();
-            if (!isInWater && isIntoWater && !canLittuaWithoutJudge)
+            bool IsNecessaryToMakeWaterEntryJudgment = !isInWater && isIntoWater && !canLittuaWithoutJudge;
+
+            //PieceMovementが踏み越えに対応しているか
+            bool IsNecessaryToMakeSurmountingJudgment = piece != null && !surmounted && pieceMovement.surmountable && index < worldPath.Count - 1;
+
+            //入水判定と踏み越え判定の両方が必要な場合
+            //本当は入水判定と踏み越え判定のところとまとめたい
+            if(IsNecessaryToMakeWaterEntryJudgment && IsNecessaryToMakeSurmountingJudgment)
+            {
+                surmounted = true;
+
+                if (index > 0) ConfirmPiecePosition(movingPiece, worldPath[index - 1]);
+                const int Threshold = 3;
+                valueProvider.RequestValue(value1 =>
+                {
+                    if (value1 < Threshold)
+                    {
+                        callback(new PieceMoveResult(false, true, null));
+                        return;
+                    }
+
+                    valueProvider.RequestValue(value2 =>
+                    {
+                        if (value2 < Threshold)
+                        {
+                            callback(new PieceMoveResult(false, true, null));
+                            return;
+                        }
+
+                        //Unsafe 踏み越えられた場合のイベント通知
+                        if (piece is ISurmountedObserver)
+                            (piece as ISurmountedObserver).OnSurmounted.OnNext(Unit.Default);
+                        ConfirmPiecePosition(movingPiece, worldPath[index + 1], isForceMove: true);
+                        Move(value2 >= Threshold, worldPath[index + 1], index + 2);
+                    });
+                });
+                return;
+            }
+
+            if (IsNecessaryToMakeWaterEntryJudgment)
             {
                 if (index > 0) ConfirmPiecePosition(movingPiece, worldPath[index - 1]);
                 valueProvider.RequestValue(value => Move(value >= 3, movingPiece.Position, ++index));
                 return;
             }
 
-            //PieceMovementが踏み越えに対応しているか
-            if (piece != null && !surmounted && pieceMovement.surmountable && index < worldPath.Count - 1)
+            if (IsNecessaryToMakeSurmountingJudgment)
             {
                 surmounted = true;
 
-                Vector2Int currentPosition = index > 0 ? worldPath[index - 1] : start;
                 if (index > 0) ConfirmPiecePosition(movingPiece, worldPath[index - 1]);
                 valueProvider.RequestValue(value => 
                 {
