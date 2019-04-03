@@ -107,14 +107,14 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
             bool isInWater = (index > 0 && fieldEffectChecker.IsInTammua(worldPath[index - 1])) || (index == 0 && fieldEffectChecker.IsInTammua(start));
             bool isIntoWater = fieldEffectChecker.IsInTammua(worldPath[index]);
             bool canLittuaWithoutJudge = movingPiece.CanLittuaWithoutJudge();
-            bool IsNecessaryToMakeWaterEntryJudgment = !isInWater && isIntoWater && !canLittuaWithoutJudge;
+            bool isNecessaryWaterEntryJudgment = !isInWater && isIntoWater && !canLittuaWithoutJudge;
 
             //PieceMovementが踏み越えに対応しているか
-            bool IsNecessaryToMakeSurmountingJudgment = piece != null && !surmounted && pieceMovement.surmountable && index < worldPath.Count - 1;
+            bool isNecessarySurmountingJudgment = piece != null && !surmounted && pieceMovement.surmountable && index < worldPath.Count - 1;
 
             //入水判定と踏み越え判定の両方が必要な場合
             //本当は入水判定と踏み越え判定のところとまとめたい
-            if(IsNecessaryToMakeWaterEntryJudgment && IsNecessaryToMakeSurmountingJudgment)
+            if(isNecessaryWaterEntryJudgment && isNecessarySurmountingJudgment)
             {
                 surmounted = true;
 
@@ -146,14 +146,14 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
                 return;
             }
 
-            if (IsNecessaryToMakeWaterEntryJudgment)
+            if (isNecessaryWaterEntryJudgment)
             {
                 if (index > 0) ConfirmPiecePosition(movingPiece, worldPath[index - 1]);
                 valueProvider.RequestValue(value => Move(value >= 3, movingPiece.Position, ++index));
                 return;
             }
 
-            if (IsNecessaryToMakeSurmountingJudgment)
+            if (isNecessarySurmountingJudgment)
             {
                 surmounted = true;
 
