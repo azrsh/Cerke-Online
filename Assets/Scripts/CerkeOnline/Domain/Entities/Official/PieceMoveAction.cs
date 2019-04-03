@@ -117,7 +117,6 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
             //PieceMovementが踏み越えに対応しているか
             if (piece != null && !surmounted && pieceMovement.surmountable && index < worldPath.Count - 1)
             {
-                Debug.Log("Surmount");
                 surmounted = true;
 
                 Vector2Int currentPosition = index > 0 ? worldPath[index - 1] : start;
@@ -131,6 +130,9 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
                         return;
                     }
 
+                    //Unsafe 踏み越えられた場合のイベント通知
+                    if (piece is ISurmountedObserver)
+                        (piece as ISurmountedObserver).OnSurmounted.OnNext(Unit.Default);
                     ConfirmPiecePosition(movingPiece, worldPath[index + 1], isForceMove: true);
                     Move(value >= Threshold, worldPath[index + 1], index + 2);
                 });

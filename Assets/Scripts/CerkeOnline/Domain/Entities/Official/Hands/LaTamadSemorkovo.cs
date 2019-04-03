@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UniRx;
 using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.Official.Hands
@@ -11,15 +12,18 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.Hands
         public string Name { get; }
         public int Score { get; }
 
-        public LaTamadSemorkovo(int score)
+        int numberOfSurmounted = 0;
+
+        public LaTamadSemorkovo(int score, ISurmountedObservable surmountedObservable)
         {
-            Name = GetType().Name;
+            Name = HandNameDictionary.PascalToJapanese[GetType().Name];
             Score = score;
+            surmountedObservable.OnSurmounted.Subscribe(_ => numberOfSurmounted++);
         }
 
         public int GetNumberOfSuccesses(IReadOnlyList<IReadOnlyPiece> pieces)
         {
-            return 0;
+            return numberOfSurmounted;
         }
     }
 }

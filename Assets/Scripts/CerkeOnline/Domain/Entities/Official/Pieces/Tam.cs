@@ -1,11 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using UniRx;
 using UnityEngine;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.Official.Pieces
 {
-    public class Tam : DefaultPiece
+    public class Tam : DefaultPiece, ISurmountedObservable, ISurmountedObserver
     {
         public override int NumberOfMoves => 2;
+
+        IObservable<Unit> ISurmountedObservable.OnSurmounted => onSurmounted;
+        IObserver<Unit> ISurmountedObserver.OnSurmounted => onSurmounted;
+        readonly Subject<Unit> onSurmounted = new Subject<Unit>();
 
         readonly PieceMovement[] normalPieceMovements;
         readonly PieceMovement[] expansionPieceMovements;
