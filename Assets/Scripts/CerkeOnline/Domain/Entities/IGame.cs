@@ -7,6 +7,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
     {
         IBoard Board { get; }
         IHandDatabase HandDatabase { get; }
+        IScoreHolder ScoreHolder { get; }
         Terminologies.FirstOrSecond CurrentTurn { get; }
         IPlayer FirstPlayer { get; }
         IPlayer SecondPlayer { get; }

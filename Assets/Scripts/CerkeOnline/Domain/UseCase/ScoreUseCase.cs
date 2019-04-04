@@ -4,35 +4,20 @@ using Azarashi.CerkeOnline.Domain.Entities;
 
 namespace Azarashi.CerkeOnline.Domain.UseCase
 {
+    /// <summary>
+    /// Playerの手駒を参照し, その時終季した場合に得られる得点を計算する.
+    /// </summary>
     public class ScoreUseCase : IScoreUseCase
     {
+        IHand[] previousPaltauilHands;
+        public int Score => scoreHolder.GetScore(player);
+        readonly IScoreHolder scoreHolder;
         readonly IPlayer player;
-        readonly IHandDatabase handDatabase;
-        readonly ILogger logger;
 
-        IHand[] previousHands;
-
-        public ScoreUseCase(IPlayer player, IHandDatabase handDatabase, ILogger logger)
+        public ScoreUseCase(IPlayer player, IScoreHolder scoreHolder)
         {
             this.player = player;
-            this.handDatabase = handDatabase;
-            this.logger = logger;
-        }
-
-        public int GetScore()
-        {
-            var establishedHands = handDatabase.SearchHands(player.GetPieceList());
-            var score = establishedHands.Sum(hand => hand.Score * hand.GetNumberOfSuccesses(player.GetPieceList()));
-
-            var increasedDifference = establishedHands?.Except(previousHands ?? new IHand[] { })?.ToArray() ?? establishedHands;
-            var decreasedDifference = previousHands?.Except(establishedHands)?.ToArray() ?? new IHand[]{ };
-            foreach (IHand hand in increasedDifference)
-                logger.Log("役 " + hand.Name + "が成立しました.");
-            foreach (IHand hand in decreasedDifference)
-                logger.Log("役 " + hand.Name + "が不成立になりました.");
-            previousHands = establishedHands;
-
-            return score;
+            this.scoreHolder = scoreHolder;
         }
     }
 }

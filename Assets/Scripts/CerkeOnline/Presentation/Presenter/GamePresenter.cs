@@ -10,7 +10,7 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter
     /// </summary>
     public class GamePresenter : MonoBehaviour
     {
-        ScoreUseCase scoreUseCase;
+        IScoreUseCase scoreUseCase;
 
         void Start()
         {

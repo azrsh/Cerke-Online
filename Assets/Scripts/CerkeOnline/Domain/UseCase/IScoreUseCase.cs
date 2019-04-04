@@ -2,6 +2,6 @@
 {
     public interface IScoreUseCase
     {
-        int GetScore();
+        int Score { get; }
     }
 }

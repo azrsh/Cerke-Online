@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UniRx;
 using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
 
@@ -8,6 +9,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
     {
         public IBoard Board { get; }
         public IHandDatabase HandDatabase { get; }
+        public IScoreHolder ScoreHolder { get; }
         public FirstOrSecond CurrentTurn { get; private set; }
         public IPlayer FirstPlayer { get; }
         public IPlayer SecondPlayer { get; }
@@ -27,6 +29,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
             var backPlayer = GetPlayer(Encampment.Back);
             Board = new Board(frontPlayer, backPlayer);
             HandDatabase = new HandDatabase(Board, OnTurnChanged);
+            ScoreHolder = new DefaultScoreHolder(new Dictionary<IPlayer, int> { { frontPlayer, 20 }, { backPlayer, 20 } });
         }
 
         public IPlayer GetPlayer(FirstOrSecond firstOrSecond)

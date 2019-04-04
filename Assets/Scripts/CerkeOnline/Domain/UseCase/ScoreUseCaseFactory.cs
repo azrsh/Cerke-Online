@@ -13,7 +13,7 @@ namespace Azarashi.CerkeOnline.Domain.UseCase
 
             var player = game.GetPlayer(firstOrSecond);
             var logger = GameController.Instance.SystemLogger;
-            return new ScoreUseCase(player, handDatabase, logger);
+            return new ScoreUseCase(player, game.ScoreHolder);
         }
     }
 }

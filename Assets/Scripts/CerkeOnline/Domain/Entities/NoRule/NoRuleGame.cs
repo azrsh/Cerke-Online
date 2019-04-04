@@ -8,6 +8,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.NoRule
     {
         public IBoard Board { get; }
         public IHandDatabase HandDatabase { get; } = null;
+        public IScoreHolder ScoreHolder { get; } = null;
         public FirstOrSecond CurrentTurn { get; private set; }
         public IPlayer FirstPlayer { get; }
         public IPlayer SecondPlayer { get; }
