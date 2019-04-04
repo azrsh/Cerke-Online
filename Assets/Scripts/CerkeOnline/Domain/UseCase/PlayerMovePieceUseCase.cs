@@ -26,10 +26,17 @@ namespace Azarashi.CerkeOnline.Domain.UseCase
                 return;
             }
 
-            IBoard board = game.Board;
-            if (board.GetPiece(startPosition) == null)
+            var board = game.Board;
+            var piece = board.GetPiece(startPosition);
+            if (piece == null)
             {
                 logger.Log("駒が選択されていません.");
+                return;
+            }
+
+            if (piece.Owner != null && piece.Owner == player)
+            {
+                logger.Log("あなたの駒ではありません.");
                 return;
             }
 
