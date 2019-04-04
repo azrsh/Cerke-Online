@@ -54,7 +54,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
         IPiece PickUpPiece(IPiece movingPiece, Vector2Int endWorldPosition)
         {
             IPiece originalPiece = pieces.Read(endWorldPosition);     //命名が分かりにくい. 行先にある駒.
-            if (originalPiece == null || originalPiece.Owner == player)
+            if (!IsPickupable(originalPiece))
                 return null;
             
             IPiece gottenPiece = originalPiece;
@@ -98,6 +98,15 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
             bool canLittuaWithoutJudge = movingPiece.CanLittuaWithoutJudge();
             bool isNecessaryWaterEntryJudgment = !isInWater && isIntoWater && !canLittuaWithoutJudge;
             return isNecessaryWaterEntryJudgment;
+        }
+
+        bool IsPickupable(IPiece targetPiece)
+        {
+            if (targetPiece == null) return false;
+
+            bool isPiecePickupable = targetPiece.IsPickupable();
+            bool isSameOwner = targetPiece.Owner == player;
+            return isPiecePickupable && !isSameOwner;
         }
 
         public void StartMove()
@@ -184,7 +193,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
 
             if (piece != null)
             {
-                if (piece.IsPickupable() && worldPath[index] == worldPath.Last())
+                if (IsPickupable(piece) && worldPath[index] == worldPath.Last())
                 {
                     LastMove(movingPiece, worldPath[index]);
                     return;
