@@ -34,7 +34,7 @@ namespace Azarashi.CerkeOnline.Domain.UseCase
                 return;
             }
 
-            if (piece.Owner != null && piece.Owner == player)
+            if (piece.Owner != null && piece.Owner != player)
             {
                 logger.Log("あなたの駒ではありません.");
                 return;
