@@ -40,14 +40,42 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         /// <returns></returns>
         int Color { get; }
 
+        /// <summary>
+        /// 1ターンあたりの移動回数を返す. 通常は1回.
+        /// </summary>
         int NumberOfMoves { get; }
 
+        /// <summary>
+        /// PieceMovementの取得を試みる.
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="pieceMovement"></param>
+        /// <returns></returns>
         bool TryToGetPieceMovement(Vector2Int position, out PieceMovement pieceMovement);
 
+        /// <summary>
+        /// 引数のプレイヤーがオーナーであるかを返す
+        /// </summary>
+        /// <param name="player"></param>
+        /// <returns></returns>
         bool IsOwner(IPlayer player);
 
+        /// <summary>
+        /// この駒は取られることがあるかを返す.
+        /// </summary>
+        /// <returns></returns>
         bool IsPickupable();
 
+        /// <summary>
+        /// 入水判定が必要あるかを返す.
+        /// </summary>
+        /// <returns></returns>
         bool CanLittuaWithoutJudge();
+
+        /// <summary>
+        /// ほかの駒を取る能力があるかを返す.
+        /// </summary>
+        /// <returns></returns>
+        bool CanTakePiece();
     }
 }

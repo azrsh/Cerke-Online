@@ -94,5 +94,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         }
 
         public virtual bool CanLittuaWithoutJudge() => false;
+
+        public virtual bool CanTakePiece() => true;
     }
 }

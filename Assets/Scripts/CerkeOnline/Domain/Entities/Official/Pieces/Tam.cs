@@ -41,5 +41,6 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.Pieces
         public override bool IsOwner(IPlayer player) => true;
         public override bool IsPickupable() => false;
         public override bool CanLittuaWithoutJudge() => true;
+        public override bool CanTakePiece() => false;
     }
 }
