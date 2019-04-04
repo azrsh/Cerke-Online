@@ -31,7 +31,7 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter
             Action<Unit> action = _ =>
             {
                 throwStickButton.gameObject.SetActive(false);
-                int number = Random.Range(1, 5);
+                int number = Random.Range(0, 2) + Random.Range(0, 2) + Random.Range(0, 2) + Random.Range(0, 2) + Random.Range(0, 2);
                 Debug.Log("投げ棒の数 : " + number);
                 callback(number);
                 IsRequestCompleted = true;
