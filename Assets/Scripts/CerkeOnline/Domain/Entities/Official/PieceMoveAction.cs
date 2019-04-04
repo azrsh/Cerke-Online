@@ -8,6 +8,13 @@ using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.Official
 {
+    /*命名に関する注意
+     以下のクラスでは, 
+     ・Surmountとその派生を巫の駒越え
+     ・Semorkoを踏み越え
+     という意味で使っています.
+     */
+
     public class PieceMoveAction
     {
         readonly IPlayer player;
@@ -44,7 +51,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
             this.isTurnEnd = isTurnEnd;
         }
 
-        IPiece PickUpPiece(IPiece movingPiece,Vector2Int endWorldPosition)
+        IPiece PickUpPiece(IPiece movingPiece, Vector2Int endWorldPosition)
         {
             IPiece originalPiece = pieces.Read(endWorldPosition);     //命名が分かりにくい. 行先にある駒.
             if (originalPiece == null || originalPiece.Owner == player)
@@ -77,6 +84,22 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
             callback(new PieceMoveResult(true, isTurnEnd, gottenPiece));
         }
 
+        void OnFailure(IPiece movingPiece)
+        {
+            ConfirmPiecePosition(movingPiece, startPosition, true);
+            callback(new PieceMoveResult(isSuccess: false, isTurnEnd: false, gottenPiece: null));
+        }
+
+        bool IsNecessaryWaterEntryJudgment(IPiece movingPiece, int index)
+        {
+            Vector2Int start = movingPiece.Position;
+            bool isInWater = (index > 0 && fieldEffectChecker.IsInTammua(worldPath[index - 1])) || (index == 0 && fieldEffectChecker.IsInTammua(start));
+            bool isIntoWater = fieldEffectChecker.IsInTammua(worldPath[index]);
+            bool canLittuaWithoutJudge = movingPiece.CanLittuaWithoutJudge();
+            bool isNecessaryWaterEntryJudgment = !isInWater && isIntoWater && !canLittuaWithoutJudge;
+            return isNecessaryWaterEntryJudgment;
+        }
+
         public void StartMove()
         {
             Move(true, startPosition, 0);
@@ -104,88 +127,71 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
             IPiece piece = pieces.Read(worldPath[index]);
 
             //入水判定の必要があるか
-            bool isInWater = (index > 0 && fieldEffectChecker.IsInTammua(worldPath[index - 1])) || (index == 0 && fieldEffectChecker.IsInTammua(start));
-            bool isIntoWater = fieldEffectChecker.IsInTammua(worldPath[index]);
-            bool canLittuaWithoutJudge = movingPiece.CanLittuaWithoutJudge();
-            bool isNecessaryWaterEntryJudgment = !isInWater && isIntoWater && !canLittuaWithoutJudge;
-
-            //PieceMovementが踏み越えに対応しているか
-            bool isNecessarySurmountingJudgment = piece != null && !surmounted && pieceMovement.surmountable && index < worldPath.Count - 1;
-
-            //入水判定と踏み越え判定の両方が必要な場合
-            //本当は入水判定と踏み越え判定のところとまとめたい
-            if(isNecessaryWaterEntryJudgment && isNecessarySurmountingJudgment)
-            {
-                surmounted = true;
-
-                if (index > 0) ConfirmPiecePosition(movingPiece, worldPath[index - 1]);
-                const int Threshold = 3;
-                valueProvider.RequestValue(value1 =>
-                {
-                    if (value1 < Threshold)
-                    {
-                        callback(new PieceMoveResult(false, true, null));
-                        return;
-                    }
-
-                    valueProvider.RequestValue(value2 =>
-                    {
-                        if (value2 < Threshold)
-                        {
-                            callback(new PieceMoveResult(false, true, null));
-                            return;
-                        }
-
-                        //Unsafe 踏み越えられた場合のイベント通知
-                        if (piece is ISurmountedObserver)
-                            (piece as ISurmountedObserver).OnSurmounted.OnNext(Unit.Default);
-                        ConfirmPiecePosition(movingPiece, worldPath[index + 1], isForceMove: true);
-                        Move(value2 >= Threshold, worldPath[index + 1], index + 2);
-                    });
-                });
-                return;
-            }
-
-            if (isNecessaryWaterEntryJudgment)
+            if (IsNecessaryWaterEntryJudgment(movingPiece, index))
             {
                 if (index > 0) ConfirmPiecePosition(movingPiece, worldPath[index - 1]);
                 valueProvider.RequestValue(value => Move(value >= 3, movingPiece.Position, ++index));
                 return;
             }
 
-            if (isNecessarySurmountingJudgment)
+            //PieceMovementが踏み越えに対応しているか
+            bool isSurmountable = piece != null && !surmounted && pieceMovement.surmountable && index < worldPath.Count - 1;
+            if (isSurmountable)
             {
-                surmounted = true;
-
-                if (index > 0) ConfirmPiecePosition(movingPiece, worldPath[index - 1]);
-                valueProvider.RequestValue(value => 
-                {
-                    const int Threshold = 3;
-                    if (value < Threshold)
+                Action surmountAction = () =>
+                { 
+                    surmounted = true;
+                    if (pieces.Read(worldPath[index + 1]) == null)
                     {
-                        callback(new PieceMoveResult(false, true, null));
+                        ConfirmPiecePosition(movingPiece, worldPath[index + 1], isForceMove: true);
+                        Move(true, worldPath[index + 1], index + 2);
                         return;
                     }
 
-                    //Unsafe 踏み越えられた場合のイベント通知
-                    if (piece is ISurmountedObserver)
-                        (piece as ISurmountedObserver).OnSurmounted.OnNext(Unit.Default);
-                    ConfirmPiecePosition(movingPiece, worldPath[index + 1], isForceMove: true);
-                    Move(value >= Threshold, worldPath[index + 1], index + 2);
-                });
+                    if (worldPath[index + 1] == worldPath.Last())
+                    {
+                        LastMove(movingPiece, worldPath[index + 1]);
+                        return;
+                    }
+
+                    OnFailure(movingPiece);
+                };
+
+                //別の書き方にしたい
+                if (IsNecessaryWaterEntryJudgment(movingPiece, index) || 
+                    IsNecessaryWaterEntryJudgment(movingPiece, index + 1))
+                {
+                    if (index > 0) ConfirmPiecePosition(movingPiece, worldPath[index - 1]);
+                    valueProvider.RequestValue(value =>
+                    {
+                        if (value < 3)
+                        {
+                            if (index > 0)
+                                LastMove(movingPiece, worldPath[index - 1]);
+                            if (index == 0)
+                                callback(new PieceMoveResult(true, isTurnEnd, null));
+                            return;
+                        }
+
+                        surmountAction();
+                    });
+                }
+                else
+                    surmountAction();
+
                 return;
             }
 
             if (piece != null)
             {
-                if (piece.IsPickupable())
+                if (piece.IsPickupable() && worldPath[index] == worldPath.Last())
                 {
                     LastMove(movingPiece, worldPath[index]);
                     return;
                 }
 
                 //取ることが出ない駒が移動ルート上にある場合は移動失敗として終了する
-                callback(new PieceMoveResult(isSuccess: false, isTurnEnd : false, gottenPiece : null));
+                OnFailure(movingPiece);
                 return;
             }
 
