@@ -8,7 +8,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
         IObservable<Unit> OnSurmounted { get; }
     }
 
-    public interface ISurmountedObserver
+    public interface ISemorkoObserver
     {
         IObserver<Unit> OnSurmounted { get; }
     }

@@ -37,9 +37,12 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.Columns
             firstOrSecond = GameController.Instance.Game.CurrentTurn;
         }
 
-        protected override void OnColumnSelected(Vector2Int start, Vector2Int end)
+        protected override void OnColumnSelected(Vector2Int start, Vector2Int via, Vector2Int last)
         {
-            MovePieceUseCaseFactory.Create(firstOrSecond, valueProvider).RequestToMovePiece(start, end);
+            if(via == last)
+                MovePieceUseCaseFactory.Create(firstOrSecond, valueProvider).RequestToMovePiece(start, last);
+            else
+                MovePieceUseCaseFactory.Create(firstOrSecond, valueProvider).RequestToMovePiece(start, via, last);
         }
     }
 }

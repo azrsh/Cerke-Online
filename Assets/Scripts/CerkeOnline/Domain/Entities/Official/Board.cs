@@ -77,20 +77,74 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
         }
 
         bool isLocked = false;
-        public void MovePiece(Vector2Int startPosition, Vector2Int endPosition, IPlayer player, IValueInputProvider<int> valueProvider, Action<PieceMoveResult> callback)
+        public void MovePiece(Vector2Int startPosition, Vector2Int viaPosition, Vector2Int lastPosition, IPlayer player, IValueInputProvider<int> valueProvider, Action<PieceMoveResult> callback)
+            //Test
         {
             if (isLocked) return;
 
-            if (!IsOnBoard(startPosition) || !IsOnBoard(endPosition))
+            if (!IsOnBoard(startPosition) || !IsOnBoard(lastPosition))
                 throw new ArgumentException();
 
             IPiece movingPiece = pieces.Read(startPosition);
-            IPiece originalPiece = pieces.Read(endPosition);     //元からある駒の意味で使っているが, 英語があってるか不明.
+            IPiece viaPiece = pieces.Read(viaPosition);
+            IPiece originalPiece = pieces.Read(lastPosition);     //元からある駒の意味で使っているが, 英語があってるか不明.
+            bool isTargetNull = movingPiece == null;
+            bool isViaPieceNull = viaPosition == null;//
+            bool isOwner = !isTargetNull && movingPiece.IsOwner(player);
+            bool isSameOwner = !isTargetNull && originalPiece != null && originalPiece.Owner == movingPiece.Owner;
+            PieceMovement viaPieceMovement = PieceMovement.Default;
+            PieceMovement lastPieceMovement = PieceMovement.Default;
+            bool isMoveableToVia = !isTargetNull && movingPiece.TryToGetPieceMovement(viaPosition, out viaPieceMovement);//
+            bool isMoveableToLast = !isTargetNull && movingPiece.TryToGetPieceMovement(startPosition + lastPosition - viaPosition, out lastPieceMovement);//
+            if (isTargetNull || isViaPieceNull || !isOwner || isSameOwner || !isMoveableToVia || ! isMoveableToLast)//
+            {
+                callback(new PieceMoveResult(false, false, null));
+                return;
+            }
+
+            //1ターンに複数回動作する駒のためのロジック
+            if (movingPiece == operationStatus.PreviousPiece)
+            {
+                operationStatus.AddCount();
+            }
+            else
+            {
+                if (operationStatus.PreviousPiece != null)
+                {
+                    callback(new PieceMoveResult(false, false, null));
+                    return;
+                }
+                else
+                {
+                    operationStatus.Reset(movingPiece);
+                }
+            }
+            bool isTurnEnd = operationStatus.Count >= movingPiece.NumberOfMoves;
+            if (isTurnEnd)
+                operationStatus.Reset(null);
+
+
+            isLocked = true;
+            callback += (result) => { isLocked = false; };
+            var pieceMoveAction =
+                new PieceSemorkoMoveAction(player, startPosition, viaPosition, lastPosition, pieces, fieldChecker, valueProvider, viaPieceMovement, lastPieceMovement, callback, () => onEveryValueChanged.OnNext(Unit.Default), isTurnEnd);
+            pieceMoveAction.StartMove();
+        }
+
+        public void MovePiece(Vector2Int startPosition, Vector2Int lastPosition, IPlayer player, IValueInputProvider<int> valueProvider, Action<PieceMoveResult> callback)
+        {
+            if (isLocked) return;
+
+            if (!IsOnBoard(startPosition) || !IsOnBoard(lastPosition))
+                throw new ArgumentException();
+
+            IPiece movingPiece = pieces.Read(startPosition);
+            IPiece originalPiece = pieces.Read(lastPosition);     //元からある駒の意味で使っているが, 英語があってるか不明.
             bool isTargetNull = movingPiece == null;
             bool isOwner = !isTargetNull && movingPiece.IsOwner(player);
             bool isSameOwner = !isTargetNull && originalPiece != null && originalPiece.Owner == movingPiece.Owner;
             PieceMovement pieceMovement = PieceMovement.Default;
-            bool isMoveable = !isTargetNull && movingPiece.TryToGetPieceMovement(endPosition, out pieceMovement);
+            bool isMoveable = !isTargetNull && movingPiece.TryToGetPieceMovement(lastPosition, out pieceMovement);
             if (isTargetNull || !isOwner || isSameOwner || !isMoveable)
             {
                 callback(new PieceMoveResult(false, false, null));
@@ -122,7 +176,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
             isLocked = true;
             callback += (result) => { isLocked = false; };
             PieceMoveAction pieceMoveAction =
-                new PieceMoveAction(player, startPosition, endPosition, pieces, fieldChecker, valueProvider, pieceMovement, callback, () => onEveryValueChanged.OnNext(Unit.Default), isTurnEnd);
+                new PieceMoveAction(player, startPosition, lastPosition, pieces, fieldChecker, valueProvider, pieceMovement, callback, () => onEveryValueChanged.OnNext(Unit.Default), isTurnEnd);
             pieceMoveAction.StartMove();
         }
 

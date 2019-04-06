@@ -25,6 +25,17 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         void MovePiece(Vector2Int startPosition, Vector2Int endPosition, IPlayer player, IValueInputProvider<int> valueProvider, Action<PieceMoveResult> callback);
 
         /// <summary>
+        /// 盤上の駒を指定された座標に移動する. 移動は引数に指定されたプレイヤーの権限で行われる.
+        /// </summary>
+        /// <param name="startPosition">開始位置</param>
+        /// <param name="viaPosition">経由点</param>
+        /// <param name="endPosition">目標位置</param>
+        /// <param name="player">移動したプレイヤー</param>
+        /// <param name="valueProvider">賽による判定値の提供者</param>
+        /// <param name="callback">コールバック関数</param>
+        void MovePiece(Vector2Int startPosition, Vector2Int viaPosition, Vector2Int endPosition, IPlayer player, IValueInputProvider<int> valueProvider, Action<PieceMoveResult> callback);
+
+        /// <summary>
         /// 指定座標の駒のインスタンスを取得する.
         /// </summary>
         /// <param name="position">取得したい駒の座標</param>

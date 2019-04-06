@@ -5,12 +5,12 @@ using UnityEngine;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.Official.Pieces
 {
-    public class Tam : DefaultPiece, ISurmountedObservable, ISurmountedObserver
+    public class Tam : DefaultPiece, ISurmountedObservable, ISemorkoObserver
     {
         public override int NumberOfMoves => 2;
 
         IObservable<Unit> ISurmountedObservable.OnSurmounted => onSurmounted;
-        IObserver<Unit> ISurmountedObserver.OnSurmounted => onSurmounted;
+        IObserver<Unit> ISemorkoObserver.OnSurmounted => onSurmounted;
         readonly Subject<Unit> onSurmounted = new Subject<Unit>();
 
         readonly PieceMovement[] normalPieceMovements;

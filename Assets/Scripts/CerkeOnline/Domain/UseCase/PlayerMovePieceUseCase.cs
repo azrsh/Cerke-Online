@@ -18,12 +18,12 @@ namespace Azarashi.CerkeOnline.Domain.UseCase
             this.logger = logger;
         }
 
-        public void RequestToMovePiece(Vector2Int startPosition, Vector2Int endPosition)
+        bool CommonCheck(Vector2Int startPosition)
         {
             if (game.CurrentPlayer != player)
             {
                 logger.Log("あなたのターンではありません.");
-                return;
+                return false;
             }
 
             var board = game.Board;
@@ -31,17 +31,41 @@ namespace Azarashi.CerkeOnline.Domain.UseCase
             if (piece == null)
             {
                 logger.Log("駒が選択されていません.");
-                return;
+                return false;
             }
 
             if (piece.Owner != null && piece.Owner != player)
             {
                 logger.Log("あなたの駒ではありません.");
+                return false;
+            }
+
+            return true;
+        }
+
+        public void RequestToMovePiece(Vector2Int startPosition, Vector2Int viaPosition, Vector2Int lastPosition)
+        {
+            if (!CommonCheck(startPosition)) return;
+            if (game.Board.GetPiece(viaPosition) == null)
+            {
+                logger.Log("経由点に駒がありません");
                 return;
             }
 
-            logger.Log(startPosition + " " + board.GetPiece(startPosition)?.PieceName.ToString() + "を" + endPosition + "へ移動");
-            board.MovePiece(startPosition, endPosition, player, inputProvider, OnPieceMoved);
+            var board = game.Board;
+            logger.Log(startPosition + " " + board.GetPiece(startPosition)?.PieceName.ToString() + "を" + 
+                        viaPosition + "を経由して" + 
+                        lastPosition + "へ移動");
+            board.MovePiece(startPosition, viaPosition, lastPosition, player, inputProvider, OnPieceMoved);
+        }
+
+        public void RequestToMovePiece(Vector2Int startPosition, Vector2Int lastPosition)
+        {
+            if (!CommonCheck(startPosition)) return;
+
+            var board = game.Board;
+            logger.Log(startPosition + " " + board.GetPiece(startPosition)?.PieceName.ToString() + "を" + lastPosition + "へ移動");
+            board.MovePiece(startPosition, lastPosition, player, inputProvider, OnPieceMoved);
         }
 
         void OnPieceMoved(PieceMoveResult pieceMoveResult)

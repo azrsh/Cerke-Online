@@ -10,14 +10,14 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.Columns
     {
         // 現在はColumnSelectorを継承しているが, ColumnSelectorの内部処理は分離してPureC#にした方がいいかも
         
-        protected override void OnColumnSelected(Vector2Int start, Vector2Int end)
+        protected override void OnColumnSelected(Vector2Int start, Vector2Int via, Vector2Int last)
         {
             IGame game = GameController.Instance.Game;
             if (game == null)
                 return;
 
             PieceName pieceName = game.Board.GetPiece(start).PieceName;
-            PieceMoveData pieceMoveData = new PieceMoveData(string.Empty, start, pieceName, end);
+            PieceMoveData pieceMoveData = new PieceMoveData(string.Empty, start, pieceName, last);
             GameController.Instance.ServerDelegate.PostMoveData(pieceMoveData);
         }
     }
