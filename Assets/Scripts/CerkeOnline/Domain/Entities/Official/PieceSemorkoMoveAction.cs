@@ -86,11 +86,11 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
             onPiecesChanged();
         }
 
-        void LastMove(IPiece movingPiece, Vector2Int endWorldPosition)
+        void LastMove(IPiece movingPiece, Vector2Int endWorldPosition, bool isForceMove = false)
         {
             //移動先の駒を取る
             IPiece gottenPiece = PickUpPiece(movingPiece, endWorldPosition);
-            ConfirmPiecePosition(movingPiece, endWorldPosition);
+            ConfirmPiecePosition(movingPiece, endWorldPosition, isForceMove);
             callback(new PieceMoveResult(true, isTurnEnd, gottenPiece));
         }
 
@@ -144,7 +144,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
                 return;
             }
             
-            IPiece piece = pieces.Read(worldPath[index]);
+            IPiece nextPiece = pieces.Read(worldPath[index]);
 
             //入水判定の必要があるか
             if (IsNecessaryWaterEntryJudgment(movingPiece, index))
@@ -157,35 +157,60 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
             //経由点にいる場合
             if (worldPath[index] == viaPosition && worldPath[index] != worldPath.Last())
             {
-                if(piece == null)
+                if(nextPiece == null)
                 {
                     OnFailure(movingPiece);
                     return;
                 }
 
                 //Unsafe 踏み越えられた場合のイベント通知
-                if (piece is ISemorkoObserver)
-                    (piece as ISemorkoObserver).OnSurmounted.OnNext(Unit.Default);
+                if (nextPiece is ISemorkoObserver)
+                    (nextPiece as ISemorkoObserver).OnSurmounted.OnNext(Unit.Default);
 
-                Debug.Log(worldPath[index]);
-                Debug.Log(worldPath[index + 1]);
-                Debug.Log(viaPosition);
-                if (pieces.Read(worldPath[index + 1]) == null)
+                IPiece semorkoNextPiece = pieces.Read(worldPath[index + 1]);
+                Action semorkoAction = null;
+                if (semorkoNextPiece == null)
                 {
-                    Debug.Log(worldPath.Last());
-                    ConfirmPiecePosition(movingPiece, worldPath[index + 1], true);
-                    Move(true, movingPiece.Position, index + 2);
+                    semorkoAction = () =>
+                    {
+                        Debug.Log(worldPath.Last());
+                        ConfirmPiecePosition(movingPiece, worldPath[index + 1], true);
+                        Move(true, movingPiece.Position, index + 2);
+                    };
                 }
+                else if(worldPath[index + 1] == worldPath.Last() && IsPickupable(movingPiece, semorkoNextPiece))
+                {
+                    semorkoAction = () =>
+                    {
+                        LastMove(movingPiece, worldPath[index + 1], true);
+                    };
+                }
+                
+                if(semorkoAction == null)
+                    OnFailure(movingPiece);
+                else if (IsNecessaryWaterEntryJudgment(movingPiece, index) ||
+                    IsNecessaryWaterEntryJudgment(movingPiece, index + 1))
+                    valueProvider.RequestValue(value => 
+                    {
+                        if (value < 3)
+                        {
+                            if (index > 0)
+                                LastMove(movingPiece, worldPath[index - 1]);
+                            if (index == 0)
+                                callback(new PieceMoveResult(true, isTurnEnd, null));
+                            return;
+                        }
+
+                        semorkoAction();
+                    });
                 else
-                {
-                    Debug.Log("nai");
-                    OnFailure(movingPiece);//飛び越えできる場合もある
-                }
+                    semorkoAction();
+
                 return;
             }
 
             //PieceMovementが踏み越えに対応しているか
-            bool isSurmountable = piece != null && !surmounted && viaPieceMovement.surmountable && index < worldPath.Count - 1;
+            bool isSurmountable = nextPiece != null && !surmounted && viaPieceMovement.surmountable && index < worldPath.Count - 1;
             if (isSurmountable)
             {
                 Action surmountAction = () =>
@@ -232,9 +257,9 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
                 return;
             }
 
-            if (piece != null)
+            if (nextPiece != null)
             {
-                if (IsPickupable(movingPiece, piece) && worldPath[index] == worldPath.Last())
+                if (IsPickupable(movingPiece, nextPiece) && worldPath[index] == worldPath.Last())
                 {
                     LastMove(movingPiece, worldPath[index]);
                     return;
