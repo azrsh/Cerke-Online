@@ -50,11 +50,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
             var worldPath = relativeViaPath.Select(value => startPosition + value * (isFrontPlayersPiece ? -1 : 1)).ToList();
             worldPath.AddRange(realtiveLastPath.Select(value => viaPosition + value * (isFrontPlayersPiece ? -1 : 1)));
             this.worldPath = worldPath;
-            for (int i = 0; i < worldPath.Count; i++)
-            {
-                Debug.Log("ls " + worldPath[i]);
-            }
-
+            
             this.viaPieceMovement = viaPieceMovement;
             this.callback = callback;
             this.onPiecesChanged = onPiecesChanged;
@@ -173,7 +169,6 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
                 {
                     semorkoAction = () =>
                     {
-                        Debug.Log(worldPath.Last());
                         ConfirmPiecePosition(movingPiece, worldPath[index + 1], true);
                         Move(true, movingPiece.Position, index + 2);
                     };
