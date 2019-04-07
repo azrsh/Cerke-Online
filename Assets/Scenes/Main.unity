@@ -5461,7 +5461,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scoreText: {fileID: 399389513}
   firstOrSecond: 0
-  tag: "\u81EA\u5206\u306E\u5F97\u70B9"
+  scoreTextTag: "\u81EA\u5206\u306E\u5F97\u70B9"
 --- !u!114 &1369468442
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5491,7 +5491,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scoreText: {fileID: 605091721}
   firstOrSecond: 1
-  tag: "\u76F8\u624B\u306E\u5F97\u70B9"
+  scoreTextTag: "\u76F8\u624B\u306E\u5F97\u70B9"
 --- !u!1 &1372319182
 GameObject:
   m_ObjectHideFlags: 0

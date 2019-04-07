@@ -11,8 +11,8 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.UI
     public class ScorePresenter : MonoBehaviour
     {
         [SerializeField] Text scoreText = default;
-        [SerializeField] Terminologies.FirstOrSecond firstOrSecond;
-        [SerializeField] string tag;
+        [SerializeField] Terminologies.FirstOrSecond firstOrSecond = default;
+        [SerializeField] string scoreTextTag = default;
 
         void Start()
         {
@@ -32,7 +32,7 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.UI
             Action<Unit> onTurnChanged = _ =>
             {
                 var score = scoreUseCase.Score;
-                scoreText.text = tag + " : " + score.ToString();
+                scoreText.text = scoreTextTag + " : " + score.ToString();
             };
 
             scoreText.enabled = true;
