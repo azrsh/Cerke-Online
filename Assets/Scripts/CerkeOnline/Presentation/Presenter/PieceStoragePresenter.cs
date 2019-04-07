@@ -43,7 +43,7 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter
                 if (pieceView != null)
                 {
                     pieceView.transform.position = GetNextPlace(i);
-                    pieceView.transform.rotation = Quaternion.identity;
+                    pieceView.transform.rotation = GetPieceQuaternion(pieces[i]);
                 }
             }
         }
@@ -53,6 +53,29 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter
             int x = index % lineLimit;
             int y = index / lineLimit + 1;
             return offset + new Vector3(x * placeInterval.x, y * placeInterval.y, transform.position.z);
+        }
+
+        Quaternion GetPieceQuaternion(IReadOnlyPiece piece)
+        {
+            int pieceAttitude = GetPieceAttitude(piece);
+            return Quaternion.AngleAxis(pieceAttitude, Vector3.forward);
+        }
+
+        //PieceViewに同じコードがあるので統合したい
+        int GetPieceAttitude(IReadOnlyPiece piece)
+        {
+            var owner = piece.Owner;
+            if (owner == null) return -90;
+
+            switch (owner.Encampment)
+            {
+                case Encampment.Front:
+                    return 0;
+                case Encampment.Back:
+                    return 180;
+            }
+
+            return -90;
         }
     }
 }
