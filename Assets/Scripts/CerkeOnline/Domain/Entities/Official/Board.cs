@@ -78,7 +78,6 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
 
         bool isLocked = false;
         public void MovePiece(Vector2Int startPosition, Vector2Int viaPosition, Vector2Int lastPosition, IPlayer player, IValueInputProvider<int> valueProvider, Action<PieceMoveResult> callback)
-            //Test
         {
             if (isLocked) return;
 
