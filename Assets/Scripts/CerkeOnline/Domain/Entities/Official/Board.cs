@@ -3,7 +3,7 @@ using UniRx;
 using UnityEngine;
 using Azarashi.Utilities.Collections;
 using Azarashi.CerkeOnline.Domain.Entities.Official.Pieces;
-using Azarashi.CerkeOnline.Domain.Entities.NoRule;
+using Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction;
 using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.Official
@@ -174,8 +174,8 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
 
             isLocked = true;
             callback += (result) => { isLocked = false; };
-            PieceMoveAction pieceMoveAction =
-                new PieceMoveAction(player, startPosition, lastPosition, pieces, fieldChecker, valueProvider, pieceMovement, callback, () => onEveryValueChanged.OnNext(Unit.Default), isTurnEnd);
+            var pieceMoveAction =
+                new PieceMoveAction.PieceMoveAction(player, startPosition, lastPosition, pieces, fieldChecker, valueProvider, pieceMovement, callback, () => onEveryValueChanged.OnNext(Unit.Default), isTurnEnd);
             pieceMoveAction.StartMove();
         }
 

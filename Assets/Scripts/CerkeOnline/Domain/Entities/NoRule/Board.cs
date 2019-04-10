@@ -125,7 +125,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.NoRule
             isLocked = true;
             callback += (result) => { isLocked = false; };
             var pieceMoveAction =
-                new Official.PieceSemorkoMoveAction(player, startPosition, viaPosition, lastPosition, pieces, fieldChecker, new ConstantProvider(5), viaPieceMovement, lastPieceMovement, callback, () => onEveryValueChanged.OnNext(Unit.Default), isTurnEnd);
+                new Official.PieceMoveAction.PieceSemorkoMoveAction(player, startPosition, viaPosition, lastPosition, pieces, fieldChecker, new ConstantProvider(5), viaPieceMovement, lastPieceMovement, callback, () => onEveryValueChanged.OnNext(Unit.Default), isTurnEnd);
             pieceMoveAction.StartMove();
         }
 
@@ -173,8 +173,8 @@ namespace Azarashi.CerkeOnline.Domain.Entities.NoRule
 
             isLocked = true;
             callback += (result) => { isLocked = false; };
-            Official.PieceMoveAction pieceMoveAction = 
-                new Official.PieceMoveAction(player, startPosition, endPosition, pieces, fieldChecker, new ConstantProvider(5), pieceMovement, callback, () => onEveryValueChanged.OnNext(Unit.Default), isTurnEnd);
+            var pieceMoveAction = 
+                new Official.PieceMoveAction.PieceMoveAction(player, startPosition, endPosition, pieces, fieldChecker, new ConstantProvider(5), pieceMovement, callback, () => onEveryValueChanged.OnNext(Unit.Default), isTurnEnd);
             pieceMoveAction.StartMove();
         }
         

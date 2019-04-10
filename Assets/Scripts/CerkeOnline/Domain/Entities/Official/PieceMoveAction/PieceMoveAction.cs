@@ -6,7 +6,7 @@ using UniRx;
 using Azarashi.Utilities.Collections;
 using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
 
-namespace Azarashi.CerkeOnline.Domain.Entities.Official
+namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
 {
     /*命名に関する注意
      以下のクラスでは, 

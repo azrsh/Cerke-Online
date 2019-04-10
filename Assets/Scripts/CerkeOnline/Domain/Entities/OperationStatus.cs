@@ -1,4 +1,4 @@
-﻿namespace Azarashi.CerkeOnline.Domain.Entities.NoRule
+﻿namespace Azarashi.CerkeOnline.Domain.Entities
 {
     public class OperationStatus
     {
