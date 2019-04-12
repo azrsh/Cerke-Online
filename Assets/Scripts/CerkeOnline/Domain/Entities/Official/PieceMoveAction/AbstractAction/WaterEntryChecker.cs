@@ -18,15 +18,12 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction.Abstract
             this.valueProvider = valueProvider;
         }
 
-        public void CheckWaterEntry(IPiece movingPiece, LinkedListNode<ColumnData> worldPathNode, Action onSuccess, Action onFailure)
+        public bool CheckWaterEntry(IPiece movingPiece, LinkedListNode<ColumnData> worldPathNode, Action onSuccess, Action onFailure)
         {
-            if (IsJudgmentNecessary(movingPiece, worldPathNode))
-            {
-                JudgeWaterEntry(onSuccess, onFailure);
-                return;
-            }
+            if (!IsJudgmentNecessary(movingPiece, worldPathNode)) return true;
 
-            onSuccess();
+            JudgeWaterEntry(onSuccess, onFailure);
+            return false;
         }
 
         public bool IsJudgmentNecessary(IPiece movingPiece, LinkedListNode<ColumnData> worldPathNode)
@@ -45,11 +42,11 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction.Abstract
             {
                 if (value < threshold)
                 {
-                    onFailure();
+                    onFailure?.Invoke();
                     return;
                 }
 
-                onSuccess();
+                onSuccess?.Invoke();
             });
         }
     }

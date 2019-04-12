@@ -38,6 +38,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
         readonly Pickupper pickupper;
         readonly WaterEntryChecker waterEntryChecker;
         readonly MoveFinisher moveFinisher;
+        readonly PickupChecker pickupChecker;
 
         public PieceSemorkoMoveAction(IPlayer player, Vector2Int startPosition, Vector2Int viaPosition, Vector2Int lastPosition, Vector2ArrayAccessor<IPiece> pieces, IFieldEffectChecker fieldEffectChecker,
             IValueInputProvider<int> valueProvider, PieceMovement viaPieceMovement, PieceMovement lastPieceMovement, Action<PieceMoveResult> callback, Action onPiecesChanged, bool isTurnEnd)
@@ -68,6 +69,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
             pieceMover = new Mover(pieces, onPiecesChanged);
             waterEntryChecker = new WaterEntryChecker(3, fieldEffectChecker, valueProvider);
             moveFinisher = new MoveFinisher(pieceMover, new Pickupper(pieces));
+            pickupChecker = new PickupChecker(pickupper, moveFinisher);
         }
 
         void OnFailure(IPiece movingPiece)
@@ -78,7 +80,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
 
         void OnJudgementFailure(IPiece movingPiece, LinkedListNode<ColumnData> worldPathNode)
         {
-            if (worldPathNode.Previous != null)
+            if (worldPathNode?.Previous != null)
                 moveFinisher.FinishMove(player, movingPiece, worldPathNode.Previous.Value.Positin, callback, isTurnEnd);
             else
                 callback(new PieceMoveResult(true, isTurnEnd, null));
@@ -86,23 +88,12 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
 
         public void StartMove()
         {
-            Move(true, startPosition, worldPath.First);
+            IPiece movingPiece = pieces.Read(startPosition);
+            Move(movingPiece, worldPath.First);
         }
 
-        void Move(bool condition, Vector2Int start, LinkedListNode<ColumnData> worldPathNode)
+        void Move(IPiece movingPiece, LinkedListNode<ColumnData> worldPathNode)
         {
-            IPiece movingPiece = pieces.Read(start);
-
-            //再帰終了処理
-            if (!condition)
-            {
-                if (worldPathNode.Previous?.Previous != null)
-                    moveFinisher.FinishMove(player, movingPiece, worldPathNode.Previous.Previous.Value.Positin, callback, isTurnEnd);
-                else if (worldPathNode.Previous != null)
-                    callback(new PieceMoveResult(true, isTurnEnd, null));
-                return;
-            }
-
             if (worldPathNode == null)
             {
                 moveFinisher.FinishMove(player, movingPiece, worldPath.Last.Value.Positin, callback, isTurnEnd);
@@ -112,13 +103,9 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
             IPiece nextPiece = worldPathNode.Value.Piece;
 
             //入水判定の必要があるか
-            if (waterEntryChecker.IsJudgmentNecessary(movingPiece, worldPathNode))
-            {
-                if (worldPathNode.Previous != null) pieceMover.MovePiece(movingPiece, worldPathNode.Previous.Value.Positin);
-                valueProvider.RequestValue(value => Move(value >= 3, movingPiece.Position, worldPathNode.Next));
+            if (!waterEntryChecker.CheckWaterEntry(movingPiece, worldPathNode, () => Move(movingPiece, worldPathNode.Next), null))
                 return;
-            }
-
+            
             //経由点にいる場合
             if (worldPathNode.Value.Positin == viaPosition && worldPathNode.Next != null)
             {
@@ -139,7 +126,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
                     semorkoAction = () =>
                     {
                         pieceMover.MovePiece(movingPiece, worldPathNode.Next.Value.Positin, true);
-                        Move(true, movingPiece.Position, worldPathNode.Next.Next);
+                        Move(movingPiece, worldPathNode.Next.Next);
                     };
                 }
                 else if (worldPathNode.Next.Next == null && pickupper.IsPickupable(player ,movingPiece, semorkoNextPiece))
@@ -181,7 +168,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
                     if (worldPathNode.Next.Value.Piece == null)
                     {
                         pieceMover.MovePiece(movingPiece, worldPathNode.Next.Value.Positin, isForceMove: true);
-                        Move(true, worldPathNode.Next.Value.Positin, worldPathNode.Next.Next);
+                        Move(movingPiece, worldPathNode.Next.Next);
                         return;
                     }
 
@@ -222,7 +209,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
             if(worldPathNode.Next == null)
                 moveFinisher.FinishMove(player, movingPiece, worldPathNode.Previous.Value.Positin, callback, isTurnEnd);
             else
-                Move(true, start, worldPathNode.Next);
+                Move(movingPiece, worldPathNode.Next);
         }
     }
 }
