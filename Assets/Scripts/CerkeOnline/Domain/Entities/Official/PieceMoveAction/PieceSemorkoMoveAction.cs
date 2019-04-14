@@ -22,12 +22,9 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
     {
         readonly IPlayer player;
         readonly Vector2ArrayAccessor<IPiece> pieces;
-        readonly IFieldEffectChecker fieldEffectChecker;
-        readonly IValueInputProvider<int> valueProvider;
         readonly LinkedList<ColumnData> worldPath;
         readonly PieceMovement viaPieceMovement;
         readonly Action<PieceMoveResult> callback;
-        readonly Action onPiecesChanged;
         readonly bool isTurnEnd;
         bool surmounted = false;
 
@@ -38,23 +35,24 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
         readonly Pickupper pickupper;
         readonly WaterEntryChecker waterEntryChecker;
         readonly MoveFinisher moveFinisher;
-        readonly PickupChecker pickupChecker;
+        readonly SurmountingChecker surmountingChecker;
+        readonly SemorkoChecker semorkoChecker;
 
         public PieceSemorkoMoveAction(IPlayer player, Vector2Int startPosition, Vector2Int viaPosition, Vector2Int lastPosition, Vector2ArrayAccessor<IPiece> pieces, IFieldEffectChecker fieldEffectChecker,
             IValueInputProvider<int> valueProvider, PieceMovement viaPieceMovement, PieceMovement lastPieceMovement, Action<PieceMoveResult> callback, Action onPiecesChanged, bool isTurnEnd)
         {
             this.player = player ?? throw new ArgumentNullException("駒を操作するプレイヤーを指定してください.");
             this.pieces = pieces ?? throw new ArgumentNullException("盤面の情報を入力してください.");
-            this.fieldEffectChecker = fieldEffectChecker ?? throw new ArgumentNullException("フィールド効果の情報を入力してください.");
-            this.valueProvider = valueProvider ?? throw new ArgumentNullException("投げ棒の値を提供するインスタンスを指定してください.");
+            //fieldEffectChecker ?? throw new ArgumentNullException("フィールド効果の情報を入力してください.");
+            //valueProvider ?? throw new ArgumentNullException("投げ棒の値を提供するインスタンスを指定してください.");
 
             this.startPosition = startPosition;
-            this.viaPosition = viaPosition;//
+            this.viaPosition = viaPosition;
             bool isFrontPlayersPiece = pieces.Read(startPosition).Owner != null && pieces.Read(startPosition).Owner.Encampment == Encampment.Front;
             Vector2Int relativeViaPosition = (viaPosition - startPosition) * (isFrontPlayersPiece ? -1 : 1);
-            var relativeViaPath = viaPieceMovement.GetPath(relativeViaPosition)?.ToList() ?? throw new ArgumentException("移動不可能な移動先が指定されました.");//
-            Vector2Int relativeLastPosition = (lastPosition - viaPosition) * (isFrontPlayersPiece ? -1 : 1);//
-            var realtiveLastPath = lastPieceMovement.GetPath(relativeLastPosition) ?? throw new ArgumentException("移動不可能な移動先が指定されました.");//
+            var relativeViaPath = viaPieceMovement.GetPath(relativeViaPosition)?.ToList() ?? throw new ArgumentException("移動不可能な移動先が指定されました.");
+            Vector2Int relativeLastPosition = (lastPosition - viaPosition) * (isFrontPlayersPiece ? -1 : 1);
+            var realtiveLastPath = lastPieceMovement.GetPath(relativeLastPosition) ?? throw new ArgumentException("移動不可能な移動先が指定されました.");
 
             var worldPath = relativeViaPath.Select(value => startPosition + value * (isFrontPlayersPiece ? -1 : 1)).ToList();
             worldPath.AddRange(realtiveLastPath.Select(value => viaPosition + value * (isFrontPlayersPiece ? -1 : 1)));
@@ -62,14 +60,14 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
 
             this.viaPieceMovement = viaPieceMovement;
             this.callback = callback;
-            this.onPiecesChanged = onPiecesChanged;
             this.isTurnEnd = isTurnEnd;
 
             pickupper = new Pickupper(pieces);
             pieceMover = new Mover(pieces, onPiecesChanged);
-            waterEntryChecker = new WaterEntryChecker(3, fieldEffectChecker, valueProvider);
+            waterEntryChecker = new WaterEntryChecker(3, fieldEffectChecker, valueProvider, OnJudgementFailure);
             moveFinisher = new MoveFinisher(pieceMover, new Pickupper(pieces));
-            pickupChecker = new PickupChecker(pickupper, moveFinisher);
+            surmountingChecker = new SurmountingChecker(pieceMover, waterEntryChecker);
+            semorkoChecker = new SemorkoChecker(waterEntryChecker);
         }
 
         void OnFailure(IPiece movingPiece)
@@ -103,105 +101,51 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
             IPiece nextPiece = worldPathNode.Value.Piece;
 
             //入水判定の必要があるか
-            if (!waterEntryChecker.CheckWaterEntry(movingPiece, worldPathNode, () => Move(movingPiece, worldPathNode.Next), null))
+            if (!waterEntryChecker.CheckWaterEntry(movingPiece, worldPathNode, () => Move(movingPiece, worldPathNode.Next)))
                 return;
-            
+
             //経由点にいる場合
-            if (worldPathNode.Value.Positin == viaPosition && worldPathNode.Next != null)
+            IPiece semorkoNextPiece = worldPathNode.Next.Value.Piece;
+            Action semorkoAction = null;
+            if (semorkoNextPiece == null)
             {
-                if (nextPiece == null)
+                semorkoAction = () =>
                 {
-                    OnFailure(movingPiece);
+                    pieceMover.MovePiece(movingPiece, worldPathNode.Next.Value.Positin, true);
+                    Move(movingPiece, worldPathNode.Next.Next);
+                };
+            }
+            else if (worldPathNode.Next.Next == null && pickupper.IsPickupable(player, movingPiece, semorkoNextPiece))
+            {
+                semorkoAction = () =>
+                {
+                    moveFinisher.FinishMove(player, movingPiece, worldPathNode.Next.Value.Positin, callback, true);
+                };
+            }
+            if (!semorkoChecker.CheckSemorko(viaPosition, player, movingPiece, worldPathNode, semorkoAction, OnFailure))
+                return;
+
+            //PieceMovementが踏み越えに対応しているか
+            Action surmountAction = () =>
+            {
+                surmounted = true;
+                if (worldPathNode.Next.Value.Piece == null)
+                {
+                    pieceMover.MovePiece(movingPiece, worldPathNode.Next.Value.Positin, isForceMove: true);
+                    Move(movingPiece, worldPathNode.Next.Next);
                     return;
                 }
 
-                //Unsafe 踏み越えられた場合のイベント通知
-                if (nextPiece is ISemorkoObserver)
-                    (nextPiece as ISemorkoObserver).OnSurmounted.OnNext(Unit.Default);
-
-                IPiece semorkoNextPiece = worldPathNode.Next.Value.Piece;
-                Action semorkoAction = null;
-                if (semorkoNextPiece == null)
+                if (worldPathNode.Next.Next == null)
                 {
-                    semorkoAction = () =>
-                    {
-                        pieceMover.MovePiece(movingPiece, worldPathNode.Next.Value.Positin, true);
-                        Move(movingPiece, worldPathNode.Next.Next);
-                    };
-                }
-                else if (worldPathNode.Next.Next == null && pickupper.IsPickupable(player ,movingPiece, semorkoNextPiece))
-                {
-                    semorkoAction = () =>
-                    {
-                        moveFinisher.FinishMove(player, movingPiece, worldPathNode.Next.Value.Positin, callback, true);
-                    };
+                    moveFinisher.FinishMove(player, movingPiece, worldPathNode.Next.Value.Positin, callback, isTurnEnd);
+                    return;
                 }
 
-                if (semorkoAction == null)
-                    OnFailure(movingPiece);
-                else if (waterEntryChecker.IsJudgmentNecessary(movingPiece, worldPathNode) ||
-                    waterEntryChecker.IsJudgmentNecessary(movingPiece, worldPathNode.Next))
-                    valueProvider.RequestValue(value =>
-                    {
-                        if (value < 3)
-                        {
-                            OnJudgementFailure(movingPiece, worldPathNode);
-                            return;
-                        }
-
-                        semorkoAction();
-                    });
-                else
-                    semorkoAction();
-
+                OnFailure(movingPiece);
+            };
+            if (!surmountingChecker.CheckSurmounting(viaPieceMovement, movingPiece, worldPathNode, surmounted, surmountAction))
                 return;
-            }
-
-            //PieceMovementが踏み越えに対応しているか
-            var isLast = worldPathNode.Next == null;
-            var isSurmountable = nextPiece != null && !surmounted && viaPieceMovement.surmountable && !isLast;
-            if (isSurmountable)
-            {
-                Action surmountAction = () =>
-                {
-                    surmounted = true;
-                    if (worldPathNode.Next.Value.Piece == null)
-                    {
-                        pieceMover.MovePiece(movingPiece, worldPathNode.Next.Value.Positin, isForceMove: true);
-                        Move(movingPiece, worldPathNode.Next.Next);
-                        return;
-                    }
-
-                    if (worldPathNode.Next.Next == null)
-                    {
-                        moveFinisher.FinishMove(player, movingPiece, worldPathNode.Next.Value.Positin, callback, isTurnEnd);
-                        return;
-                    }
-
-                    OnFailure(movingPiece);
-                };
-
-                //別の書き方にしたい
-                if (waterEntryChecker.IsJudgmentNecessary(movingPiece, worldPathNode) ||
-                    waterEntryChecker.IsJudgmentNecessary(movingPiece, worldPathNode.Next))
-                {
-                    if (worldPathNode.Previous != null) pieceMover.MovePiece(movingPiece, worldPathNode.Previous.Value.Positin);
-                    valueProvider.RequestValue(value =>
-                    {
-                        if (value < 3)
-                        {
-                            OnJudgementFailure(movingPiece, worldPathNode);
-                            return;
-                        }
-
-                        surmountAction();
-                    });
-                }
-                else
-                    surmountAction();
-
-                return;
-            }
 
             if(!moveFinisher.CheckIfContinuable(player, movingPiece, worldPathNode, callback, () => OnFailure(movingPiece), isTurnEnd))
                 return;

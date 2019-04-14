@@ -10,19 +10,21 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction.Abstract
         readonly int threshold;
         readonly IFieldEffectChecker fieldEffectChecker;
         readonly IValueInputProvider<int> valueProvider;
+        readonly Action<IPiece, LinkedListNode<ColumnData>> onJudgementFailure;
 
-        public WaterEntryChecker(int threshold, IFieldEffectChecker fieldEffectChecker,IValueInputProvider<int> valueProvider)
+        public WaterEntryChecker(int threshold, IFieldEffectChecker fieldEffectChecker,IValueInputProvider<int> valueProvider, Action<IPiece, LinkedListNode<ColumnData>> onJudgementFailure)
         {
             this.threshold = threshold;
             this.fieldEffectChecker = fieldEffectChecker;
             this.valueProvider = valueProvider;
+            this.onJudgementFailure = onJudgementFailure;
         }
 
-        public bool CheckWaterEntry(IPiece movingPiece, LinkedListNode<ColumnData> worldPathNode, Action onSuccess, Action onFailure)
+        public bool CheckWaterEntry(IPiece movingPiece, LinkedListNode<ColumnData> worldPathNode, Action onSuccess)
         {
             if (!IsJudgmentNecessary(movingPiece, worldPathNode)) return true;
 
-            JudgeWaterEntry(onSuccess, onFailure);
+            JudgeWaterEntry(movingPiece, worldPathNode, onSuccess);
             return false;
         }
 
@@ -36,13 +38,13 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction.Abstract
             return isNecessaryWaterEntryJudgment;
         }
 
-        void JudgeWaterEntry(Action onSuccess, Action onFailure)
+        public void JudgeWaterEntry(IPiece movingPiece, LinkedListNode<ColumnData> worldPathNode, Action onSuccess)
         {
             valueProvider.RequestValue(value =>
             {
                 if (value < threshold)
                 {
-                    onFailure?.Invoke();
+                    onJudgementFailure?.Invoke(movingPiece, worldPathNode);
                     return;
                 }
 
