@@ -67,7 +67,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
             waterEntryChecker = new WaterEntryChecker(3, fieldEffectChecker, valueProvider, OnJudgementFailure);
             moveFinisher = new MoveFinisher(pieceMover, new Pickupper(pieces));
             surmountingChecker = new SurmountingChecker(pieceMover, waterEntryChecker);
-            semorkoChecker = new SemorkoChecker(waterEntryChecker);
+            semorkoChecker = new SemorkoChecker(waterEntryChecker, moveFinisher, pickupper, pieceMover, callback);
         }
 
         void OnFailure(IPiece movingPiece)
@@ -106,23 +106,8 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
 
             //経由点にいる場合
             IPiece semorkoNextPiece = worldPathNode.Next.Value.Piece;
-            Action semorkoAction = null;
-            if (semorkoNextPiece == null)
-            {
-                semorkoAction = () =>
-                {
-                    pieceMover.MovePiece(movingPiece, worldPathNode.Next.Value.Positin, true);
-                    Move(movingPiece, worldPathNode.Next.Next);
-                };
-            }
-            else if (worldPathNode.Next.Next == null && pickupper.IsPickupable(player, movingPiece, semorkoNextPiece))
-            {
-                semorkoAction = () =>
-                {
-                    moveFinisher.FinishMove(player, movingPiece, worldPathNode.Next.Value.Positin, callback, true);
-                };
-            }
-            if (!semorkoChecker.CheckSemorko(viaPosition, player, movingPiece, worldPathNode, semorkoAction, OnFailure))
+            Action moveAfterNext = () => Move(movingPiece, worldPathNode.Next.Next);
+            if (!semorkoChecker.CheckSemorko(viaPosition, player, movingPiece, worldPathNode, moveAfterNext, OnFailure))
                 return;
 
             //PieceMovementが踏み越えに対応しているか
