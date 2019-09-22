@@ -17,9 +17,9 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter
 
             vector3Map = new Vector3[Terminologies.LengthOfOneSideOfBoard, Terminologies.LengthOfOneSideOfBoard];
             BoxCollider2D[] boxColliders = GetComponentsInChildren<BoxCollider2D>();
-            for (int i = 0; i < vector3Map.GetLength(1); i++)
-                for (int j = 0; j < vector3Map.GetLength(0); j++)
-                    vector3Map[i, j] = boxColliders[j * vector3Map.GetLength(0) + i].transform.position;
+            for (int y = 0; y < vector3Map.GetLength(1); y++)
+                for (int x = 0; x < vector3Map.GetLength(0); x++)
+                    vector3Map[x, y] = boxColliders[y * vector3Map.GetLength(0) + x].transform.position;
             return vector3Map;
         }
 
@@ -29,9 +29,10 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter
 
             transformMap = new Transform[Terminologies.LengthOfOneSideOfBoard, Terminologies.LengthOfOneSideOfBoard];
             BoxCollider2D[] boxColliders = GetComponentsInChildren<BoxCollider2D>();
-            for (int i = 0; i < transformMap.GetLength(1); i++)
-                for (int j = 0; j < transformMap.GetLength(0); j++)
-                    transformMap[i, j] = boxColliders[j * transformMap.GetLength(0) + i].transform;
+            for (int y = 0; y < transformMap.GetLength(1); y++)
+                for (int x = 0; x < transformMap.GetLength(0); x++)
+                    transformMap[x, y] = boxColliders[y * transformMap.GetLength(0) + x].transform;
+            
             return transformMap;
         }
     }
