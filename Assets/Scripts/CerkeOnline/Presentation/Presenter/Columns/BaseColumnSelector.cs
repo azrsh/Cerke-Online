@@ -3,7 +3,9 @@
 namespace Azarashi.CerkeOnline.Presentation.Presenter.Columns
 {
     public abstract class BaseColumnSelector : MonoBehaviour
-    {   
+    {
+        [SerializeField] IReadOnlyPieceUnityEvent onPieceSelected = default;
+
         static readonly Vector2Int NonePosition = new Vector2Int(-1, -1);
         Vector2Int startPosition = NonePosition;
         Vector2Int viaPosition = NonePosition;
@@ -15,6 +17,9 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.Columns
             {
                 this.startPosition = position;
                 this.viaPosition = NonePosition;
+
+                CallPieceSelectedEvent(position);
+                
                 return;
             }
 
@@ -29,5 +34,13 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.Columns
         }
 
         protected abstract void OnColumnSelected(Vector2Int start, Vector2Int via, Vector2Int last);
+
+        void CallPieceSelectedEvent(Vector2Int position)
+        {
+            var game = Application.GameController.Instance.Game;
+            var board = game.Board;
+            var piece = board.GetPiece(position);
+            onPieceSelected.Invoke(piece);
+        }
     }
 }

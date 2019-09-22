@@ -193,7 +193,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
             return true;
         }
 
-        bool IsOnBoard(Vector2Int position)
+        public bool IsOnBoard(Vector2Int position)
         {
             return position.x >= 0 && position.y >= 0 && position.x < pieces.Width && position.y < pieces.Height;
         }
