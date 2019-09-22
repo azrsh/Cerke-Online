@@ -32,7 +32,7 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.PredictionMarker
         }
 
         public void OnPieceSelected(IReadOnlyPiece movingPiece) => CalculateAndDisplay(movingPiece);
-        public void OnViaPositionSelected(Vector2Int position) { }
+        public void OnViaPositionSelected(Vector2Int position) { /*中継地点からの移動先ハイライトは未実装*/}
         public void OnTargetPositionSelected(Vector2Int position) => markerObjects.HideAllMarker();
 
         void CalculateAndDisplay(IReadOnlyPiece movingPiece)
