@@ -53,5 +53,11 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         /// 盤の更新イベント.
         /// </summary>
         IObservable<Unit> OnEveruValueChanged { get; }
+
+        /// <summary>
+        /// 引数の論理座標は盤上か判定する.
+        /// </summary>
+        /// <returns></returns>
+        bool IsOnBoard(Vector2Int position);
     }
 }

@@ -21,7 +21,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
     public class PieceSemorkoMoveAction
     {
         readonly IPlayer player;
-        readonly Vector2ArrayAccessor<IPiece> pieces;
+        readonly Vector2YXArrayAccessor<IPiece> pieces;
         readonly LinkedList<ColumnData> worldPath;
         readonly PieceMovement viaPieceMovement;
         readonly Action<PieceMoveResult> callback;
@@ -38,7 +38,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
         readonly SurmountingChecker surmountingChecker;
         readonly SemorkoChecker semorkoChecker;
 
-        public PieceSemorkoMoveAction(IPlayer player, Vector2Int startPosition, Vector2Int viaPosition, Vector2Int lastPosition, Vector2ArrayAccessor<IPiece> pieces, IFieldEffectChecker fieldEffectChecker,
+        public PieceSemorkoMoveAction(IPlayer player, Vector2Int startPosition, Vector2Int viaPosition, Vector2Int lastPosition, Vector2YXArrayAccessor<IPiece> pieces, IFieldEffectChecker fieldEffectChecker,
             IValueInputProvider<int> valueProvider, PieceMovement viaPieceMovement, PieceMovement lastPieceMovement, Action<PieceMoveResult> callback, Action onPiecesChanged, bool isTurnEnd)
         {
             this.player = player ?? throw new ArgumentNullException("駒を操作するプレイヤーを指定してください.");

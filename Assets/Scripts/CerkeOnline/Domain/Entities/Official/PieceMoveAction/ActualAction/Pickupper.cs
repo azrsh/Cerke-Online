@@ -6,9 +6,9 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction.ActualAc
 {
     public class Pickupper
     {
-        readonly Vector2ArrayAccessor<IPiece> pieces;
+        readonly Vector2YXArrayAccessor<IPiece> pieces;
 
-        public Pickupper(Vector2ArrayAccessor<IPiece> pieces)
+        public Pickupper(Vector2YXArrayAccessor<IPiece> pieces)
         {
             this.pieces = pieces;
         }

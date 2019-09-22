@@ -9,7 +9,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.NoRule
 {
     public class Board : IBoard
     {
-        readonly Vector2ArrayAccessor<IPiece> pieces;
+        readonly Vector2YXArrayAccessor<IPiece> pieces;
         readonly Official.IFieldEffectChecker fieldChecker;
         public IObservable<Unit> OnEveruValueChanged => onEveryValueChanged;
         readonly Subject<Unit> onEveryValueChanged = new Subject<Unit>();
@@ -33,7 +33,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.NoRule
                 { FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal },
                 { FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal },
             };
-            fieldChecker = new Official.FieldEffectChecker(new Vector2ArrayAccessor<FieldEffect>(columns), tam);
+            fieldChecker = new Official.FieldEffectChecker(new Vector2YXArrayAccessor<FieldEffect>(columns), tam);
 
             IPiece[,] pieces = new IPiece[,]
             {
@@ -47,7 +47,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.NoRule
                 {  new Terlsk(0, new Vector2Int(0,7), frontPlayer, fieldChecker),   new Gustuer(0, new Vector2Int(1,7), frontPlayer, fieldChecker),                                                            null,   new Stistyst(0, new Vector2Int(3,7), frontPlayer, fieldChecker),                                                             null,   new Stistyst(1, new Vector2Int(5,7), frontPlayer, fieldChecker),                                                            null,   new Gustuer(1, new Vector2Int(7,7), frontPlayer, fieldChecker),   new Terlsk(1, new Vector2Int(8,7), frontPlayer, fieldChecker) },
                 {     new Kua(1, new Vector2Int(0,8), frontPlayer, fieldChecker),     new Dodor(1, new Vector2Int(1,8), frontPlayer, fieldChecker),   new Vadyrd(1, new Vector2Int(2,8), frontPlayer, fieldChecker),     new Varxle(1, new Vector2Int(3,8), frontPlayer, fieldChecker),      new Ales(0, new Vector2Int(4,8), frontPlayer, fieldChecker),     new Varxle(0, new Vector2Int(5,8), frontPlayer, fieldChecker),   new Vadyrd(0, new Vector2Int(6,8), frontPlayer, fieldChecker),     new Dodor(0, new Vector2Int(7,8), frontPlayer, fieldChecker),      new Kua(0, new Vector2Int(8,8), frontPlayer, fieldChecker) }
             };
-            this.pieces = new Vector2ArrayAccessor<IPiece>(pieces);
+            this.pieces = new Vector2YXArrayAccessor<IPiece>(pieces);
 
             onEveryValueChanged.OnNext(Unit.Default);
         }
@@ -192,7 +192,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.NoRule
             return true;
         }
         
-        bool IsOnBoard(Vector2Int position)
+        public bool IsOnBoard(Vector2Int position)
         {
             return position.x >= 0 && position.y >= 0 && position.x < pieces.Width && position.y < pieces.Height;
         }

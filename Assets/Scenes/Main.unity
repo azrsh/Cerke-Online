@@ -1340,6 +1340,7 @@ GameObject:
   m_Component:
   - component: {fileID: 273674880}
   - component: {fileID: 273674881}
+  - component: {fileID: 273674879}
   m_Layer: 0
   m_Name: Presenters
   m_TagString: Untagged
@@ -1347,6 +1348,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &273674879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 273674878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1a1a275254658745923ce69e9f8f9b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  columnParentObject: {fileID: 1173496822}
+  predictionMarkerPrefab: {fileID: 769375799254165547, guid: 424a14f7b1b46844eaf4469d4ee14a88,
+    type: 3}
 --- !u!4 &273674880
 Transform:
   m_ObjectHideFlags: 0
@@ -3382,6 +3398,54 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 255296969582634499afdb08cad3579f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onPieceSelected:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 273674879}
+        m_MethodName: OnPieceSelected
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: Azarashi.CerkeOnline.Presentation.Presenter.IReadOnlyPieceUnityEvent,
+      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  onViaPositionSelected:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 273674879}
+        m_MethodName: OnViaPositionSelected
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: Azarashi.Utilities.UnityEvents.Vector2IntUnityEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  onTargetPositionSelected:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 273674879}
+        m_MethodName: OnTargetPositionSelected
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: Azarashi.Utilities.UnityEvents.Vector2IntUnityEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!114 &809378392
 MonoBehaviour:
   m_ObjectHideFlags: 0

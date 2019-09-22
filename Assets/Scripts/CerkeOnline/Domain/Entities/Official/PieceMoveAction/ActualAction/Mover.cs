@@ -6,10 +6,10 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction.ActualAc
 {
     public class Mover
     {
-        readonly Vector2ArrayAccessor<IPiece> pieces;
+        readonly Vector2YXArrayAccessor<IPiece> pieces;
         readonly Action onPiecesChanged;
 
-        public Mover(Vector2ArrayAccessor<IPiece> pieces, Action onPiecesChanged)
+        public Mover(Vector2YXArrayAccessor<IPiece> pieces, Action onPiecesChanged)
         {
             this.pieces = pieces;
             this.onPiecesChanged = onPiecesChanged;

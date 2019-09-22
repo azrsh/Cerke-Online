@@ -8,9 +8,9 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction.DataStru
         public Vector2Int Positin { get; }
         public IPiece Piece { get { return pieces.Read(Positin); } }
 
-        readonly Vector2ArrayAccessor<IPiece> pieces;
+        readonly Vector2YXArrayAccessor<IPiece> pieces;
 
-        public ColumnData(Vector2Int positin, Vector2ArrayAccessor<IPiece> pieces)
+        public ColumnData(Vector2Int positin, Vector2YXArrayAccessor<IPiece> pieces)
         {
             Positin = positin;
             this.pieces = pieces;
