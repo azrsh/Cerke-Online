@@ -14,8 +14,8 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.PredictionMarker
     //[RequireComponent(typeof(IMapProvider<Transform>))]
     public class PredictionMarkPresenter : MonoBehaviour
     {
-        [SerializeField] GameObject columnParentObject;
-        [SerializeField] GameObject predictionMarkerPrefab;
+        [SerializeField] GameObject columnParentObject = default;
+        [SerializeField] GameObject predictionMarkerPrefab = default;
         PredictionMarkerObjects markerObjects;
         ColumnPositionConverter columnPositionConverter;
         MovePredictor movePredictor;
@@ -24,7 +24,7 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.PredictionMarker
         {
             //GameController呼び出したくない
             GameController.Instance.OnGameReset.Subscribe(game => movePredictor = new MovePredictor(game.Board));
-            
+
             var mapProvider = columnParentObject.GetComponent<IMapProvider<Transform>>();
             columnPositionConverter = new ColumnPositionConverter(mapProvider);
 
@@ -32,6 +32,8 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.PredictionMarker
         }
 
         public void OnPieceSelected(IReadOnlyPiece movingPiece) => CalculateAndDisplay(movingPiece);
+        public void OnViaPositionSelected(Vector2Int position) { }
+        public void OnTargetPositionSelected(Vector2Int position) => markerObjects.HideAllMarker();
 
         void CalculateAndDisplay(IReadOnlyPiece movingPiece)
         {

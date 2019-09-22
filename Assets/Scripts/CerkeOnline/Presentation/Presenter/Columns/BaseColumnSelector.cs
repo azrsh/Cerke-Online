@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
+using Azarashi.Utilities.UnityEvents;
 
 namespace Azarashi.CerkeOnline.Presentation.Presenter.Columns
 {
     public abstract class BaseColumnSelector : MonoBehaviour
     {
         [SerializeField] IReadOnlyPieceUnityEvent onPieceSelected = default;
+        [SerializeField] Vector2IntUnityEvent onViaPositionSelected = default;
+        [SerializeField] Vector2IntUnityEvent onTargetPositionSelected = default;
 
         static readonly Vector2Int NonePosition = new Vector2Int(-1, -1);
         Vector2Int startPosition = NonePosition;
@@ -26,9 +29,11 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.Columns
             if (this.viaPosition == NonePosition)
             {
                 this.viaPosition = position;
+                onViaPositionSelected.Invoke(viaPosition);
                 return;
             }
 
+            onTargetPositionSelected.Invoke(position);
             OnColumnSelected(this.startPosition, this.viaPosition, position);
             this.startPosition = NonePosition;
         }
