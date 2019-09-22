@@ -7,10 +7,10 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
 {
     public class FieldEffectChecker : IFieldEffectChecker
     {
-        readonly Vector2ArrayAccessor<FieldEffect> columns;
+        readonly Vector2YXArrayAccessor<FieldEffect> columns;
         readonly IReadOnlyPiece[] pieces;
 
-        public FieldEffectChecker(Vector2ArrayAccessor<FieldEffect> columns, params IReadOnlyPiece[] pieces)
+        public FieldEffectChecker(Vector2YXArrayAccessor<FieldEffect> columns, params IReadOnlyPiece[] pieces)
         {
             this.columns = columns;
             this.pieces = pieces;

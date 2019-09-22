@@ -14,12 +14,12 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.Columns
         {
             Transform[,] columns = GetComponent<IMapProvider<Transform>>().GetMap();
 
-            for (int i = 0; i < columns.GetLength(0); i++)
+            for (int x = 0; x < columns.GetLength(0); x++)
             {
-                for (int j = 0; j < columns.GetLength(1); j++)
+                for (int y = 0; y < columns.GetLength(1); y++)
                 {
-                    ColumnView columnView = columns[i, j].gameObject.AddComponent<ColumnView>();
-                    Vector2Int columnPosition = new Vector2Int(i, j);
+                    ColumnView columnView = columns[x, y].gameObject.AddComponent<ColumnView>();
+                    Vector2Int columnPosition = new Vector2Int(x, y);
                     columnView.OnClick.TakeUntilDestroy(this).Select(_ => columnPosition).Subscribe(onColumnClicked.Invoke);
                 }
             }

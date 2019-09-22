@@ -18,9 +18,9 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter
 
             transformMap = transformMap ?? GenerateTransformMap();
             vector3Map = new Vector3[Terminologies.LengthOfOneSideOfBoard, Terminologies.LengthOfOneSideOfBoard];
-            for (int y = 0; y < transformMap.GetLength(1); y++)
-                for (int x = 0; x < transformMap.GetLength(0); x++)
-                    vector3Map[x, y] = transformMap[x, y].position;
+            for (int i = 0; i < transformMap.GetLength(1); i++)
+                for (int j = 0; j < transformMap.GetLength(0); j++)
+                    vector3Map[i, j] = transformMap[i, j].position;
 
             return vector3Map;
         }
@@ -38,8 +38,8 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter
         {
             transformMap = new Transform[Terminologies.LengthOfOneSideOfBoard, Terminologies.LengthOfOneSideOfBoard];
             BoxCollider2D[] boxColliders = GetComponentsInChildren<BoxCollider2D>();
-            for (int y = 0; y < transformMap.GetLength(1); y++)
-                for (int x = 0; x < transformMap.GetLength(0); x++)
+            for (int x = 0; x < transformMap.GetLength(0); x++)
+                for (int y = 0; y < transformMap.GetLength(1); y++)
                     transformMap[x, y] = boxColliders[y * transformMap.GetLength(0) + x].transform;
 
             return transformMap;
