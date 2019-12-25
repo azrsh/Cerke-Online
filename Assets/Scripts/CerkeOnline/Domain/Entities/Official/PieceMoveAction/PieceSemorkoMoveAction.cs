@@ -18,7 +18,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
      という意味で使っています.
      */
 
-    public class PieceSemorkoMoveAction
+    public class PieceSemorkoMoveAction : IPieceMoveAction
     {
         readonly IPlayer player;
         readonly Vector2YXArrayAccessor<IPiece> pieces;
