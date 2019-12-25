@@ -27,7 +27,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
         
             var frontPlayer = GetPlayer(Encampment.Front);
             var backPlayer = GetPlayer(Encampment.Back);
-            Board = new Board(frontPlayer, backPlayer);
+            Board = BoardFactory.Create(frontPlayer, backPlayer);
             HandDatabase = new HandDatabase(Board, OnTurnChanged);
             ScoreHolder = new DefaultScoreHolder(new Dictionary<IPlayer, int> { { frontPlayer, 20 }, { backPlayer, 20 } });
         }
