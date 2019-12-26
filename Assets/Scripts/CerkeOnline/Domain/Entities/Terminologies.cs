@@ -61,6 +61,40 @@ namespace Azarashi.CerkeOnline.Domain.Entities
             tamajtel = 2,   //硬皇力
         }
 
+        public static class PieceNameDictionary
+        {
+            public static IReadOnlyDictionary<string, string> PieceNameChineseCharacters2Alphabet
+                        => new Dictionary<string, string>()
+                        {
+                            {"felkana", "船"},
+                            {"elmer", "兵"},
+                            {"gustuer", "弓"},
+                            {"vadyrd", "車"},
+                            {"stistyst", "虎"},
+                            {"dodor", "馬"},
+                            {"kua", "筆"},
+                            {"terlsk", "巫"},
+                            {"varxle", "将"},
+                            {"ales", "王"},
+                            {"tam", "皇"}
+                        };
+            public static IReadOnlyDictionary<string, string> PieceNameAlphabet2ChineseCharacters
+                        => new Dictionary<string, string>()
+                        {
+                            {"船", "felkana"},
+                            {"兵", "elmer"},
+                            {"弓", "gustuer"},
+                            {"車", "vadyrd"},
+                            {"虎", "stistyst"},
+                            {"馬", "dodor"},
+                            {"筆", "kua"},
+                            {"巫", "terlsk"},
+                            {"将", "varxle"},
+                            {"王", "ales"},
+                            {"皇", "tam"}
+                        };
+        }
+
         public static class Pieces
         {
             public const string Felkana = "船";
