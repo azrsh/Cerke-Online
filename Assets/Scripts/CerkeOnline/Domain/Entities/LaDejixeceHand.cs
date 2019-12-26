@@ -21,20 +21,32 @@ namespace Azarashi.CerkeOnline.Domain.Entities
             Score = score;
         }
 
-        public int GetNumberOfSuccesses(IReadOnlyList<IReadOnlyPiece> pieces)
+        public int GetNumberOfSuccesses(IReadOnlyList<IReadOnlyPiece> holdingPieces)
         {
             IReadOnlyList<PieceStack> pieceStacks = pieceStacksProvider.GetPieceStacks();
 
-            if (pieces.Count < pieceStacks.Count) return 0;
+            if (holdingPieces.Count < pieceStacks.Count) return 0;
 
+            IEnumerable<IReadOnlyPiece> alesList = holdingPieces.Where(piece => piece.PieceName == PieceName.Ales);
+            int restBlackAlesCount = alesList.Where(piece => piece.Color == 0).Count();
             bool black = pieceStacks.All(stack =>
             {
-                return pieces.Count(piece => piece.Color == 0 && (stack.PieceName == PieceName.None || piece.PieceName == stack.PieceName)) >= stack.StackCount;
+                int appropriateHoldingPieceCount = holdingPieces.Count(piece => piece.Color == 0 && (stack.PieceName == PieceName.None || piece.PieceName == stack.PieceName));
+                int difference = appropriateHoldingPieceCount - stack.StackCount;
+                bool isIndividualSuccess = difference + restBlackAlesCount >= 0;
+                restBlackAlesCount += System.Math.Min(0, difference);
+                return isIndividualSuccess;
             });
+            
+            int restRedAlesCount = alesList.Where(piece => piece.Color == 1).Count();
             bool red = pieceStacks.All(stack =>
             {
-                return pieces.Count(piece => piece.Color == 1 && (stack.PieceName == PieceName.None || piece.PieceName == stack.PieceName)) >= stack.StackCount;
-            });
+                int appropriateHoldingPieceCount = holdingPieces.Count(piece => piece.Color == 1 && (stack.PieceName == PieceName.None || piece.PieceName == stack.PieceName));
+                int difference = appropriateHoldingPieceCount - stack.StackCount;
+                bool isIndividualSuccess = difference + restRedAlesCount >= 0;
+                restRedAlesCount += System.Math.Min(0, difference);
+                return isIndividualSuccess;
+            }); 
 
             bool isSuccess = black || red;
             return isSuccess ? 1 : 0;
