@@ -19,6 +19,7 @@ namespace Azarashi.CerkeOnline.Tests
     public class HandDatabaseSearchHands
     {
         const string url = "https://sozysozbot.github.io/cerke_calculate_hands/calculate_hand_contest.html";
+        const int drillCount = 50;
 
         [Test]
         public void HandDatabaseSearchHandsSimplePasses()
@@ -28,21 +29,19 @@ namespace Azarashi.CerkeOnline.Tests
 
         void TestMethod(IHandDatabase handDatabase)
         {
-            var path = UnityEngine.Application.streamingAssetsPath;
+            var path = UnityEngine.Application.dataPath + "/Libraries/Selenium";
             var options = new ChromeOptions();
-            //options.AddArgument("--headless");
+            options.AddArgument("--headless");
             using (ChromeDriver driver = new ChromeDriver(path, options))
             {
                 driver.Navigate().GoToUrl(url);
                 IWebElement contestElement = driver.FindElementById("contest");
                 contestElement.FindElements(By.TagName("input"))
-                    .Where(button => button.GetAttribute("value") == "50本ノックを始める").First().Click();
+                    .Where(button => button.GetAttribute("value") == drillCount.ToString() + "本ノックを始める").First().Click();
 
-                for (int i = 0; i < 50; i++)
-                {
+                for (int i = 0; i < drillCount; i++)
                     SolveQuestion(driver);
-                }
-
+                
 
                 System.Threading.Thread.Sleep(5000);
             }
@@ -55,14 +54,14 @@ namespace Azarashi.CerkeOnline.Tests
                     .Select(pair => (IReadOnlyPiece)ConvertPieceNameToPieceInstance(ConvertColorTextToColorId(pair.color), pair.kind)).ToArray();
 
                 IHand[] hands = handDatabase.SearchHands(questionPieces);
-                IReadOnlyCollection<IWebElement> webElements = driver.FindElementsByTagName("label");
+                IReadOnlyCollection<IWebElement> labelElements = driver.FindElementsByTagName("label");
                 foreach (IHand hand in hands)
                 {
                     IWebElement handTextElement;
                     if(hand.Name == "王" || hand.Name == "同色王")
-                        handTextElement = webElements.Where(element => element.Text == "王 = 同色王").FirstOrDefault();
+                        handTextElement = labelElements.Where(element => element.Text == "王 = 同色王").FirstOrDefault();
                     else
-                        handTextElement = webElements.Where(element => element.Text == hand.Name).FirstOrDefault();
+                        handTextElement = labelElements.Where(element => element.Text == hand.Name).FirstOrDefault();
 
                     if (handTextElement == null) { Debug.LogError("webElement is null! : " + hand.Name); continue; }
                     
@@ -81,15 +80,6 @@ namespace Azarashi.CerkeOnline.Tests
                     .Where(element => element.GetAttribute("value") == "OK").FirstOrDefault();
                 okButton.Click();
             }
-
-            /*IHand[] hands = handDatabase.SearchHands(new IReadOnlyPiece[] 
-            { new Gustuer(1, default, default, default), new Varxle(0, default, default, default), new Elmer(0, default, default, default), new Terlsk(1, default, default, default), });
-
-            if (hands.Length == 0) Debug.Log("no hand");
-            for (int i = 0; i < hands.Length; i++)
-            {
-                Debug.Log(hands[i].Name);
-            }*/
         }
 
         [UnityTest]
