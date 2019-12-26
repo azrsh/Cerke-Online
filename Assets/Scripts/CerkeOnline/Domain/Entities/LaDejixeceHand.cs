@@ -17,7 +17,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         public LaDejixeceHand(IPieceStacksProvider pieceStacksProvider, int score)
         {
             this.pieceStacksProvider = pieceStacksProvider;
-            Name = "同色役";  //TODO べた書きの排除
+            Name = "同色" + HandNameDictionary.PascalToJapanese[pieceStacksProvider.GetType().Name]; //TODO べた書きの排除
             Score = score;
         }
 
