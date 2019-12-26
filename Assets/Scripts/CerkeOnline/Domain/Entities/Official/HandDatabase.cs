@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Collections.Generic;
 using UniRx;
-using Azarashi.Utilities.Collections;
 using Azarashi.CerkeOnline.Domain.Entities.Official.Hands;
 using Azarashi.CerkeOnline.Domain.Entities.Official.Hands.PieceStackProviders;
 
