@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Azarashi.CerkeOnline.Domain.Entities;
 
@@ -15,6 +14,8 @@ public class MovePredictor
     public IReadOnlyList<Vector2Int> PredictMoveableColumns(IReadOnlyPiece movingPiece)
     {
         List<Vector2Int> result = new List<Vector2Int>();
+
+        if (movingPiece == null) return result;
 
         for (int i = 0; i < 9; i++)
         {
