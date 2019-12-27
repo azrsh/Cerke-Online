@@ -1,28 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Remote;
 using OpenQA.Selenium.Chrome;
-using UnityEngine;
 using Azarashi.CerkeOnline.Domain.Entities;
-using Azarashi.CerkeOnline.Domain.Entities.Official.Pieces;
 
 namespace Azarashi.CerkeOnline.Tests
 {
-
-    public class SozysozbotHandQuestionEngine
+    public class SozysozbotHandVerificater
     {
         readonly Func<IReadOnlyPiece[], IHand[]> solveFunction;
         readonly int drillCount;
         
-        public SozysozbotHandQuestionEngine(Func<IReadOnlyPiece[], IHand[]> solveFunction, int drillCount = 50)
+        public SozysozbotHandVerificater(Func<IReadOnlyPiece[], IHand[]> solveFunction, int drillCount = 50)
         {
             this.solveFunction = solveFunction;
             this.drillCount = drillCount;
         }
 
-        public void Solve()
+        public void Verify()
         {
             var path = UnityEngine.Application.dataPath + "/Libraries/Selenium";
             var options = new ChromeOptions();
@@ -35,7 +28,7 @@ namespace Azarashi.CerkeOnline.Tests
 
                 for (int i = 0; i < drillCount; i++)
                 { 
-                    VerifyAnswerToQuestion(drillPageDriver); 
+                    VerifyEachCase(drillPageDriver); 
                     drillPageDriver.LoadNextPage(); 
                 }
 
@@ -43,7 +36,7 @@ namespace Azarashi.CerkeOnline.Tests
             }
         }
 
-        void VerifyAnswerToQuestion(SozysozbotHandDrillPageDriver drillPageDriver)
+        void VerifyEachCase(SozysozbotHandDrillPageDriver drillPageDriver)
         {
             IReadOnlyPiece[] questionPieces = drillPageDriver.LoadQuestion();
             IHand[] hands = solveFunction(questionPieces);

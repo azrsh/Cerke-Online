@@ -14,7 +14,7 @@ namespace Azarashi.CerkeOnline.Tests
 
         void TestMethod(IHandDatabase handDatabase)
         {
-            new SozysozbotHandQuestionEngine(handDatabase.SearchHands).Solve();
+            new SozysozbotHandVerificater(handDatabase.SearchHands).Verify();
         }
     }
 }
