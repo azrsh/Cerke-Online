@@ -8,7 +8,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.Pieces
         readonly PieceMovement[] normalPieceMovements;
         readonly PieceMovement[] expansionPieceMovements;
 
-        public Terlsk(int color, Vector2Int position, IPlayer owner, IExpandingMoveFieldChecker fieldChecker) : base(position, color, owner, Terminologies.PieceName.Terlsk, fieldChecker)
+        public Terlsk(Terminologies.PieceColor color, Vector2Int position, IPlayer owner, IExpandingMoveFieldChecker fieldChecker) : base(position, color, owner, Terminologies.PieceName.Terlsk, fieldChecker)
         {
             normalPieceMovements = new PieceMovement[]
             {

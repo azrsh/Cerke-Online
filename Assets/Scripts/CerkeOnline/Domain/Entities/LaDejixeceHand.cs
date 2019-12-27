@@ -28,20 +28,20 @@ namespace Azarashi.CerkeOnline.Domain.Entities
             if (holdingPieces.Count < pieceStacks.Count) return 0;
 
             IEnumerable<IReadOnlyPiece> alesList = holdingPieces.Where(piece => piece.PieceName == PieceName.Ales);
-            int restBlackAlesCount = alesList.Where(piece => piece.Color == 0).Count();
+            int restBlackAlesCount = alesList.Where(piece => piece.Color == PieceColor.Black).Count();
             bool black = pieceStacks.All(stack =>
             {
-                int appropriateHoldingPieceCount = holdingPieces.Count(piece => piece.Color == 0 && (stack.PieceName == PieceName.None || piece.PieceName == stack.PieceName));
+                int appropriateHoldingPieceCount = holdingPieces.Count(piece => piece.Color == PieceColor.Black && (stack.PieceName == PieceName.None || piece.PieceName == stack.PieceName));
                 int difference = appropriateHoldingPieceCount - stack.StackCount;
                 bool isIndividualSuccess = difference + restBlackAlesCount >= 0;
                 restBlackAlesCount += System.Math.Min(0, difference);
                 return isIndividualSuccess;
             });
             
-            int restRedAlesCount = alesList.Where(piece => piece.Color == 1).Count();
+            int restRedAlesCount = alesList.Where(piece => piece.Color == PieceColor.Red).Count();
             bool red = pieceStacks.All(stack =>
             {
-                int appropriateHoldingPieceCount = holdingPieces.Count(piece => piece.Color == 1 && (stack.PieceName == PieceName.None || piece.PieceName == stack.PieceName));
+                int appropriateHoldingPieceCount = holdingPieces.Count(piece => piece.Color == PieceColor.Red && (stack.PieceName == PieceName.None || piece.PieceName == stack.PieceName));
                 int difference = appropriateHoldingPieceCount - stack.StackCount;
                 bool isIndividualSuccess = difference + restRedAlesCount >= 0;
                 restRedAlesCount += System.Math.Min(0, difference);

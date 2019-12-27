@@ -38,7 +38,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         /// 駒の色を返す. パイグ将棋特有のAPIなので, 分離したい.
         /// </summary>
         /// <returns></returns>
-        int Color { get; }
+        Terminologies.PieceColor Color { get; }
 
         /// <summary>
         /// 1ターンあたりの移動回数を返す. 通常は1回.

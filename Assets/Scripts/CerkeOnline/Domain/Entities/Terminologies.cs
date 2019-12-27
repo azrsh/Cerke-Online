@@ -110,6 +110,11 @@ namespace Azarashi.CerkeOnline.Domain.Entities
             public const string Tam = "皇";
         }
 
+        public enum PieceColor
+        {
+            Black=278,Red=378
+        }
+
         public static class HandNameDictionary
         {
             /*
