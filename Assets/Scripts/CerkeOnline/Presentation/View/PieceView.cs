@@ -45,7 +45,7 @@ namespace Azarashi.CerkeOnline.Presentation.View
             this.columnMap = columnMap;
 
             //TODO 駒の色系統の処理がいろいろクソなので直す
-            GetComponentInChildren<SpriteRenderer>().material = piece.Color == 0 ? materials.BlackMaterial : materials.RedMaterial;
+            GetComponentInChildren<SpriteRenderer>().material = ConvertPieceColorToMaterial(piece.Color);
 
             UpdateView(Unit.Default);
         }
@@ -103,6 +103,19 @@ namespace Azarashi.CerkeOnline.Presentation.View
         public void OnPointerClick(PointerEventData eventData)
         {
             onClicked.OnNext(piece);
+        }
+
+        Material ConvertPieceColorToMaterial(Terminologies.PieceColor color)
+        {
+            switch (color)
+            {
+                case Terminologies.PieceColor.Black:
+                    return materials.BlackMaterial;
+                case Terminologies.PieceColor.Red:
+                    return materials.RedMaterial;
+                default:
+                    return null;
+            }
         }
     }
 }
