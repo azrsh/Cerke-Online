@@ -1,11 +1,9 @@
-﻿using System.Collections;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using UnityEngine;
-using UnityEngine.TestTools;
 using Azarashi.CerkeOnline.Domain.Entities;
 using Assert = NUnit.Framework.Assert;
  
-namespace Azarashi.CerkeOnline.Tests
+namespace Azarashi.CerkeOnline.Tests.PieceMovementTest
 {
     public class PieceMovementGetPathTest
     {

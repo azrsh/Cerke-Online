@@ -7,7 +7,7 @@ using UnityEngine;
 using Azarashi.CerkeOnline.Domain.Entities;
 using Azarashi.CerkeOnline.Domain.Entities.Official.Pieces;
 
-namespace Azarashi.CerkeOnline.Tests
+namespace Azarashi.CerkeOnline.Tests.HandDatabaseTest
 {
     public class SozysozbotHandDrillPageDriver
     {

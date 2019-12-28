@@ -2,7 +2,7 @@
 using Azarashi.CerkeOnline.Domain.Entities;
 using Azarashi.CerkeOnline.Domain.Entities.Official;
 
-namespace Azarashi.CerkeOnline.Tests
+namespace Azarashi.CerkeOnline.Tests.HandDatabaseTest
 {
     public class HandDatabaseSearchHands
     {

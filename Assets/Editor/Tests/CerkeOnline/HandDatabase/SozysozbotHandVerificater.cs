@@ -2,7 +2,7 @@
 using OpenQA.Selenium.Chrome;
 using Azarashi.CerkeOnline.Domain.Entities;
 
-namespace Azarashi.CerkeOnline.Tests
+namespace Azarashi.CerkeOnline.Tests.HandDatabaseTest
 {
     public class SozysozbotHandVerificater
     {
