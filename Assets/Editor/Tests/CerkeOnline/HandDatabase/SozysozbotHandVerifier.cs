@@ -4,12 +4,12 @@ using Azarashi.CerkeOnline.Domain.Entities;
 
 namespace Azarashi.CerkeOnline.Tests.HandDatabaseTest
 {
-    public class SozysozbotHandVerificater
+    public class SozysozbotHandVerifier
     {
         readonly Func<IReadOnlyPiece[], IHand[]> solveFunction;
         readonly int drillCount;
         
-        public SozysozbotHandVerificater(Func<IReadOnlyPiece[], IHand[]> solveFunction, int drillCount = 50)
+        public SozysozbotHandVerifier(Func<IReadOnlyPiece[], IHand[]> solveFunction, int drillCount = 50)
         {
             this.solveFunction = solveFunction;
             this.drillCount = drillCount;
