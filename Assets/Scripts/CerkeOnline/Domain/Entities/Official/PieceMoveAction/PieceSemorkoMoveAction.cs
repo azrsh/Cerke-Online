@@ -105,7 +105,6 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
                 return;
 
             //経由点にいる場合
-            IPiece semorkoNextPiece = worldPathNode.Next.Value.Piece;
             Action moveAfterNext = () => Move(movingPiece, worldPathNode.Next.Next);
             if (!semorkoChecker.CheckSemorko(viaPosition, player, movingPiece, worldPathNode, moveAfterNext, OnFailure))
                 return;
