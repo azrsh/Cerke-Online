@@ -52,7 +52,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
             this.endPosition = endPosition;
             bool isFrontPlayersPiece = pieces.Read(startPosition).Owner != null && pieces.Read(startPosition).Owner.Encampment == Encampment.Front;
             Vector2Int relativeViaPosition = (viaPosition - startPosition) * (isFrontPlayersPiece ? -1 : 1);
-            var relativeViaPath = viaPieceMovement.GetPath(relativeViaPosition)?.ToList() ?? throw new ArgumentException("移動不可能な移動先が指定されました.");
+            var relativeViaPath = viaPieceMovement.GetPath(relativeViaPosition) ?? throw new ArgumentException("移動不可能な移動先が指定されました.");
             Vector2Int relativeLastPosition = (endPosition - viaPosition) * (isFrontPlayersPiece ? -1 : 1);
             var realtiveLastPath = lastPieceMovement.GetPath(relativeLastPosition) ?? throw new ArgumentException("移動不可能な移動先が指定されました.");
 
