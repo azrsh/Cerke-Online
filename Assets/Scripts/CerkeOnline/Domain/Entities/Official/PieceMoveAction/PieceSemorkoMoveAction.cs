@@ -30,6 +30,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
 
         readonly Vector2Int startPosition;
         readonly Vector2Int viaPosition;
+        readonly Vector2Int endPosition;
 
         readonly Mover pieceMover;
         readonly Pickupper pickupper;
@@ -38,7 +39,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
         readonly SurmountingChecker surmountingChecker;
         readonly SemorkoChecker semorkoChecker;
 
-        public PieceSemorkoMoveAction(IPlayer player, Vector2Int startPosition, Vector2Int viaPosition, Vector2Int lastPosition, Vector2YXArrayAccessor<IPiece> pieces, IFieldEffectChecker fieldEffectChecker,
+        public PieceSemorkoMoveAction(IPlayer player, Vector2Int startPosition, Vector2Int viaPosition, Vector2Int endPosition, Vector2YXArrayAccessor<IPiece> pieces, IFieldEffectChecker fieldEffectChecker,
             IValueInputProvider<int> valueProvider, PieceMovement viaPieceMovement, PieceMovement lastPieceMovement, Action<PieceMoveResult> callback, Action onPiecesChanged, bool isTurnEnd)
         {
             this.player = player ?? throw new ArgumentNullException("駒を操作するプレイヤーを指定してください.");
@@ -48,10 +49,11 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
 
             this.startPosition = startPosition;
             this.viaPosition = viaPosition;
+            this.endPosition = endPosition;
             bool isFrontPlayersPiece = pieces.Read(startPosition).Owner != null && pieces.Read(startPosition).Owner.Encampment == Encampment.Front;
             Vector2Int relativeViaPosition = (viaPosition - startPosition) * (isFrontPlayersPiece ? -1 : 1);
             var relativeViaPath = viaPieceMovement.GetPath(relativeViaPosition)?.ToList() ?? throw new ArgumentException("移動不可能な移動先が指定されました.");
-            Vector2Int relativeLastPosition = (lastPosition - viaPosition) * (isFrontPlayersPiece ? -1 : 1);
+            Vector2Int relativeLastPosition = (endPosition - viaPosition) * (isFrontPlayersPiece ? -1 : 1);
             var realtiveLastPath = lastPieceMovement.GetPath(relativeLastPosition) ?? throw new ArgumentException("移動不可能な移動先が指定されました.");
 
             var worldPath = relativeViaPath.Select(value => startPosition + value * (isFrontPlayersPiece ? -1 : 1)).ToList();
@@ -64,10 +66,10 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
 
             pickupper = new Pickupper(pieces);
             pieceMover = new Mover(pieces, onPiecesChanged);
-            waterEntryChecker = new WaterEntryChecker(3, fieldEffectChecker, valueProvider, OnJudgementFailure);
+            waterEntryChecker = new WaterEntryChecker(3, fieldEffectChecker, valueProvider, OnFailure);
             moveFinisher = new MoveFinisher(pieceMover, new Pickupper(pieces));
-            surmountingChecker = new SurmountingChecker(pieceMover, waterEntryChecker);
-            semorkoChecker = new SemorkoChecker(waterEntryChecker, moveFinisher, pickupper, pieceMover, callback);
+            surmountingChecker = new SurmountingChecker(pieceMover);
+            semorkoChecker = new SemorkoChecker(moveFinisher, pickupper, pieceMover, callback);
         }
 
         void OnFailure(IPiece movingPiece)
@@ -76,17 +78,14 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
             callback(new PieceMoveResult(isSuccess: false, isTurnEnd: false, gottenPiece: null));
         }
 
-        void OnJudgementFailure(IPiece movingPiece, LinkedListNode<ColumnData> worldPathNode)
-        {
-            if (worldPathNode?.Previous != null)
-                moveFinisher.FinishMove(player, movingPiece, worldPathNode.Previous.Value.Positin, callback, isTurnEnd);
-            else
-                callback(new PieceMoveResult(true, isTurnEnd, null));
-        }
-
         public void StartMove()
         {
             IPiece movingPiece = pieces.Read(startPosition);
+
+            //入水判定の必要があるか
+            if (!waterEntryChecker.CheckWaterEntry(movingPiece, startPosition, endPosition, () => Move(movingPiece, worldPath.First)))
+                return;
+            
             Move(movingPiece, worldPath.First);
         }
 
@@ -99,10 +98,6 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
             }
 
             IPiece nextPiece = worldPathNode.Value.Piece;
-
-            //入水判定の必要があるか
-            if (!waterEntryChecker.CheckWaterEntry(movingPiece, worldPathNode, () => Move(movingPiece, worldPathNode.Next)))
-                return;
 
             //経由点にいる場合
             Action moveAfterNext = () => Move(movingPiece, worldPathNode.Next.Next);

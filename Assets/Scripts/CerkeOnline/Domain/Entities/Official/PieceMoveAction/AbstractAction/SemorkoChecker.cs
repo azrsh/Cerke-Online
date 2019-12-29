@@ -12,20 +12,15 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction.Abstract
     /// </summary>
     public class SemorkoChecker
     {
-        readonly WaterEntryChecker waterEntryChecker;
-
         readonly MoveFinisher moveFinisher;
         readonly Pickupper pickupper;
         readonly Mover mover;
 
         readonly Action<PieceMoveResult> finishCallback;
 
-        public SemorkoChecker(WaterEntryChecker waterEntryChecker,
-            MoveFinisher moveFinisher, Pickupper pickupper, Mover mover,
+        public SemorkoChecker(MoveFinisher moveFinisher, Pickupper pickupper, Mover mover,
             Action<PieceMoveResult> finishCallback)
         {
-            this.waterEntryChecker = waterEntryChecker;
-
             this.moveFinisher = moveFinisher;
             this.pickupper = pickupper;
             this.mover = mover;
@@ -68,11 +63,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction.Abstract
             if (nextPiece is ISemorkoObserver)
                 (nextPiece as ISemorkoObserver).OnSurmounted.OnNext(Unit.Default);
 
-            if (waterEntryChecker.IsJudgmentNecessary(movingPiece, worldPathNode) ||
-                waterEntryChecker.IsJudgmentNecessary(movingPiece, worldPathNode.Next))
-                waterEntryChecker.JudgeWaterEntry(movingPiece, worldPathNode, semorkoAction);
-            else
-                semorkoAction();
+            semorkoAction();
 
             return false;
         }

@@ -8,12 +8,10 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction.Abstract
     public class SurmountingChecker
     {
         readonly Mover pieceMover;
-        readonly WaterEntryChecker waterEntryChecker;
 
-        public SurmountingChecker(Mover pieceMover, WaterEntryChecker waterEntryChecker)
+        public SurmountingChecker(Mover pieceMover)
         {
             this.pieceMover = pieceMover;
-            this.waterEntryChecker = waterEntryChecker;
         }
 
         public bool CheckSurmounting(PieceMovement viaPieceMovement, IPiece movingPiece, LinkedListNode<ColumnData> worldPathNode, bool surmounted, Action surmountAction)
@@ -24,16 +22,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction.Abstract
             if (!isSurmountable)
                 return true;
 
-            if (waterEntryChecker.IsJudgmentNecessary(movingPiece, worldPathNode) ||
-                waterEntryChecker.IsJudgmentNecessary(movingPiece, worldPathNode.Next))
-            {
-                if (worldPathNode.Previous != null) pieceMover.MovePiece(movingPiece, worldPathNode.Previous.Value.Positin);
-                waterEntryChecker.JudgeWaterEntry(movingPiece, worldPathNode, surmountAction);
-            }
-            else
-            {
-                surmountAction();
-            }
+            surmountAction();
 
             return false;
         }

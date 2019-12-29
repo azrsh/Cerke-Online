@@ -30,6 +30,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
         bool surmounted = false;
 
         readonly Vector2Int startPosition;
+        readonly Vector2Int endPosition;
 
         public PieceMoveAction(IPlayer player,Vector2Int startPosition, Vector2Int endPosition, Vector2YXArrayAccessor<IPiece> pieces, IFieldEffectChecker fieldEffectChecker, 
             IValueInputProvider<int> valueProvider, PieceMovement pieceMovement, Action<PieceMoveResult> callback, Action onPiecesChanged, bool isTurnEnd)
@@ -40,6 +41,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
             this.valueProvider = valueProvider ?? throw new ArgumentNullException("投げ棒の値を提供するインスタンスを指定してください.");
 
             this.startPosition = startPosition;
+            this.endPosition = endPosition;
             bool isFrontPlayersPiece = pieces.Read(startPosition).Owner != null && pieces.Read(startPosition).Owner.Encampment == Encampment.Front;
             Vector2Int relativePosition = (endPosition - startPosition) * (isFrontPlayersPiece ? -1 : 1);
             this.relativePath = pieceMovement.GetPath(relativePosition) ?? throw new ArgumentException("移動不可能な移動先が指定されました.");
@@ -90,11 +92,11 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
             callback(new PieceMoveResult(isSuccess: false, isTurnEnd: false, gottenPiece: null));
         }
 
-        bool IsNecessaryWaterEntryJudgment(IPiece movingPiece, int index)
+        bool IsNecessaryWaterEntryJudgment(Vector2Int start, Vector2Int last)
         {
-            Vector2Int start = movingPiece.Position;
-            bool isInWater = (index > 0 && fieldEffectChecker.IsInTammua(worldPath[index - 1])) || (index == 0 && fieldEffectChecker.IsInTammua(start));
-            bool isIntoWater = fieldEffectChecker.IsInTammua(worldPath[index]);
+            IPiece movingPiece = pieces.Read(start);
+            bool isInWater = fieldEffectChecker.IsInTammua(start);
+            bool isIntoWater = fieldEffectChecker.IsInTammua(last);
             bool canLittuaWithoutJudge = movingPiece.CanLittuaWithoutJudge();
             bool isNecessaryWaterEntryJudgment = !isInWater && isIntoWater && !canLittuaWithoutJudge;
             return isNecessaryWaterEntryJudgment;
@@ -112,6 +114,19 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
 
         public void StartMove()
         {
+            //入水判定の必要があるか
+            if (IsNecessaryWaterEntryJudgment(startPosition,endPosition))
+            {
+                valueProvider.RequestValue(value => 
+                {
+                    if (value >= 3)
+                        Move(true, startPosition, 0);
+                    else
+                        OnFailure(pieces.Read(startPosition));
+                });
+                return;
+            }
+
             Move(true, startPosition, 0);
         }
 
@@ -136,14 +151,6 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
             
             IPiece piece = pieces.Read(worldPath[index]);
 
-            //入水判定の必要があるか
-            if (IsNecessaryWaterEntryJudgment(movingPiece, index))
-            {
-                if (index > 0) ConfirmPiecePosition(movingPiece, worldPath[index - 1]);
-                valueProvider.RequestValue(value => Move(value >= 3, movingPiece.Position, ++index));
-                return;
-            }
-
             //PieceMovementが踏み越えに対応しているか
             bool isSurmountable = piece != null && !surmounted && pieceMovement.surmountable && index < worldPath.Count - 1;
             if (isSurmountable)
@@ -167,27 +174,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
                     OnFailure(movingPiece);
                 };
 
-                //別の書き方にしたい
-                if (IsNecessaryWaterEntryJudgment(movingPiece, index) || 
-                    IsNecessaryWaterEntryJudgment(movingPiece, index + 1))
-                {
-                    if (index > 0) ConfirmPiecePosition(movingPiece, worldPath[index - 1]);
-                    valueProvider.RequestValue(value =>
-                    {
-                        if (value < 3)
-                        {
-                            if (index > 0)
-                                LastMove(movingPiece, worldPath[index - 1]);
-                            if (index == 0)
-                                callback(new PieceMoveResult(true, isTurnEnd, null));
-                            return;
-                        }
-
-                        surmountAction();
-                    });
-                }
-                else
-                    surmountAction();
+                surmountAction();
 
                 return;
             }
