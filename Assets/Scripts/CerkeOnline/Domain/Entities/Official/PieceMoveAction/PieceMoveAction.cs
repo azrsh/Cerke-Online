@@ -5,6 +5,9 @@ using UnityEngine;
 using UniRx;
 using Azarashi.Utilities.Collections;
 using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
+using Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction.DataStructure;
+using Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction.ActualAction;
+using Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction.AbstractAction;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
 {
@@ -19,180 +22,97 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
     {
         readonly IPlayer player;
         readonly Vector2YXArrayAccessor<IPiece> pieces;
-        readonly IFieldEffectChecker fieldEffectChecker;
-        readonly IValueInputProvider<int> valueProvider;
-        readonly IReadOnlyList<Vector2Int> relativePath;
-        readonly IReadOnlyList<Vector2Int> worldPath;
+        readonly LinkedList<ColumnData> worldPath;
         readonly PieceMovement pieceMovement;
         readonly Action<PieceMoveResult> callback;
-        readonly Action onPiecesChanged;
         readonly bool isTurnEnd;
         bool surmounted = false;
 
         readonly Vector2Int startPosition;
         readonly Vector2Int endPosition;
 
-        public PieceMoveAction(IPlayer player,Vector2Int startPosition, Vector2Int endPosition, Vector2YXArrayAccessor<IPiece> pieces, IFieldEffectChecker fieldEffectChecker, 
-            IValueInputProvider<int> valueProvider, PieceMovement pieceMovement, Action<PieceMoveResult> callback, Action onPiecesChanged, bool isTurnEnd)
+        readonly Mover pieceMover;
+        readonly Pickupper pickupper;
+        readonly WaterEntryChecker waterEntryChecker;
+        readonly MoveFinisher moveFinisher;
+        readonly SurmountingChecker surmountingChecker;
+
+        public PieceMoveAction(IPlayer player, Vector2Int startPosition, Vector2Int endPosition, Vector2YXArrayAccessor<IPiece> pieces, IFieldEffectChecker fieldEffectChecker,
+            IValueInputProvider<int> valueProvider, PieceMovement endPieceMovement, Action<PieceMoveResult> callback, Action onPiecesChanged, bool isTurnEnd)
         {
             this.player = player ?? throw new ArgumentNullException("駒を操作するプレイヤーを指定してください.");
             this.pieces = pieces ?? throw new ArgumentNullException("盤面の情報を入力してください.");
-            this.fieldEffectChecker = fieldEffectChecker ?? throw new ArgumentNullException("フィールド効果の情報を入力してください.");
-            this.valueProvider = valueProvider ?? throw new ArgumentNullException("投げ棒の値を提供するインスタンスを指定してください.");
+            //fieldEffectChecker ?? throw new ArgumentNullException("フィールド効果の情報を入力してください.");
+            //valueProvider ?? throw new ArgumentNullException("投げ棒の値を提供するインスタンスを指定してください.");
 
             this.startPosition = startPosition;
             this.endPosition = endPosition;
             bool isFrontPlayersPiece = pieces.Read(startPosition).Owner != null && pieces.Read(startPosition).Owner.Encampment == Encampment.Front;
             Vector2Int relativePosition = (endPosition - startPosition) * (isFrontPlayersPiece ? -1 : 1);
-            this.relativePath = pieceMovement.GetPath(relativePosition) ?? throw new ArgumentException("移動不可能な移動先が指定されました.");
-            this.worldPath = relativePath.Select(value => startPosition + value * (isFrontPlayersPiece ? -1 : 1)).ToArray();
+            var relativeLastPath = endPieceMovement.GetPath(relativePosition)?.ToList() ?? throw new ArgumentException("移動不可能な移動先が指定されました.");
+            var worldPath = relativeLastPath.Select(value => startPosition + value * (isFrontPlayersPiece ? -1 : 1));
+            this.worldPath = new LinkedList<ColumnData>(worldPath.Select(value => new ColumnData(value, pieces)));
 
-            this.pieceMovement = pieceMovement;
+            this.pieceMovement = endPieceMovement;
             this.callback = callback;
-            this.onPiecesChanged = onPiecesChanged;
             this.isTurnEnd = isTurnEnd;
-        }
 
-        IPiece PickUpPiece(IPiece movingPiece, Vector2Int endWorldPosition)
-        {
-            IPiece originalPiece = pieces.Read(endWorldPosition);     //命名が分かりにくい. 行先にある駒.
-            if (!IsPickupable(movingPiece, originalPiece))
-                return null;
-            
-            IPiece gottenPiece = originalPiece;
-            if(!gottenPiece.PickUpFromBoard()) return null;
-            gottenPiece.SetOwner(player);
-            pieces.Write(endWorldPosition, null);
-            return gottenPiece;
-        }
-
-        void ConfirmPiecePosition(IPiece movingPiece, Vector2Int endWorldPosition, bool isForceMove = false)
-        {
-            Vector2Int startWorldPosition = movingPiece.Position;
-            movingPiece.MoveTo(endWorldPosition, isForceMove);
-
-            //この順で書きまないと現在いる座標と同じ座標をendWorldPositionに指定されたとき盤上から駒の判定がなくなる
-            pieces.Write(startWorldPosition, null);
-            pieces.Write(endWorldPosition, movingPiece);
-            
-            onPiecesChanged();
-        }
-
-        void LastMove(IPiece movingPiece, Vector2Int endWorldPosition)
-        {
-            //移動先の駒を取る
-            IPiece gottenPiece = PickUpPiece(movingPiece, endWorldPosition);
-            ConfirmPiecePosition(movingPiece, endWorldPosition);
-            callback(new PieceMoveResult(true, isTurnEnd, gottenPiece));
+            pickupper = new Pickupper(pieces);
+            pieceMover = new Mover(pieces, onPiecesChanged);
+            waterEntryChecker = new WaterEntryChecker(3, fieldEffectChecker, valueProvider, OnFailure);
+            moveFinisher = new MoveFinisher(pieceMover, new Pickupper(pieces));
+            surmountingChecker = new SurmountingChecker(pieceMover);
         }
 
         void OnFailure(IPiece movingPiece)
         {
-            ConfirmPiecePosition(movingPiece, startPosition, true);
+            pieceMover.MovePiece(movingPiece, startPosition, true);
             callback(new PieceMoveResult(isSuccess: false, isTurnEnd: false, gottenPiece: null));
-        }
-
-        bool IsNecessaryWaterEntryJudgment(Vector2Int start, Vector2Int last)
-        {
-            IPiece movingPiece = pieces.Read(start);
-            bool isInWater = fieldEffectChecker.IsInTammua(start);
-            bool isIntoWater = fieldEffectChecker.IsInTammua(last);
-            bool canLittuaWithoutJudge = movingPiece.CanLittuaWithoutJudge();
-            bool isNecessaryWaterEntryJudgment = !isInWater && isIntoWater && !canLittuaWithoutJudge;
-            return isNecessaryWaterEntryJudgment;
-        }
-
-        bool IsPickupable(IPiece movingPiece, IPiece targetPiece)
-        {
-            if (targetPiece == null) return false;
-
-            bool canMovingPieceTakePiece = movingPiece.CanTakePiece();
-            bool isPiecePickupable = targetPiece.IsPickupable();
-            bool isSameOwner = targetPiece.Owner == player;
-            return canMovingPieceTakePiece && isPiecePickupable && !isSameOwner;
         }
 
         public void StartMove()
         {
-            //入水判定の必要があるか
-            if (IsNecessaryWaterEntryJudgment(startPosition,endPosition))
-            {
-                valueProvider.RequestValue(value => 
-                {
-                    if (value >= 3)
-                        Move(true, startPosition, 0);
-                    else
-                        OnFailure(pieces.Read(startPosition));
-                });
-                return;
-            }
+            IPiece movingPiece = pieces.Read(startPosition);
 
-            Move(true, startPosition, 0);
+            //入水判定の必要があるか
+            if (!waterEntryChecker.CheckWaterEntry(movingPiece, startPosition, endPosition, () => Move(movingPiece, worldPath.First)))
+                return;
+
+            Move(movingPiece, worldPath.First);
         }
 
-        void Move(bool condition, Vector2Int start, int index)
+        void Move(IPiece movingPiece, LinkedListNode<ColumnData> worldPathNode)
         {
-            IPiece movingPiece = pieces.Read(start);
+            if (worldPathNode == null)
+            {
+                moveFinisher.FinishMove(player, movingPiece, worldPath.Last.Value.Positin, callback, isTurnEnd);
+                return;
+            }
 
-            //再帰終了処理
-            if (!condition)
-            {
-                if (index > 1)
-                    LastMove(movingPiece, worldPath[index - 2]);
-                if (index == 1)
-                    callback(new PieceMoveResult(true, isTurnEnd, null));
-                return;
-            }
-            if (index >= relativePath.Count)
-            {
-                LastMove(movingPiece, worldPath[index - 1]);
-                return;
-            }
-            
-            IPiece piece = pieces.Read(worldPath[index]);
+            IPiece nextPiece = worldPathNode.Value.Piece;
 
             //PieceMovementが踏み越えに対応しているか
-            bool isSurmountable = piece != null && !surmounted && pieceMovement.surmountable && index < worldPath.Count - 1;
-            if (isSurmountable)
+            Action surmountAction = () =>
             {
-                Action surmountAction = () =>
-                { 
-                    surmounted = true;
-                    if (pieces.Read(worldPath[index + 1]) == null)
-                    {
-                        ConfirmPiecePosition(movingPiece, worldPath[index + 1], isForceMove: true);
-                        Move(true, worldPath[index + 1], index + 2);
-                        return;
-                    }
-
-                    if (worldPath[index + 1] == worldPath.Last())
-                    {
-                        LastMove(movingPiece, worldPath[index + 1]);
-                        return;
-                    }
-
-                    OnFailure(movingPiece);
-                };
-
-                surmountAction();
-
-                return;
-            }
-
-            if (piece != null)
-            {
-                if (IsPickupable(movingPiece, piece) && worldPath[index] == worldPath.Last())
+                surmounted = true;
+                if (worldPathNode.Next.Next == null)
                 {
-                    LastMove(movingPiece, worldPath[index]);
+                    moveFinisher.FinishMove(player, movingPiece, worldPathNode.Next.Value.Positin, callback, isTurnEnd);
                     return;
                 }
 
-                //取ることが出ない駒が移動ルート上にある場合は移動失敗として終了する
-                OnFailure(movingPiece);
+                Move(movingPiece, worldPathNode.Next.Next);
+            };
+            if (!surmountingChecker.CheckSurmounting(pieceMovement, movingPiece, worldPathNode, surmounted, surmountAction))
                 return;
-            }
 
-            Move(true, start, ++index);
+            if (!moveFinisher.CheckIfContinuable(player, movingPiece, worldPathNode, callback, () => OnFailure(movingPiece), isTurnEnd))
+                return;
+
+            if (worldPathNode.Next == null)
+                moveFinisher.FinishMove(player, movingPiece, worldPathNode.Value.Positin, callback, isTurnEnd);
+            else
+                Move(movingPiece, worldPathNode.Next);
         }
     }
 }

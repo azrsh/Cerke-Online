@@ -108,20 +108,13 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
             Action surmountAction = () =>
             {
                 surmounted = true;
-                if (worldPathNode.Next.Value.Piece == null)
-                {
-                    pieceMover.MovePiece(movingPiece, worldPathNode.Next.Value.Positin, isForceMove: true);
-                    Move(movingPiece, worldPathNode.Next.Next);
-                    return;
-                }
-
                 if (worldPathNode.Next.Next == null)
                 {
                     moveFinisher.FinishMove(player, movingPiece, worldPathNode.Next.Value.Positin, callback, isTurnEnd);
                     return;
                 }
 
-                OnFailure(movingPiece);
+                Move(movingPiece, worldPathNode.Next.Next);
             };
             if (!surmountingChecker.CheckSurmounting(viaPieceMovement, movingPiece, worldPathNode, surmounted, surmountAction))
                 return;
@@ -130,7 +123,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
                 return;
 
             if(worldPathNode.Next == null)
-                moveFinisher.FinishMove(player, movingPiece, worldPathNode.Previous.Value.Positin, callback, isTurnEnd);
+                moveFinisher.FinishMove(player, movingPiece, worldPathNode.Value.Positin, callback, isTurnEnd);
             else
                 Move(movingPiece, worldPathNode.Next);
         }
