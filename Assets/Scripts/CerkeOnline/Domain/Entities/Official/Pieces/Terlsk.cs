@@ -13,7 +13,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.Pieces
             normalPieceMovements = new PieceMovement[]
             {
                 new PieceMovement(new Vector2Int(0, 1), 1), new PieceMovement(new Vector2Int(0, -1), 1),
-                new PieceMovement(new Vector2Int(1, 0), 1), new PieceMovement(new Vector2Int(-1, 0), 1)
+                new PieceMovement(new Vector2Int(1, 0), -1), new PieceMovement(new Vector2Int(-1, 0), -1)
             };
             expansionPieceMovements = new PieceMovement[]
             {
