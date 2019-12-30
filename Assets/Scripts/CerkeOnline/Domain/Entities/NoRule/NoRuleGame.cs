@@ -26,7 +26,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.NoRule
 
             var frontPlayer = GetPlayer(Encampment.Front);
             var backPlayer = GetPlayer(Encampment.Back);
-            Board = new Board(frontPlayer, backPlayer);
+            Board = BoardFactory.Create(frontPlayer, backPlayer);
         }
 
         public IPlayer GetPlayer(FirstOrSecond firstOrSecond)
