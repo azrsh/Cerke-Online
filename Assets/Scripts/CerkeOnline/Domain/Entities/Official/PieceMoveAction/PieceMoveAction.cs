@@ -38,7 +38,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
         readonly SurmountingChecker surmountingChecker;
 
         public PieceMoveAction(IPlayer player, Vector2Int startPosition, Vector2Int endPosition, Vector2YXArrayAccessor<IPiece> pieces, IFieldEffectChecker fieldEffectChecker,
-            IValueInputProvider<int> valueProvider, PieceMovement endPieceMovement, Action<PieceMoveResult> callback, Action onPiecesChanged, bool isTurnEnd)
+            IValueInputProvider<int> valueProvider, PieceMovement start2EndPieceMovement, Action<PieceMoveResult> callback, Action onPiecesChanged, bool isTurnEnd)
         {
             this.player = player ?? throw new ArgumentNullException("駒を操作するプレイヤーを指定してください.");
             this.pieces = pieces ?? throw new ArgumentNullException("盤面の情報を入力してください.");
@@ -48,12 +48,10 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
             this.startPosition = startPosition;
             this.endPosition = endPosition;
             bool isFrontPlayersPiece = pieces.Read(startPosition).Owner != null && pieces.Read(startPosition).Owner.Encampment == Encampment.Front;
-            Vector2Int relativePosition = (endPosition - startPosition) * (isFrontPlayersPiece ? -1 : 1);
-            var relativeLastPath = endPieceMovement.GetPath(relativePosition)?.ToList() ?? throw new ArgumentException("移動不可能な移動先が指定されました.");
-            var worldPath = relativeLastPath.Select(value => startPosition + value * (isFrontPlayersPiece ? -1 : 1));
-            this.worldPath = new LinkedList<ColumnData>(worldPath.Select(value => new ColumnData(value, pieces)));
 
-            this.pieceMovement = endPieceMovement;
+            this.worldPath = new PieceMovePathCalculator().CalculatePath(startPosition, endPosition, endPosition, pieces, start2EndPieceMovement, start2EndPieceMovement);
+
+            this.pieceMovement = start2EndPieceMovement;
             this.callback = callback;
             this.isTurnEnd = isTurnEnd;
 

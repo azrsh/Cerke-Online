@@ -39,28 +39,20 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
         readonly SurmountingChecker surmountingChecker;
         readonly SemorkoChecker semorkoChecker;
 
-        public PieceSemorkoMoveAction(IPlayer player, Vector2Int startPosition, Vector2Int viaPosition, Vector2Int endPosition, Vector2YXArrayAccessor<IPiece> pieces, IFieldEffectChecker fieldEffectChecker,
-            IValueInputProvider<int> valueProvider, PieceMovement viaPieceMovement, PieceMovement lastPieceMovement, Action<PieceMoveResult> callback, Action onPiecesChanged, bool isTurnEnd)
+        public PieceSemorkoMoveAction(IPlayer player, LinkedList<ColumnData> worldPath, Vector2Int viaPosition, Vector2YXArrayAccessor<IPiece> pieces, IFieldEffectChecker fieldEffectChecker,
+            IValueInputProvider<int> valueProvider, PieceMovement start2ViaPieceMovement, PieceMovement via2EndPieceMovement, Action<PieceMoveResult> callback, Action onPiecesChanged, bool isTurnEnd)
         {
             this.player = player ?? throw new ArgumentNullException("駒を操作するプレイヤーを指定してください.");
             this.pieces = pieces ?? throw new ArgumentNullException("盤面の情報を入力してください.");
             //fieldEffectChecker ?? throw new ArgumentNullException("フィールド効果の情報を入力してください.");
             //valueProvider ?? throw new ArgumentNullException("投げ棒の値を提供するインスタンスを指定してください.");
 
-            this.startPosition = startPosition;
+            startPosition = worldPath.First.Value.Positin;
             this.viaPosition = viaPosition;
-            this.endPosition = endPosition;
-            bool isFrontPlayersPiece = pieces.Read(startPosition).Owner != null && pieces.Read(startPosition).Owner.Encampment == Encampment.Front;
-            Vector2Int relativeViaPosition = (viaPosition - startPosition) * (isFrontPlayersPiece ? -1 : 1);
-            var relativeViaPath = viaPieceMovement.GetPath(relativeViaPosition) ?? throw new ArgumentException("移動不可能な移動先が指定されました.");
-            Vector2Int relativeLastPosition = (endPosition - viaPosition) * (isFrontPlayersPiece ? -1 : 1);
-            var realtiveLastPath = lastPieceMovement.GetPath(relativeLastPosition) ?? throw new ArgumentException("移動不可能な移動先が指定されました.");
-
-            var worldPath = relativeViaPath.Select(value => startPosition + value * (isFrontPlayersPiece ? -1 : 1)).ToList();
-            worldPath.AddRange(realtiveLastPath.Select(value => viaPosition + value * (isFrontPlayersPiece ? -1 : 1)));
-            this.worldPath = new LinkedList<ColumnData>(worldPath.Select(value => new ColumnData(value, pieces)));
-
-            this.viaPieceMovement = viaPieceMovement;
+            endPosition = worldPath.First.Value.Positin;
+            
+            this.worldPath  = worldPath;
+            this.viaPieceMovement = start2ViaPieceMovement;
             this.callback = callback;
             this.isTurnEnd = isTurnEnd;
 
@@ -119,10 +111,10 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
             if (!surmountingChecker.CheckSurmounting(viaPieceMovement, movingPiece, worldPathNode, surmounted, surmountAction))
                 return;
 
-            if(!moveFinisher.CheckIfContinuable(player, movingPiece, worldPathNode, callback, () => OnFailure(movingPiece), isTurnEnd))
+            if (!moveFinisher.CheckIfContinuable(player, movingPiece, worldPathNode, callback, () => OnFailure(movingPiece), isTurnEnd))
                 return;
 
-            if(worldPathNode.Next == null)
+            if (worldPathNode.Next == null)
                 moveFinisher.FinishMove(player, movingPiece, worldPathNode.Value.Positin, callback, isTurnEnd);
             else
                 Move(movingPiece, worldPathNode.Next);

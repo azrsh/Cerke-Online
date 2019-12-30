@@ -2,7 +2,6 @@
 using UniRx;
 using UnityEngine;
 using Azarashi.Utilities.Collections;
-using Azarashi.CerkeOnline.Domain.Entities.Official.Pieces;
 using Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction;
 using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
 
@@ -50,25 +49,25 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
         }
 
         bool isLocked = false;
-        public void MovePiece(Vector2Int startPosition, Vector2Int viaPosition, Vector2Int lastPosition, IPlayer player, IValueInputProvider<int> valueProvider, Action<PieceMoveResult> callback)
+        public void MovePiece(Vector2Int startPosition, Vector2Int viaPosition, Vector2Int endPosition, IPlayer player, IValueInputProvider<int> valueProvider, Action<PieceMoveResult> callback)
         {
             if (isLocked) return;
 
-            if (!IsOnBoard(startPosition) || !IsOnBoard(lastPosition))
+            if (!IsOnBoard(startPosition) || !IsOnBoard(endPosition))
                 throw new ArgumentException();
 
-            bool areViaAndLastSame = viaPosition == lastPosition;
+            bool areViaAndLastSame = viaPosition == endPosition;
             IPiece movingPiece = pieces.Read(startPosition);
             IPiece viaPiece = pieces.Read(viaPosition);
-            IPiece originalPiece = pieces.Read(lastPosition);     //元からある駒の意味で使っているが, 英語があってるか不明.
+            IPiece originalPiece = pieces.Read(endPosition);     //元からある駒の意味で使っているが, 英語があってるか不明.
             bool isTargetNull = movingPiece == null;
             bool isViaPieceNull = viaPiece == null;//
             bool isOwner = !isTargetNull && movingPiece.IsOwner(player);
             bool isSameOwner = !isTargetNull && originalPiece != null && originalPiece.Owner == movingPiece.Owner;
-            PieceMovement viaPieceMovement = PieceMovement.Default;
-            PieceMovement lastPieceMovement = PieceMovement.Default;
-            bool isMoveableToVia = !isTargetNull && movingPiece.TryToGetPieceMovement(viaPosition, out viaPieceMovement);//
-            bool isMoveableToLast = !isTargetNull && (areViaAndLastSame || movingPiece.TryToGetPieceMovement(startPosition + lastPosition - viaPosition, out lastPieceMovement));//
+            PieceMovement start2ViaPieceMovement = PieceMovement.Default;
+            PieceMovement via2EndPieceMovement = PieceMovement.Default;
+            bool isMoveableToVia = !isTargetNull && movingPiece.TryToGetPieceMovement(viaPosition, out start2ViaPieceMovement);//
+            bool isMoveableToLast = !isTargetNull && (areViaAndLastSame || movingPiece.TryToGetPieceMovement(startPosition + endPosition - viaPosition, out via2EndPieceMovement));//
             if (isTargetNull || (!areViaAndLastSame && isViaPieceNull) || !isOwner || isSameOwner || !isMoveableToVia || ! isMoveableToLast)//
             {
                 callback(new PieceMoveResult(false, false, null));
@@ -99,12 +98,10 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
 
             isLocked = true;
             callback += (result) => { isLocked = false; };
-            IPieceMoveAction pieceMoveAction = null;
-            if (areViaAndLastSame)
-                pieceMoveAction = new PieceMoveAction.PieceMoveAction(player, startPosition, lastPosition, pieces, fieldChecker, valueProvider, viaPieceMovement, callback, () => onEveryValueChanged.OnNext(Unit.Default), isTurnEnd);
-            else
-                pieceMoveAction = new PieceSemorkoMoveAction(player, startPosition, viaPosition, lastPosition, pieces, fieldChecker, valueProvider, viaPieceMovement, lastPieceMovement, callback, () => onEveryValueChanged.OnNext(Unit.Default), isTurnEnd);
-            
+            var worldPath = new PieceMovePathCalculator().CalculatePath(startPosition, viaPosition, endPosition, pieces, start2ViaPieceMovement, via2EndPieceMovement);
+            IPieceMoveAction pieceMoveAction = new PieceSemorkoMoveAction(player, worldPath, viaPosition,
+                pieces, fieldChecker, valueProvider, start2ViaPieceMovement, via2EndPieceMovement, 
+                callback, () => onEveryValueChanged.OnNext(Unit.Default), isTurnEnd);
             pieceMoveAction.StartMove();
         }
 

@@ -2,7 +2,8 @@
 using UniRx;
 using UnityEngine;
 using Azarashi.Utilities.Collections;
-using Azarashi.CerkeOnline.Domain.Entities.Official.Pieces;
+using Azarashi.CerkeOnline.Domain.Entities.Official;
+using Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction;
 using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.NoRule
@@ -10,44 +11,17 @@ namespace Azarashi.CerkeOnline.Domain.Entities.NoRule
     public class Board : IBoard
     {
         readonly Vector2YXArrayAccessor<IPiece> pieces;
-        readonly Official.IFieldEffectChecker fieldChecker;
+        readonly IFieldEffectChecker fieldChecker;
         public IObservable<Unit> OnEveruValueChanged => onEveryValueChanged;
         readonly Subject<Unit> onEveryValueChanged = new Subject<Unit>();
 
         //これ、Boardが保持すべき情報ではない
         readonly OperationStatus operationStatus = new OperationStatus();
 
-        public Board(IPlayer frontPlayer, IPlayer backPlayer)
+        public Board(Vector2YXArrayAccessor<IPiece> pieceMap, FieldEffectChecker fieldChecker)
         {
-            IPiece tam = new Tam(0, new Vector2Int(4, 4), null, null); //fieldEffectCheckerに渡すため別途生成
-
-            FieldEffect[,] columns = new FieldEffect[,]
-            {
-                { FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal },
-                { FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal },
-                { FieldEffect.Normal, FieldEffect.Normal,  FieldEffect.Tarfe, FieldEffect.Normal, FieldEffect.Tammua, FieldEffect.Normal,  FieldEffect.Tarfe, FieldEffect.Normal, FieldEffect.Normal },
-                { FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal,  FieldEffect.Tarfe, FieldEffect.Tammua,  FieldEffect.Tarfe, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal },
-                { FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Tammua, FieldEffect.Tammua,  FieldEffect.Tanzo, FieldEffect.Tammua, FieldEffect.Tammua, FieldEffect.Normal, FieldEffect.Normal },
-                { FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal,  FieldEffect.Tarfe, FieldEffect.Tammua,  FieldEffect.Tarfe, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal },
-                { FieldEffect.Normal, FieldEffect.Normal,  FieldEffect.Tarfe, FieldEffect.Normal, FieldEffect.Tammua, FieldEffect.Normal,  FieldEffect.Tarfe, FieldEffect.Normal, FieldEffect.Normal },
-                { FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal },
-                { FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal },
-            };
-            fieldChecker = new Official.FieldEffectChecker(new Vector2YXArrayAccessor<FieldEffect>(columns), tam);
-
-            IPiece[,] pieces = new IPiece[,]
-            {
-                {     new Kua(PieceColor.Black, new Vector2Int(0,0), backPlayer, fieldChecker),       new Dodor(PieceColor.Black, new Vector2Int(1,0), backPlayer, fieldChecker),    new Vadyrd(PieceColor.Black, new Vector2Int(2,0), backPlayer, fieldChecker),      new Varxle(PieceColor.Black, new Vector2Int(3,0), backPlayer, fieldChecker),         new Ales(PieceColor.Red, new Vector2Int(4,0), backPlayer, fieldChecker),        new Varxle(PieceColor.Red, new Vector2Int(5,0), backPlayer, fieldChecker),      new Vadyrd(PieceColor.Red, new Vector2Int(6,0), backPlayer, fieldChecker),        new Dodor(PieceColor.Red, new Vector2Int(7,0), backPlayer, fieldChecker),         new Kua(PieceColor.Red, new Vector2Int(8,0), backPlayer, fieldChecker) },
-                {    new Terlsk(PieceColor.Red, new Vector2Int(0,1), backPlayer, fieldChecker),       new Gustuer(PieceColor.Red, new Vector2Int(1,1), backPlayer, fieldChecker),                                                                           null,      new Stistyst(PieceColor.Red, new Vector2Int(3,1), backPlayer, fieldChecker),                                                                            null,    new Stistyst(PieceColor.Black, new Vector2Int(5,1), backPlayer, fieldChecker),                                                                           null,      new Gustuer(PieceColor.Red, new Vector2Int(7,1), backPlayer, fieldChecker),      new Terlsk(PieceColor.Red, new Vector2Int(8,1), backPlayer, fieldChecker) },
-                {   new Elmer(PieceColor.Black, new Vector2Int(0,2), backPlayer, fieldChecker),         new Elmer(PieceColor.Red, new Vector2Int(1,2), backPlayer, fieldChecker),     new Elmer(PieceColor.Black, new Vector2Int(2,2), backPlayer, fieldChecker),         new Elmer(PieceColor.Red, new Vector2Int(3,2), backPlayer, fieldChecker),      new Felkana(PieceColor.Red, new Vector2Int(4,2), backPlayer, fieldChecker),         new Elmer(PieceColor.Red, new Vector2Int(5,2), backPlayer, fieldChecker),     new Elmer(PieceColor.Black, new Vector2Int(6,2), backPlayer, fieldChecker),        new Elmer(PieceColor.Red, new Vector2Int(7,2), backPlayer, fieldChecker),     new Elmer(PieceColor.Black, new Vector2Int(8,2), backPlayer, fieldChecker) },
-                {                                                                         null,                                                                             null,                                                                           null,                                                                             null,                                                                            null,                                                                             null,                                                                           null,                                                                            null,                                                                           null },
-                {                                                                         null,                                                                             null,                                                                           null,                                                                             null,                                                                             tam,                                                                             null,                                                                           null,                                                                            null,                                                                           null },
-                {                                                                         null,                                                                             null,                                                                           null,                                                                             null,                                                                            null,                                                                             null,                                                                           null,                                                                            null,                                                                           null },
-                {   new Elmer(PieceColor.Black, new Vector2Int(0,6), frontPlayer, fieldChecker),       new Elmer(PieceColor.Red, new Vector2Int(1,6), frontPlayer, fieldChecker),    new Elmer(PieceColor.Black, new Vector2Int(2,6), frontPlayer, fieldChecker),        new Elmer(PieceColor.Red, new Vector2Int(3,6), frontPlayer, fieldChecker),   new Felkana(PieceColor.Black, new Vector2Int(4,6), frontPlayer, fieldChecker),        new Elmer(PieceColor.Red, new Vector2Int(5,6), frontPlayer, fieldChecker),    new Elmer(PieceColor.Black, new Vector2Int(6,6), frontPlayer, fieldChecker),       new Elmer(PieceColor.Red, new Vector2Int(7,6), frontPlayer, fieldChecker),    new Elmer(PieceColor.Black, new Vector2Int(8,6), frontPlayer, fieldChecker) },
-                {  new Terlsk(PieceColor.Black, new Vector2Int(0,7), frontPlayer, fieldChecker),   new Gustuer(PieceColor.Black, new Vector2Int(1,7), frontPlayer, fieldChecker),                                                                           null,   new Stistyst(PieceColor.Black, new Vector2Int(3,7), frontPlayer, fieldChecker),                                                                            null,     new Stistyst(PieceColor.Red, new Vector2Int(5,7), frontPlayer, fieldChecker),                                                                           null,     new Gustuer(PieceColor.Red, new Vector2Int(7,7), frontPlayer, fieldChecker),     new Terlsk(PieceColor.Red, new Vector2Int(8,7), frontPlayer, fieldChecker) },
-                {       new Kua(PieceColor.Red, new Vector2Int(0,8), frontPlayer, fieldChecker),       new Dodor(PieceColor.Red, new Vector2Int(1,8), frontPlayer, fieldChecker),     new Vadyrd(PieceColor.Red, new Vector2Int(2,8), frontPlayer, fieldChecker),       new Varxle(PieceColor.Red, new Vector2Int(3,8), frontPlayer, fieldChecker),      new Ales(PieceColor.Black, new Vector2Int(4,8), frontPlayer, fieldChecker),     new Varxle(PieceColor.Black, new Vector2Int(5,8), frontPlayer, fieldChecker),   new Vadyrd(PieceColor.Black, new Vector2Int(6,8), frontPlayer, fieldChecker),     new Dodor(PieceColor.Black, new Vector2Int(7,8), frontPlayer, fieldChecker),      new Kua(PieceColor.Black, new Vector2Int(8,8), frontPlayer, fieldChecker) }
-            };
-            this.pieces = new Vector2YXArrayAccessor<IPiece>(pieces);
+            this.pieces = pieceMap;
+            this.fieldChecker = fieldChecker;
 
             onEveryValueChanged.OnNext(Unit.Default);
         }
@@ -76,74 +50,26 @@ namespace Azarashi.CerkeOnline.Domain.Entities.NoRule
         }
 
         bool isLocked = false;
-        public void MovePiece(Vector2Int startPosition, Vector2Int viaPosition, Vector2Int lastPosition, IPlayer player, IValueInputProvider<int> valueProvider, Action<PieceMoveResult> callback)
-        {
-            if (isLocked) return;
-
-            if (!IsOnBoard(startPosition) || !IsOnBoard(lastPosition))
-                throw new ArgumentException();
-
-            IPiece movingPiece = pieces.Read(startPosition);
-            IPiece viaPiece = pieces.Read(viaPosition);
-            IPiece originalPiece = pieces.Read(lastPosition);     //元からある駒の意味で使っているが, 英語があってるか不明.
-            bool isTargetNull = movingPiece == null;
-            bool isViaPieceNull = viaPosition == null;//
-            bool isOwner = !isTargetNull && movingPiece.IsOwner(player);
-            bool isSameOwner = !isTargetNull && originalPiece != null && originalPiece.Owner == movingPiece.Owner;
-            PieceMovement viaPieceMovement = PieceMovement.Default;
-            PieceMovement lastPieceMovement = PieceMovement.Default;
-            bool isMoveableToVia = !isTargetNull && movingPiece.TryToGetPieceMovement(viaPosition, out viaPieceMovement);//
-            bool isMoveableToLast = !isTargetNull && movingPiece.TryToGetPieceMovement(startPosition + lastPosition - viaPosition, out lastPieceMovement);//
-            if (isTargetNull || isViaPieceNull || !isOwner || isSameOwner || !isMoveableToVia || !isMoveableToLast)//
-            {
-                callback(new PieceMoveResult(false, false, null));
-                return;
-            }
-
-            //1ターンに複数回動作する駒のためのロジック
-            if (movingPiece == operationStatus.PreviousPiece)
-            {
-                operationStatus.AddCount();
-            }
-            else
-            {
-                if (operationStatus.PreviousPiece != null)
-                {
-                    callback(new PieceMoveResult(false, false, null));
-                    return;
-                }
-                else
-                {
-                    operationStatus.Reset(movingPiece);
-                }
-            }
-            bool isTurnEnd = operationStatus.Count >= movingPiece.NumberOfMoves;
-            if (isTurnEnd)
-                operationStatus.Reset(null);
-
-
-            isLocked = true;
-            callback += (result) => { isLocked = false; };
-            var pieceMoveAction =
-                new Official.PieceMoveAction.PieceSemorkoMoveAction(player, startPosition, viaPosition, lastPosition, pieces, fieldChecker, new ConstantProvider(5), viaPieceMovement, lastPieceMovement, callback, () => onEveryValueChanged.OnNext(Unit.Default), isTurnEnd);
-            pieceMoveAction.StartMove();
-        }
-
-        public void MovePiece(Vector2Int startPosition, Vector2Int endPosition, IPlayer player, IValueInputProvider<int> valueProvider, Action<PieceMoveResult> callback)
+        public void MovePiece(Vector2Int startPosition, Vector2Int viaPosition, Vector2Int endPosition, IPlayer player, IValueInputProvider<int> valueProvider, Action<PieceMoveResult> callback)
         {
             if (isLocked) return;
 
             if (!IsOnBoard(startPosition) || !IsOnBoard(endPosition))
                 throw new ArgumentException();
 
+            bool areViaAndLastSame = viaPosition == endPosition;
             IPiece movingPiece = pieces.Read(startPosition);
+            IPiece viaPiece = pieces.Read(viaPosition);
             IPiece originalPiece = pieces.Read(endPosition);     //元からある駒の意味で使っているが, 英語があってるか不明.
             bool isTargetNull = movingPiece == null;
+            bool isViaPieceNull = viaPiece == null;//
             bool isOwner = !isTargetNull && movingPiece.IsOwner(player);
             bool isSameOwner = !isTargetNull && originalPiece != null && originalPiece.Owner == movingPiece.Owner;
-            PieceMovement pieceMovement = PieceMovement.Default;
-            bool isMoveable = !isTargetNull && movingPiece.TryToGetPieceMovement(endPosition, out pieceMovement);
-            if (isTargetNull || !isOwner || isSameOwner || !isMoveable)
+            PieceMovement start2ViaPieceMovement = PieceMovement.Default;
+            PieceMovement via2EndPieceMovement = PieceMovement.Default;
+            bool isMoveableToVia = !isTargetNull && movingPiece.TryToGetPieceMovement(viaPosition, out start2ViaPieceMovement);//
+            bool isMoveableToLast = !isTargetNull && (areViaAndLastSame || movingPiece.TryToGetPieceMovement(startPosition + endPosition - viaPosition, out via2EndPieceMovement));//
+            if (isTargetNull || (!areViaAndLastSame && isViaPieceNull) || !isOwner || isSameOwner || !isMoveableToVia || !isMoveableToLast)//
             {
                 callback(new PieceMoveResult(false, false, null));
                 return;
@@ -169,15 +95,21 @@ namespace Azarashi.CerkeOnline.Domain.Entities.NoRule
             bool isTurnEnd = operationStatus.Count >= movingPiece.NumberOfMoves;
             if (isTurnEnd)
                 operationStatus.Reset(null);
-            
+
 
             isLocked = true;
             callback += (result) => { isLocked = false; };
-            var pieceMoveAction = 
-                new Official.PieceMoveAction.PieceMoveAction(player, startPosition, endPosition, pieces, fieldChecker, new ConstantProvider(5), pieceMovement, callback, () => onEveryValueChanged.OnNext(Unit.Default), isTurnEnd);
+            var worldPath = new PieceMovePathCalculator().CalculatePath(startPosition, viaPosition, endPosition, pieces, start2ViaPieceMovement, via2EndPieceMovement);
+            IPieceMoveAction pieceMoveAction = new PieceSemorkoMoveAction(player, worldPath, viaPosition,
+                pieces, fieldChecker, valueProvider, start2ViaPieceMovement, via2EndPieceMovement,
+                callback, () => onEveryValueChanged.OnNext(Unit.Default), isTurnEnd);
             pieceMoveAction.StartMove();
         }
-        
+
+        public void MovePiece(Vector2Int startPosition, Vector2Int lastPosition, IPlayer player, IValueInputProvider<int> valueProvider, Action<PieceMoveResult> callback)
+            => MovePiece(startPosition, lastPosition, lastPosition, player, valueProvider, callback);
+
+
         public bool SetPiece(Vector2Int position, IPiece piece)
         {
             if (!IsOnBoard(position) || pieces.Read(position) != null)
@@ -191,7 +123,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.NoRule
             onEveryValueChanged.OnNext(Unit.Default);
             return true;
         }
-        
+
         public bool IsOnBoard(Vector2Int position)
         {
             return position.x >= 0 && position.y >= 0 && position.x < pieces.Width && position.y < pieces.Height;
