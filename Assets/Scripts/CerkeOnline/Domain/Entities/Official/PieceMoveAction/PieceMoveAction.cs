@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UniRx;
 using Azarashi.Utilities.Collections;
-using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
 using Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction.DataStructure;
 using Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction.ActualAction;
 using Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction.AbstractAction;
@@ -23,12 +20,13 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
         readonly IPlayer player;
         readonly Vector2YXArrayAccessor<IPiece> pieces;
         readonly LinkedList<ColumnData> worldPath;
-        readonly PieceMovement pieceMovement;
+        readonly PieceMovement viaPieceMovement;
         readonly Action<PieceMoveResult> callback;
         readonly bool isTurnEnd;
         bool surmounted = false;
 
         readonly Vector2Int startPosition;
+        readonly Vector2Int viaPosition;
         readonly Vector2Int endPosition;
 
         readonly Mover pieceMover;
@@ -36,22 +34,22 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
         readonly WaterEntryChecker waterEntryChecker;
         readonly MoveFinisher moveFinisher;
         readonly SurmountingChecker surmountingChecker;
+        readonly SemorkoChecker semorkoChecker;
 
-        public PieceMoveAction(IPlayer player, Vector2Int startPosition, Vector2Int endPosition, Vector2YXArrayAccessor<IPiece> pieces, IFieldEffectChecker fieldEffectChecker,
-            IValueInputProvider<int> valueProvider, PieceMovement start2EndPieceMovement, Action<PieceMoveResult> callback, Action onPiecesChanged, bool isTurnEnd)
+        public PieceMoveAction(IPlayer player, LinkedList<ColumnData> worldPath, Vector2Int viaPosition, Vector2YXArrayAccessor<IPiece> pieces, IFieldEffectChecker fieldEffectChecker,
+            IValueInputProvider<int> valueProvider, PieceMovement start2ViaPieceMovement, PieceMovement via2EndPieceMovement, Action<PieceMoveResult> callback, Action onPiecesChanged, bool isTurnEnd)
         {
             this.player = player ?? throw new ArgumentNullException("駒を操作するプレイヤーを指定してください.");
             this.pieces = pieces ?? throw new ArgumentNullException("盤面の情報を入力してください.");
             //fieldEffectChecker ?? throw new ArgumentNullException("フィールド効果の情報を入力してください.");
             //valueProvider ?? throw new ArgumentNullException("投げ棒の値を提供するインスタンスを指定してください.");
 
-            this.startPosition = startPosition;
-            this.endPosition = endPosition;
-            bool isFrontPlayersPiece = pieces.Read(startPosition).Owner != null && pieces.Read(startPosition).Owner.Encampment == Encampment.Front;
-
-            this.worldPath = new PieceMovePathCalculator().CalculatePath(startPosition, endPosition, endPosition, pieces, start2EndPieceMovement, start2EndPieceMovement);
-
-            this.pieceMovement = start2EndPieceMovement;
+            startPosition = worldPath.First.Value.Positin;
+            this.viaPosition = viaPosition;
+            endPosition = worldPath.First.Value.Positin;
+            
+            this.worldPath  = worldPath;
+            this.viaPieceMovement = start2ViaPieceMovement;
             this.callback = callback;
             this.isTurnEnd = isTurnEnd;
 
@@ -60,6 +58,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
             waterEntryChecker = new WaterEntryChecker(3, fieldEffectChecker, valueProvider, OnFailure);
             moveFinisher = new MoveFinisher(pieceMover, new Pickupper(pieces));
             surmountingChecker = new SurmountingChecker(pieceMover);
+            semorkoChecker = new SemorkoChecker(moveFinisher, pickupper, pieceMover, callback);
         }
 
         void OnFailure(IPiece movingPiece)
@@ -75,7 +74,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
             //入水判定の必要があるか
             if (!waterEntryChecker.CheckWaterEntry(movingPiece, startPosition, endPosition, () => Move(movingPiece, worldPath.First)))
                 return;
-
+            
             Move(movingPiece, worldPath.First);
         }
 
@@ -89,6 +88,11 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
 
             IPiece nextPiece = worldPathNode.Value.Piece;
 
+            //経由点にいる場合
+            Action moveAfterNext = () => Move(movingPiece, worldPathNode.Next.Next);
+            if (!semorkoChecker.CheckSemorko(viaPosition, player, movingPiece, worldPathNode, moveAfterNext, OnFailure))
+                return;
+
             //PieceMovementが踏み越えに対応しているか
             Action surmountAction = () =>
             {
@@ -101,7 +105,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
 
                 Move(movingPiece, worldPathNode.Next.Next);
             };
-            if (!surmountingChecker.CheckSurmounting(pieceMovement, movingPiece, worldPathNode, surmounted, surmountAction))
+            if (!surmountingChecker.CheckSurmounting(viaPieceMovement, movingPiece, worldPathNode, surmounted, surmountAction))
                 return;
 
             if (!moveFinisher.CheckIfContinuable(player, movingPiece, worldPathNode, callback, () => OnFailure(movingPiece), isTurnEnd))

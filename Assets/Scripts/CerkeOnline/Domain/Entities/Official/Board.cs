@@ -99,7 +99,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
             isLocked = true;
             callback += (result) => { isLocked = false; };
             var worldPath = new PieceMovePathCalculator().CalculatePath(startPosition, viaPosition, endPosition, pieces, start2ViaPieceMovement, via2EndPieceMovement);
-            IPieceMoveAction pieceMoveAction = new PieceSemorkoMoveAction(player, worldPath, viaPosition,
+            IPieceMoveAction pieceMoveAction = new PieceMoveAction.PieceMoveAction(player, worldPath, viaPosition,
                 pieces, fieldChecker, valueProvider, start2ViaPieceMovement, via2EndPieceMovement, 
                 callback, () => onEveryValueChanged.OnNext(Unit.Default), isTurnEnd);
             pieceMoveAction.StartMove();
