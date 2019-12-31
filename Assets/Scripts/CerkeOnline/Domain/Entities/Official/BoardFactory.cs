@@ -2,8 +2,7 @@
 using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
 using Azarashi.CerkeOnline.Domain.Entities.Official.Pieces;
 using Azarashi.Utilities.Collections;
-
-
+using Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.Official
 {
@@ -41,7 +40,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
             };
             Vector2YXArrayAccessor<IPiece> pieceMap = new Vector2YXArrayAccessor<IPiece>(piece2DArray);
 
-            Board board = new Board(pieceMap, fieldChecker);
+            IBoard board = new Board(pieceMap, fieldChecker, new PieceMoveActionFactory());
             return board;
         }
 

@@ -39,7 +39,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.NoRule
             };
             Vector2YXArrayAccessor<IPiece> pieceMap = new Vector2YXArrayAccessor<IPiece>(piece2DArray);
 
-            Board board = new Board(pieceMap, fieldChecker);
+            IBoard board = new Official.Board(pieceMap, fieldChecker, new Official.PieceMoveAction.PieceMoveActionFactory());
             return board;
         }
 

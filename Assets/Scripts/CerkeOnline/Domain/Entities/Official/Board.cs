@@ -12,16 +12,20 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
     {
         readonly Vector2YXArrayAccessor<IPiece> pieces;
         readonly IFieldEffectChecker fieldChecker;
+        readonly IPieceMoveActionFactory pieceMoveActionFactory;
+
         public IObservable<Unit> OnEveruValueChanged => onEveryValueChanged;
         readonly Subject<Unit> onEveryValueChanged = new Subject<Unit>();
 
         //これ、Boardが保持すべき情報ではない
+        //ターン管理をここでするな！
         readonly OperationStatus operationStatus = new OperationStatus();
 
-        public Board(Vector2YXArrayAccessor<IPiece> pieceMap, FieldEffectChecker fieldChecker)
+        public Board(Vector2YXArrayAccessor<IPiece> pieceMap, FieldEffectChecker fieldChecker, IPieceMoveActionFactory pieceMoveActionFactory)
         {
             this.pieces = pieceMap;
             this.fieldChecker = fieldChecker;
+            this.pieceMoveActionFactory = pieceMoveActionFactory;
             
             onEveryValueChanged.OnNext(Unit.Default);
         }
@@ -76,6 +80,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
             }
 
             //1ターンに複数回動作する駒のためのロジック
+            //ターン管理をここでするな！
             if (movingPiece == operationStatus.PreviousPiece)
             {
                 operationStatus.AddCount();
@@ -99,12 +104,10 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
 
             isLocked = true;
             callback += (result) => { isLocked = false; };
-            var worldPath = new PieceMovePathCalculator().CalculatePath(startPosition, viaPosition, endPosition, pieces, start2ViaPieceMovement, via2EndPieceMovement);
-            var viaPositionNode = worldPath.Find(new ColumnData(viaPosition, pieces));
-            var moveActionData = new MoveActionData(worldPath.First.Value.Piece, player, worldPath, viaPositionNode);
-            IPieceMoveAction pieceMoveAction = new PieceMoveAction.PieceMoveAction(moveActionData,
-                pieces, fieldChecker, valueProvider, start2ViaPieceMovement, via2EndPieceMovement, 
-                callback, () => onEveryValueChanged.OnNext(Unit.Default), isTurnEnd);
+            IPieceMoveAction pieceMoveAction = pieceMoveActionFactory.Create(player, startPosition, viaPosition, endPosition,
+                            pieces, fieldChecker, valueProvider,
+                            start2ViaPieceMovement, via2EndPieceMovement,
+                            callback, () => onEveryValueChanged.OnNext(Unit.Default), isTurnEnd);
             pieceMoveAction.StartMove();
         }
 
