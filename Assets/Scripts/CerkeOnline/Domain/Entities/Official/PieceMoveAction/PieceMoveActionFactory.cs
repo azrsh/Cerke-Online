@@ -1,14 +1,13 @@
-﻿using Azarashi.Utilities.Collections;
-using System;
-using System.Collections;
-using UniRx;
+﻿using System;
 using UnityEngine;
+using Azarashi.Utilities.Collections;
 using Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction.DataStructure;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
 {
     public class PieceMoveActionFactory : IPieceMoveActionFactory
     {
+        //Vector2YXArrayAccessor<IPiece> pieces, IFieldEffectChecker fieldEffectCheckerをコンストラクタの引数にすることも検討
         public IPieceMoveAction Create(IPlayer player, Vector2Int startPosition, Vector2Int viaPosition, Vector2Int endPosition,
             Vector2YXArrayAccessor<IPiece> pieces, IFieldEffectChecker fieldEffectChecker, IValueInputProvider<int> valueProvider,
             PieceMovement start2ViaPieceMovement, PieceMovement via2EndPieceMovement, 
