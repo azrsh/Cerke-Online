@@ -36,19 +36,19 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
         readonly SurmountingChecker surmountingChecker;
         readonly SemorkoChecker semorkoChecker;
 
-        public PieceMoveAction(IPlayer player, LinkedList<ColumnData> worldPath, Vector2Int viaPosition, Vector2YXArrayAccessor<IPiece> pieces, IFieldEffectChecker fieldEffectChecker,
+        public PieceMoveAction(MoveActionData moveActionData, Vector2YXArrayAccessor<IPiece> pieces, IFieldEffectChecker fieldEffectChecker,
             IValueInputProvider<int> valueProvider, PieceMovement start2ViaPieceMovement, PieceMovement via2EndPieceMovement, Action<PieceMoveResult> callback, Action onPiecesChanged, bool isTurnEnd)
         {
-            this.player = player ?? throw new ArgumentNullException("駒を操作するプレイヤーを指定してください.");
+            this.player = moveActionData?.Player ?? throw new ArgumentNullException("駒を操作するプレイヤーを指定してください.");
             this.pieces = pieces ?? throw new ArgumentNullException("盤面の情報を入力してください.");
             //fieldEffectChecker ?? throw new ArgumentNullException("フィールド効果の情報を入力してください.");
             //valueProvider ?? throw new ArgumentNullException("投げ棒の値を提供するインスタンスを指定してください.");
 
-            startPosition = worldPath.First.Value.Positin;
-            this.viaPosition = viaPosition;
-            endPosition = worldPath.First.Value.Positin;
+            startPosition = moveActionData.WorldPath.First.Value.Positin;
+            viaPosition = moveActionData.ViaPositionNode.Value.Positin;
+            endPosition = moveActionData.WorldPath.Last.Value.Positin;
             
-            this.worldPath  = worldPath;
+            this.worldPath  = moveActionData.WorldPath;
             this.viaPieceMovement = start2ViaPieceMovement;
             this.callback = callback;
             this.isTurnEnd = isTurnEnd;

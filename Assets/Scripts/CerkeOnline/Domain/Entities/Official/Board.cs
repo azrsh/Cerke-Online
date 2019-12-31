@@ -4,6 +4,7 @@ using UnityEngine;
 using Azarashi.Utilities.Collections;
 using Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction;
 using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
+using Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction.DataStructure;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.Official
 {
@@ -99,7 +100,9 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
             isLocked = true;
             callback += (result) => { isLocked = false; };
             var worldPath = new PieceMovePathCalculator().CalculatePath(startPosition, viaPosition, endPosition, pieces, start2ViaPieceMovement, via2EndPieceMovement);
-            IPieceMoveAction pieceMoveAction = new PieceMoveAction.PieceMoveAction(player, worldPath, viaPosition,
+            var viaPositionNode = worldPath.Find(new ColumnData(viaPosition, pieces));
+            var moveActionData = new MoveActionData(worldPath.First.Value.Piece, player, worldPath, viaPositionNode);
+            IPieceMoveAction pieceMoveAction = new PieceMoveAction.PieceMoveAction(moveActionData,
                 pieces, fieldChecker, valueProvider, start2ViaPieceMovement, via2EndPieceMovement, 
                 callback, () => onEveryValueChanged.OnNext(Unit.Default), isTurnEnd);
             pieceMoveAction.StartMove();
