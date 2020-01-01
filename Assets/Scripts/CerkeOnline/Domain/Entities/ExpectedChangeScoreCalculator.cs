@@ -28,6 +28,8 @@ namespace Azarashi.CerkeOnline.Domain.Entities
 
             var increasedDifference = establishedHands?.Except(previousHands ?? new IHand[] { })?.ToArray() ?? establishedHands;
             var decreasedDifference = previousHands?.Except(establishedHands)?.ToArray() ?? new IHand[]{ };
+            
+            //ログ出力の移動
             foreach (IHand hand in increasedDifference)
                 logger.Log("役 " + hand.Name + "が成立しました.");
             foreach (IHand hand in decreasedDifference)
