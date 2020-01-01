@@ -1,5 +1,5 @@
 ﻿
-namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
+namespace Azarashi.CerkeOnline.Domain.Entities
 {
     public interface IPieceMoveAction
     {
