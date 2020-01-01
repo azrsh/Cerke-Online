@@ -1,6 +1,8 @@
 # Cerke-Online
 Cerke-Onlineはcerke（机戦/パイグ将棋/cet2kaik）のためのデスクトップアプリケーションです。  
-cerkeの詳細は[日本机戦連盟公式サイト](https://sites.google.com/view/cet2kaik/トップページ?authuser=0)をご覧ください。
+cerkeの詳細は[日本机戦連盟公式サイト](https://sites.google.com/view/cet2kaik/トップページ?authuser=0)をご覧ください。  
+なお、本プロジェクトはα版であり、多くの機能が未実装です。
+
 
 # 入手
 自分でビルドする場合：このリポジトリをUnityのプロジェクトとして読み込む  
