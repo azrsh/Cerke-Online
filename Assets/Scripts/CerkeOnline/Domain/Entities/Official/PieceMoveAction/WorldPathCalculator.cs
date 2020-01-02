@@ -25,15 +25,19 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
         public LinkedList<ColumnData> CalculatePath(Vector2Int startPosition, Vector2Int viaPosition, Vector2Int endPosition, 
             Vector2YXArrayAccessor<IPiece> pieces, PieceMovement start2ViaPieceMovement, PieceMovement via2EndPieceMovement)
         {
-            if (viaPosition == endPosition) return CalculateStraightPath(startPosition, endPosition, pieces, start2ViaPieceMovement);
-            return CalculateBrockenPath(startPosition, viaPosition, endPosition, pieces, start2ViaPieceMovement, via2EndPieceMovement);
+            //startPositionは各直線ではなく全体の開始地点でなければならない
+            //インスタンス変数化？
+            bool isFrontPlayersPiece = IsFrontPlayersPiece(pieces, startPosition);
+
+            if (viaPosition == endPosition) return CalculateStraightPath(startPosition, endPosition, pieces, start2ViaPieceMovement, isFrontPlayersPiece);
+            return CalculateBrockenPath(startPosition, viaPosition, endPosition, pieces, start2ViaPieceMovement, via2EndPieceMovement, isFrontPlayersPiece);
         }
 
         LinkedList<ColumnData> CalculateBrockenPath(Vector2Int startPosition, Vector2Int viaPosition, Vector2Int endPosition,
-            Vector2YXArrayAccessor<IPiece> pieces, PieceMovement start2ViaPieceMovement, PieceMovement via2EndPieceMovement)
+            Vector2YXArrayAccessor<IPiece> pieces, PieceMovement start2ViaPieceMovement, PieceMovement via2EndPieceMovement, bool isFrontPlayersPiece)
         {
-            var start2ViaPath = CalculateStraightPath(startPosition, viaPosition, pieces, start2ViaPieceMovement);
-            var via2EndPath = CalculateStraightPath(viaPosition, endPosition, pieces, via2EndPieceMovement);
+            var start2ViaPath = CalculateStraightPath(startPosition, viaPosition, pieces, start2ViaPieceMovement, isFrontPlayersPiece);
+            var via2EndPath = CalculateStraightPath(viaPosition, endPosition, pieces, via2EndPieceMovement, isFrontPlayersPiece);
 
             //順序は保証されていないにも関わらず保証されたものとして利用
             var tempPath = start2ViaPath.Union(via2EndPath).ToList();   
@@ -41,17 +45,16 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
         }
 
         LinkedList<ColumnData> CalculateStraightPath(Vector2Int startPosition, Vector2Int endPosition, 
-            Vector2YXArrayAccessor<IPiece> pieces, PieceMovement pieceMovement)
+            Vector2YXArrayAccessor<IPiece> pieces, PieceMovement pieceMovement, bool isFrontPlayersPiece)
         {
-            bool isFrontPlayersPiece = IsFrontPlayersPiece(pieces, startPosition);
-
             var relativeStart2EndPath = GetPath(startPosition, endPosition, isFrontPlayersPiece, pieceMovement);
             //順序は保証されていないにも関わらず保証されたものとして利用
             var worldPath = relativeStart2EndPath.Select(value => startPosition + value * (isFrontPlayersPiece ? -1 : 1));
             return new LinkedList<ColumnData>(worldPath.Select(value => new ColumnData(value, pieces)));
         }
 
-        bool IsFrontPlayersPiece(Vector2YXArrayAccessor<IPiece> pieces, Vector2Int startPosition) => pieces.Read(startPosition).Owner != null && pieces.Read(startPosition).Owner.Encampment == Encampment.Front;
+        bool IsFrontPlayersPiece(Vector2YXArrayAccessor<IPiece> pieces, Vector2Int startPosition) 
+            => pieces.Read(startPosition).Owner != null && pieces.Read(startPosition).Owner.Encampment == Encampment.Front;
 
         IReadOnlyList<Vector2Int> GetPath(Vector2Int from, Vector2Int to, bool isFrontPlayersPiece, PieceMovement pieceMovement)
         {
