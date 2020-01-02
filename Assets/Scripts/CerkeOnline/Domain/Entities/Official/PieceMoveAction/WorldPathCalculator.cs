@@ -12,6 +12,16 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
     //interface, straightPath, brockenPathでクラスを分けたい
     public class PieceMovePathCalculator
     {
+        /// <summary>
+        /// 返却されるPathには開始地点は含まれない。
+        /// </summary>
+        /// <param name="startPosition"></param>
+        /// <param name="viaPosition"></param>
+        /// <param name="endPosition"></param>
+        /// <param name="pieces"></param>
+        /// <param name="start2ViaPieceMovement"></param>
+        /// <param name="via2EndPieceMovement"></param>
+        /// <returns></returns>
         public LinkedList<ColumnData> CalculatePath(Vector2Int startPosition, Vector2Int viaPosition, Vector2Int endPosition, 
             Vector2YXArrayAccessor<IPiece> pieces, PieceMovement start2ViaPieceMovement, PieceMovement via2EndPieceMovement)
         {

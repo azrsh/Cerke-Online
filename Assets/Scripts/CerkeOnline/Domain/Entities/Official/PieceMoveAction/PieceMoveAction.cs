@@ -44,7 +44,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction
             //fieldEffectChecker ?? throw new ArgumentNullException("フィールド効果の情報を入力してください.");
             //valueProvider ?? throw new ArgumentNullException("投げ棒の値を提供するインスタンスを指定してください.");
 
-            startPosition = moveActionData.WorldPath.First.Value.Positin;
+            startPosition = moveActionData.MovingPiece.Position;    //worldPathに開始地点は含まれないのでこの方法で開始地点を取得
             viaPosition = moveActionData.ViaPositionNode.Value.Positin;
             endPosition = moveActionData.WorldPath.Last.Value.Positin;
             
