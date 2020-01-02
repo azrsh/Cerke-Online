@@ -3,9 +3,9 @@ using UniRx;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.Official
 {
-    public interface ISurmountedObservable
+    public interface ISemorkoObservable
     {
-        IObservable<Unit> OnSurmounted { get; }
+        IObservable<Unit> OnSemorko { get; }
     }
 
     public interface ISemorkoObserver

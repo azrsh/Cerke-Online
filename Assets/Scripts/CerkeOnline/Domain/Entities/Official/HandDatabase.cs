@@ -48,7 +48,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
 
             var tam = board.SearchPiece(Terminologies.PieceName.Tam);
             var tamObserver = new TamObserver(onTurnChanged, board.OnEveruValueChanged, tam);
-            hands[NumberOfPieceStacksProviders * 2] = new LaTamadSemorkovo(-5, (ISurmountedObservable)tam);     //Unsafe
+            hands[NumberOfPieceStacksProviders * 2] = new LaTamadSemorkovo(-5, (ISemorkoObservable)tam);     //Unsafe
             hands[NumberOfPieceStacksProviders * 2 + 1] = new TamenMako(-3, tamObserver);
         }
 

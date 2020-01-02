@@ -5,13 +5,13 @@ using UnityEngine;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.Official.Pieces
 {
-    public class Tam : DefaultPiece, ISurmountedObservable, ISemorkoObserver
+    public class Tam : DefaultPiece, ISemorkoObservable, ISemorkoObserver
     {
         public override int NumberOfMoves => 2;
 
-        IObservable<Unit> ISurmountedObservable.OnSurmounted => onSurmounted;
-        IObserver<Unit> ISemorkoObserver.OnSurmounted => onSurmounted;
-        readonly Subject<Unit> onSurmounted = new Subject<Unit>();
+        IObservable<Unit> ISemorkoObservable.OnSemorko => onSemorko;
+        IObserver<Unit> ISemorkoObserver.OnSurmounted => onSemorko;
+        readonly Subject<Unit> onSemorko = new Subject<Unit>();
 
         readonly PieceMovement[] normalPieceMovements;
         readonly PieceMovement[] expansionPieceMovements;
