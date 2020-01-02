@@ -48,10 +48,18 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         /// <summary>
         /// PieceMovementの取得を試みる.
         /// </summary>
-        /// <param name="position"></param>
+        /// <param name="worldPosition">絶対論理座標を指定する.</param>
         /// <param name="pieceMovement"></param>
         /// <returns></returns>
-        bool TryToGetPieceMovement(Vector2Int position, out PieceMovement pieceMovement);
+        bool TryToGetPieceMovement(Vector2Int worldPosition, out PieceMovement pieceMovement);
+
+        /// <summary>
+        /// PieceMovementの取得を試みる.
+        /// </summary>
+        /// <param name="relativePosition">駒を中心とした相対論理座標を指定する.</param>
+        /// <param name="pieceMovement"></param>
+        /// <returns></returns>
+        bool TryToGetPieceMovementByRelativePosition(Vector2Int relativePosition, out PieceMovement pieceMovement);
 
         /// <summary>
         /// 引数のプレイヤーがオーナーであるかを返す

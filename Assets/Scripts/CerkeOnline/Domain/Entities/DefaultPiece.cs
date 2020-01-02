@@ -39,18 +39,21 @@ namespace Azarashi.CerkeOnline.Domain.Entities
             return true;
         }
 
-        public bool IsMoveable(Vector2Int position)
+        public bool IsMoveable(Vector2Int worldPosition)
         {
             PieceMovement pieceMovement;
-            return TryToGetPieceMovement(position, out pieceMovement);
+            return TryToGetPieceMovement(worldPosition, out pieceMovement);
         }
 
-        public bool TryToGetPieceMovement(Vector2Int targetPosition, out PieceMovement pieceMovement)
+        public bool TryToGetPieceMovement(Vector2Int worldPosition, out PieceMovement pieceMovement)
+        {
+            var relativePosition = ConvertWorldPositionToRelativePosition(worldPosition);
+            return TryToGetPieceMovementByRelativePosition(relativePosition, out pieceMovement);
+        }
+
+        public bool TryToGetPieceMovementByRelativePosition(Vector2Int relativePosition, out PieceMovement pieceMovement)
         {
             bool isExpanded = fieldChecker != null && fieldChecker.IsExpandedMoveField(this.Position);
-            bool isFrontPlayer = Owner != null && Owner.Encampment == Terminologies.Encampment.Front;//仮の条件
-            Vector2Int relativePosition = targetPosition - this.Position;
-            if (isFrontPlayer) relativePosition *= -1;                                          //逆にしたい（!isLocalPlayerのとき-1をかける）
             foreach (PieceMovement moveable in GetMoveablePosition(isExpanded))
             {
                 if (moveable.IsMoveable(relativePosition))
@@ -96,5 +99,22 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         public virtual bool CanLittuaWithoutJudge() => false;
 
         public virtual bool CanTakePiece() => true;
+
+
+        Vector2Int ConvertWorldPositionToRelativePosition(Vector2Int worldPosition)
+        {
+            bool isFrontPlayer = Owner != null && Owner.Encampment == Terminologies.Encampment.Front;//仮の条件
+            Vector2Int relativePosition = worldPosition - this.Position;
+            if (isFrontPlayer) relativePosition *= -1;                                          //逆にしたい（!isLocalPlayerのとき-1をかける）
+            return relativePosition;
+        }
+
+        Vector2Int ConvertRelativePositionToWorldPosition(Vector2Int relativePosition)
+        {
+            bool isFrontPlayer = Owner != null && Owner.Encampment == Terminologies.Encampment.Front;//仮の条件
+            if (isFrontPlayer) relativePosition *= -1;                                          //逆にしたい（!isLocalPlayerのとき-1をかける）
+            Vector2Int worldPosition = relativePosition + this.Position;
+            return worldPosition;
+        }
     }
 }

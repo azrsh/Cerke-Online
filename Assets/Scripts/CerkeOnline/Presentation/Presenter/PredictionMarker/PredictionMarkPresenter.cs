@@ -20,6 +20,10 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.PredictionMarker
         ColumnPositionConverter columnPositionConverter;
         MovePredictor movePredictor;
 
+        //--------ここで保持すべきではない--------
+        IReadOnlyPiece movingPiece;
+        //--------------------------------------
+
         void Start()
         {
             //GameController呼び出したくない
@@ -31,13 +35,21 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.PredictionMarker
             markerObjects = new PredictionMarkerObjects(predictionMarkerPrefab);
         }
 
-        public void OnPieceSelected(IReadOnlyPiece movingPiece) => CalculateAndDisplay(movingPiece);
-        public void OnViaPositionSelected(Vector2Int position) { /*中継地点からの移動先ハイライトは未実装*/}
+        public void OnPieceSelected(IReadOnlyPiece movingPiece)
+            => CalculateAndDisplay(movingPiece?.Position ?? new Vector2Int(-1, -1), this.movingPiece = movingPiece);
+        
+        public void OnViaPositionSelected(Vector2Int position) 
+        {
+            /*中継地点からの移動先ハイライトは未実装*/
+            CalculateAndDisplay(position, movingPiece);
+            movingPiece = null;
+        }
+
         public void OnTargetPositionSelected(Vector2Int position) => markerObjects.HideAllMarker();
 
-        void CalculateAndDisplay(IReadOnlyPiece movingPiece)
+        void CalculateAndDisplay(Vector2Int position, IReadOnlyPiece movingPiece)
         {
-            var logicPositions = movePredictor.PredictMoveableColumns(movingPiece);
+            var logicPositions = movePredictor.PredictMoveableColumns(position, movingPiece);
             var worldPositions = ConvertLogicPositionToWorldPosition(logicPositions);
             UpdateMarker(worldPositions);
         }
@@ -46,7 +58,6 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.PredictionMarker
         {
             return logicPositions.Select(value => columnPositionConverter.Convert(value)).ToList();
         }
-
 
         void UpdateMarker(IReadOnlyList<Vector3> columns)
         {

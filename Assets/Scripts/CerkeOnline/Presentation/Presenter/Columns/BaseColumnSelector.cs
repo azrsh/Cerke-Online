@@ -29,7 +29,7 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.Columns
             if (this.viaPosition == NonePosition)
             {
                 this.viaPosition = position;
-                onViaPositionSelected.Invoke(viaPosition);
+                CallViaPositionSelectedEvent(position);
                 return;
             }
 
@@ -46,6 +46,15 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.Columns
             var board = game.Board;
             var piece = board.GetPiece(position);
             onPieceSelected.Invoke(piece);
+        }
+        
+        void CallViaPositionSelectedEvent(Vector2Int position)
+        {
+            var game = Application.GameController.Instance.Game;
+            var board = game.Board;
+            var piece = board.GetPiece(position);
+            if (piece != null)  //駒が無ければ経由点ではないので呼ばない
+                onViaPositionSelected.Invoke(viaPosition);
         }
     }
 }
