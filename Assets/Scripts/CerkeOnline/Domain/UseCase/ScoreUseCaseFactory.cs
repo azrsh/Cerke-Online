@@ -1,19 +1,20 @@
 ﻿using Azarashi.CerkeOnline.Application;
-using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
+using Azarashi.CerkeOnline.Domain.Entities;
 
 namespace Azarashi.CerkeOnline.Domain.UseCase
 {
     public static class ScoreeUseCaseFactory
     {
-        public static IScoreUseCase Create(FirstOrSecond firstOrSecond)
+        public static IScoreUseCase Create(Terminologies.FirstOrSecond firstOrSecond)
         {
             var game = GameController.Instance.Game;
             var handDatabase = game.HandDatabase;
             if (game == null || handDatabase == null) return null;
 
-            var player = game.GetPlayer(firstOrSecond);
+            var self = game.GetPlayer(firstOrSecond);
+            var opponent = game.GetPlayer(Terminologies.GetReversal(firstOrSecond));
             var logger = GameController.Instance.SystemLogger;
-            return new ScoreUseCase(player, game.ScoreHolder);
+            return new ScoreUseCase(self, opponent, handDatabase, game.ScoreHolder, logger);
         }
     }
 }
