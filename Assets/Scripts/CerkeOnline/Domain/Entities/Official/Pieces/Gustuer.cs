@@ -16,11 +16,11 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official.Pieces
                 new PieceMovement(new Vector2Int(0, 1), -1), new PieceMovement(new Vector2Int(0, -1), -1),
                 new PieceMovement(new Vector2Int(1, 0), -1), new PieceMovement(new Vector2Int(-1, 0), -1),
             };
-            expansionPieceMovements = normalPieceMovements.Union(new PieceMovement[]
+            expansionPieceMovements = new PieceMovement[]
             {
-                new PieceMovement(new Vector2Int(1,1), 1), new PieceMovement(new Vector2Int(1,-1), 1),
-                new PieceMovement(new Vector2Int(-1,1), 1), new PieceMovement(new Vector2Int(-1,-1), 1)
-            }).ToArray();
+                new PieceMovement(new Vector2Int(1,1), -1), new PieceMovement(new Vector2Int(1,-1), -1),
+                new PieceMovement(new Vector2Int(-1,1), -1), new PieceMovement(new Vector2Int(-1,-1), -1)
+            };
         }
 
         public override IReadOnlyList<PieceMovement> GetMoveablePosition(bool isExpanded)
