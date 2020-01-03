@@ -57,8 +57,8 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
 
         public IHand[] SearchHands(IReadOnlyList<IReadOnlyPiece> pieces)
         {
-            var formedHands = hands.Where(hand => hand != null && hand.GetNumberOfSuccesses(pieces) > 0);
-            return RemoveOverwritableHands(formedHands).ToArray();
+            var successfulHands = hands.Where(hand => hand != null && hand.GetNumberOfSuccesses(pieces) > 0);
+            return RemoveOverwritableHands(successfulHands).ToArray();
         }
 
         IEnumerable<IHand> RemoveOverwritableHands(IEnumerable<IHand> hands)
