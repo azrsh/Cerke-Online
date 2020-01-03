@@ -9,34 +9,21 @@ namespace Azarashi.CerkeOnline.Domain.Entities
     /// </summary>
     public class DefaultHand : IHand
     {
-        readonly IPieceStacksProvider pieceStacksProvider;
+        readonly HandSuccessChecker handSuccessChecker;
 
         public string Name { get; }
         public int Score { get; }
 
         public DefaultHand(IPieceStacksProvider pieceStacksProvider, int score)
         {
-            this.pieceStacksProvider = pieceStacksProvider;
+            handSuccessChecker = new HandSuccessChecker(pieceStacksProvider);
             Name = HandNameDictionary.PascalToJapanese[pieceStacksProvider.GetType().Name];
             Score = score;
         }
 
         public int GetNumberOfSuccesses(IReadOnlyList<IReadOnlyPiece> holdingPieces)
         {
-            IReadOnlyList<PieceStack> pieceStacks = pieceStacksProvider.GetPieceStacks();
-
-            if (holdingPieces.Count < pieceStacks.Count) return 0;
-
-            IEnumerable<PieceName> holdingPieceNames = holdingPieces.Select(piece => piece.PieceName);
-            int restAlesCount = holdingPieceNames.Where(name => name == PieceName.Ales).Count();
-            bool isSuccess = pieceStacks.All(stack =>
-            {
-                int appropriateHoldingPieceCount = holdingPieceNames.Count(pieceName => stack.PieceName == PieceName.None || pieceName == stack.PieceName);
-                int difference = appropriateHoldingPieceCount - stack.StackCount;
-                bool isIndividualSuccess = difference + restAlesCount >= 0;
-                restAlesCount += System.Math.Min(0, difference);
-                return isIndividualSuccess;
-            });
+            bool isSuccess = handSuccessChecker.Check(holdingPieces);
             return isSuccess ? 1 : 0;
         }
     }

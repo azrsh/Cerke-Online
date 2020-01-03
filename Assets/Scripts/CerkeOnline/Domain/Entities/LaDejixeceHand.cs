@@ -10,6 +10,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
     public class LaDejixeceHand : IHand
     {
         readonly IPieceStacksProvider pieceStacksProvider;
+        readonly HandSuccessChecker handSuccessChecker;
 
         public string Name { get; }
         public int Score { get; }
@@ -17,39 +18,20 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         public LaDejixeceHand(IPieceStacksProvider pieceStacksProvider, int score)
         {
             this.pieceStacksProvider = pieceStacksProvider;
+            handSuccessChecker = new HandSuccessChecker(pieceStacksProvider);
             Name = "同色" + HandNameDictionary.PascalToJapanese[pieceStacksProvider.GetType().Name]; //TODO べた書きの排除
             Score = score;
         }
 
         public int GetNumberOfSuccesses(IReadOnlyList<IReadOnlyPiece> holdingPieces)
         {
-            IReadOnlyList<PieceStack> pieceStacks = pieceStacksProvider.GetPieceStacks();
-
-            if (holdingPieces.Count < pieceStacks.Count) return 0;
-
-            IEnumerable<IReadOnlyPiece> alesList = holdingPieces.Where(piece => piece.PieceName == PieceName.Ales);
-            int restBlackAlesCount = alesList.Where(piece => piece.Color == PieceColor.Black).Count();
-            bool black = pieceStacks.All(stack =>
-            {
-                int appropriateHoldingPieceCount = holdingPieces.Count(piece => piece.Color == PieceColor.Black && (stack.PieceName == PieceName.None || piece.PieceName == stack.PieceName));
-                int difference = appropriateHoldingPieceCount - stack.StackCount;
-                bool isIndividualSuccess = difference + restBlackAlesCount >= 0;
-                restBlackAlesCount += System.Math.Min(0, difference);
-                return isIndividualSuccess;
-            });
+            IEnumerable<IReadOnlyPiece> blackPieces = holdingPieces.Where(piece => piece.Color == PieceColor.Black);
+            if (handSuccessChecker.Check(blackPieces)) return 1;
             
-            int restRedAlesCount = alesList.Where(piece => piece.Color == PieceColor.Red).Count();
-            bool red = pieceStacks.All(stack =>
-            {
-                int appropriateHoldingPieceCount = holdingPieces.Count(piece => piece.Color == PieceColor.Red && (stack.PieceName == PieceName.None || piece.PieceName == stack.PieceName));
-                int difference = appropriateHoldingPieceCount - stack.StackCount;
-                bool isIndividualSuccess = difference + restRedAlesCount >= 0;
-                restRedAlesCount += System.Math.Min(0, difference);
-                return isIndividualSuccess;
-            }); 
+            IEnumerable<IReadOnlyPiece> redPieces = holdingPieces.Where(piece => piece.Color == PieceColor.Red);
+            if (handSuccessChecker.Check(redPieces)) return 1;
 
-            bool isSuccess = black || red;
-            return isSuccess ? 1 : 0;
+            return 0;
         }
     }
 }
