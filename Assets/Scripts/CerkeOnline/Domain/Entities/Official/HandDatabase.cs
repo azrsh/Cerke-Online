@@ -27,6 +27,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
     public class HandDatabase : IHandDatabase
     {
         readonly IHand[] hands;
+        readonly OverwriteHandPair[] overwriteHandPairs;
 
         public HandDatabase(IBoard board, IObservable<Unit> onTurnChanged)
         {
@@ -40,10 +41,12 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
             int bounus = 2;
 
             this.hands = new IHand[NumberOfPieceStacksProviders * 2 + 2];
+            this.overwriteHandPairs = new OverwriteHandPair[NumberOfPieceStacksProviders];
             for (int i = 0; i < NumberOfPieceStacksProviders; i++)
             {
                 hands[i * 2] = new DefaultHand(pieceStacksProviders[i], baseScores[i]);
-                hands[i * 2 + 1] = new LaDejixeceHand(pieceStacksProviders[i], bounus);
+                hands[i * 2 + 1] = new LaDejixeceHand(pieceStacksProviders[i], baseScores[i] + bounus);
+                overwriteHandPairs[i] = new OverwriteHandPair(hands[i * 2], hands[i * 2 + 1]);
             }
 
             var tam = board.SearchPiece(Terminologies.PieceName.Tam);
@@ -53,8 +56,15 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
         }
 
         public IHand[] SearchHands(IReadOnlyList<IReadOnlyPiece> pieces)
-        {   
-            return hands.Where(hand => hand != null && hand.GetNumberOfSuccesses(pieces) > 0).ToArray();
+        {
+            var formedHands = hands.Where(hand => hand != null && hand.GetNumberOfSuccesses(pieces) > 0);
+            return RemoveOverwritableHands(formedHands).ToArray();
+        }
+
+        IEnumerable<IHand> RemoveOverwritableHands(IEnumerable<IHand> hands)
+        {
+            var overwriters = overwriteHandPairs.Where(pair => pair.IsOverwritable(hands)).Select(pair => pair.Overwritten);
+            return hands.Except(overwriters);
         }
     }
 }
