@@ -33,12 +33,15 @@ namespace Azarashi.CerkeOnline.Domain.UseCase
         {
             previousHand = previousHand ?? new IHand[] { };
 
-            HandDifference handDifference = handDifferenceCalculator.Calculate(previousHand, handDatabase.SearchHands(self.GetPieceList()));
+            IHand[] currentHands = handDatabase.SearchHands(self.GetPieceList());
+            HandDifference handDifference = handDifferenceCalculator.Calculate(previousHand, currentHands);
 
             foreach (IHand hand in handDifference.IncreasedDifference)
                 logger.Log("役 " + hand.Name + "が成立しました.");
             foreach (IHand hand in handDifference.DecreasedDifference)
                 logger.Log("役 " + hand.Name + "が不成立になりました.");
+
+            previousHand = currentHands;
         }
 
         public void MoveScore()
