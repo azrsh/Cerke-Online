@@ -22,7 +22,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
                 seasonDeclarationProvider.RequestValue(OnDeclarated);
             });
 
-            OnEnd.Subscribe(NextSeason);
+            OnEnd.Subscribe(EndSeason);
         }
 
         void OnDeclarated(SeasonContinueOrEnd continueOrEnd)
@@ -38,12 +38,15 @@ namespace Azarashi.CerkeOnline.Domain.Entities
             }
         }
 
-        void NextSeason(Unit unit)
+        void EndSeason(Unit unit)
         {
             Terminologies.Season current = CurrentSeason.Season;
             Terminologies.Season next = Terminologies.GetNextSeason(current);
 
-            CurrentSeason = new DefaultSeason(next);
+            if (next != Terminologies.Season.None)
+                CurrentSeason = new DefaultSeason(next);
+            else
+                CurrentSeason = null;
         }
 
     }

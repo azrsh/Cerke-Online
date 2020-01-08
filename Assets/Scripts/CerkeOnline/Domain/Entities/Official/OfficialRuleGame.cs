@@ -28,6 +28,9 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
         public IObservable<Unit> OnSeasonStart => onSeasonStart;
         readonly Subject<Unit> onSeasonStart = new Subject<Unit>();
 
+        readonly Subject<Unit> gameEndSubject = new Subject<Unit>();
+        public IObservable<Unit> OnGameEnd => gameEndSubject;
+
         readonly HandChangeObserver handChangeObserver;
         readonly SeaonSequencer seasonSequencer;
 
@@ -45,7 +48,10 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
 
             handChangeObserver = new HandChangeObserver(HandDatabase, OnTurnEnd);
             seasonSequencer = new SeaonSequencer(handChangeObserver.Observable, serviceLocator.GetInstance<ISeasonDeclarationProvider>());
-            seasonSequencer.OnEnd.Subscribe(_ => StartNewSeason());
+            seasonSequencer.OnEnd.Where(_ => seasonSequencer.CurrentSeason != null)
+                .Subscribe(_ => StartNewSeason());
+            seasonSequencer.OnEnd.Where(_ => seasonSequencer.CurrentSeason == null)
+                .Subscribe(_ => gameEndSubject.OnNext(Unit.Default));
         }
 
         public IPlayer GetPlayer(FirstOrSecond firstOrSecond)
