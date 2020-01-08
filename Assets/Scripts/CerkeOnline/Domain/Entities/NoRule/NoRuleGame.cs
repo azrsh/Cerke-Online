@@ -6,20 +6,24 @@ namespace Azarashi.CerkeOnline.Domain.Entities.NoRule
 {
     public class NoRuleGame : IGame
     {
+        public ISeason CurrentSeason { get; }
         public IBoard Board { get; }
         public IHandDatabase HandDatabase { get; } = null;
         public IScoreHolder ScoreHolder { get; } = null;
         public FirstOrSecond CurrentTurn { get; private set; }
         public IPlayer FirstPlayer { get; }
         public IPlayer SecondPlayer { get; }
-        
+
         public IObservable<Unit> OnTurnChanged => onTurnChanged;
         readonly Subject<Unit> onTurnChanged = new Subject<Unit>();
+        public IObservable<Unit> OnSeasonStart => new Subject<Unit>();
 
         public IPlayer CurrentPlayer => GetPlayer(CurrentTurn);
 
         public NoRuleGame(Encampment firstPlayerEncampment)
         {
+            CurrentSeason = new DefaultSeason(Season.Spring);
+
             FirstPlayer = new Player(firstPlayerEncampment);
             SecondPlayer = new Player(Terminologies.GetReversal(firstPlayerEncampment));
             CurrentTurn = FirstOrSecond.First;
@@ -49,7 +53,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.NoRule
             return null;
         }
 
-        public void OnTurnEnd()
+        public void TurnEnd()
         {
             CurrentTurn = Terminologies.GetReversal(CurrentTurn);
             onTurnChanged.OnNext(Unit.Default);

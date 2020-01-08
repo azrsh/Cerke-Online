@@ -37,8 +37,7 @@ namespace Azarashi.CerkeOnline.Application
 
         public ILogger SystemLogger { get; } = new Logger(new SystemLogHandler());
 
-        public IReadOnlyServiceLocator ServiceLocator => serviceLocator;
-        readonly IServiceLocator serviceLocator = new DefaultServiceLocator();
+        public IReadOnlyServiceLocator ServiceLocator { get; } = new DefaultServiceLocator();
 
         public IPlayer LocalPlayer { get; private set; }
 
@@ -53,10 +52,11 @@ namespace Azarashi.CerkeOnline.Application
             Instance = this;
         }
 
-        readonly RulesetList rulesetList = new RulesetList();
+        RulesetList rulesetList;
 
         private void Start()
         {
+            rulesetList = new RulesetList(ServiceLocator);
             preGameSettings.OnStartButtonClicked.TakeUntilDestroy(this).Subscribe(_ => NewGame());
         }
 
