@@ -90,7 +90,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
             //PickOut All
             var backPlayerPieceListCache = backPlayer.GetPieceList().ToArray();
             foreach (var item in backPlayerPieceListCache)
-                frontPlayer.PickOut(item as IPiece);
+                backPlayer.PickOut(item as IPiece);
 
             //onTurnEnd.OnNext(CurrentPlayer); 
             onTurnChanged.OnNext(Unit.Default);
