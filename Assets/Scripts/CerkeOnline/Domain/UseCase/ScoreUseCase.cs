@@ -9,7 +9,6 @@ namespace Azarashi.CerkeOnline.Domain.UseCase
     /// </summary>
     public class ScoreUseCase : IScoreUseCase
     {
-        IHand[] previousPaltauilHands;
         public int Score => scoreHolder.GetScore(self);
         readonly IPlayer self;
         readonly IPlayer opponent;
@@ -24,22 +23,6 @@ namespace Azarashi.CerkeOnline.Domain.UseCase
             this.handDatabase = handDatabase;
             this.scoreHolder = scoreHolder;
             this.logger = logger;
-        }
-
-        IHand[] previousHand;
-        public void LogHandDifference()
-        {
-            previousHand = previousHand ?? new IHand[] { };
-
-            IHand[] currentHands = handDatabase.SearchHands(self.GetPieceList());
-            HandDifference handDifference = HandDifferenceCalculator.Calculate(previousHand, currentHands);
-
-            foreach (IHand hand in handDifference.IncreasedDifference)
-                logger.Log("役 " + hand.Name + "が成立しました.");
-            foreach (IHand hand in handDifference.DecreasedDifference)
-                logger.Log("役 " + hand.Name + "が不成立になりました.");
-
-            previousHand = currentHands;
         }
 
         public void MoveScore()

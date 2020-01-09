@@ -3,6 +3,5 @@
     public interface IScoreUseCase
     {
         int Score { get; }
-        void LogHandDifference();
     }
 }
