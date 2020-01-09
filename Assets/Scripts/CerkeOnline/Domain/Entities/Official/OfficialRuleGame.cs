@@ -47,12 +47,21 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
             ScoreHolder = new DefaultScoreHolder(new Dictionary<IPlayer, int> { { frontPlayer, 20 }, { backPlayer, 20 } });
 
 
+            //seasonSequencer.OnEndは季の開始の呼び出しと一体化している。
+            //OnSeasonEndは季の開始前に呼び出されることが保証されている。
+
             handChangeObserver = new HandChangeObserver(HandDatabase, OnTurnEnd);
             seasonSequencer = new SeaonSequencer(handChangeObserver.Observable, serviceLocator.GetInstance<ISeasonDeclarationProvider>());
             seasonSequencer.OnEnd.Where(_ => seasonSequencer.CurrentSeason != null)
                 .Subscribe(_ => { onSeasonEnd.OnNext(Unit.Default); StartNewSeason(); });
             seasonSequencer.OnEnd.Where(_ => seasonSequencer.CurrentSeason == null)
                 .Subscribe(_ => gameEndSubject.OnNext(Unit.Default));
+
+            var scoreCalculator = new ScoreCalculator(HandDatabase);
+            OnSeasonEnd.Select(_ => Terminologies.GetReversal(CurrentTurn)) //終季の時点で終季した人のターンが終わってしまっているのでこの形にしている。
+                .Select(GetPlayer)                                          //終季の時点ではターンが終わらないようにした方がよい？
+                .Select(scoreCalculator.Calculate)
+                .Subscribe(tuple => ScoreHolder.MoveScore(tuple.scorer, tuple.score));
         }
 
         public IPlayer GetPlayer(FirstOrSecond firstOrSecond)

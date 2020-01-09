@@ -2,7 +2,7 @@
 {
     public interface IScoreHolder
     {
-        int MoveScore(IPlayer from, IPlayer to, int score);
+        int MoveScore(IPlayer scorer, int score);
         bool TryGetScore(IPlayer player, out int score);
         bool Contains(IPlayer player);
         int GetScore(IPlayer player);
