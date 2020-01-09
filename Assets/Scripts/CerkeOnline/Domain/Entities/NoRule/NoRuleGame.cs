@@ -16,10 +16,12 @@ namespace Azarashi.CerkeOnline.Domain.Entities.NoRule
 
         public IObservable<Unit> OnTurnChanged => onTurnChanged;
         readonly Subject<Unit> onTurnChanged = new Subject<Unit>();
-        public IObservable<Unit> OnSeasonStart => new Subject<Unit>();
+        public IObservable<Unit> OnSeasonStart { get; } = new Subject<Unit>();
+        public IObservable<Unit> OnSeasonEnd { get; } = new Subject<Unit>();
 
         public IPlayer CurrentPlayer => GetPlayer(CurrentTurn);
 
+        
         public NoRuleGame(Encampment firstPlayerEncampment)
         {
             CurrentSeason = new DefaultSeason(Season.Spring);

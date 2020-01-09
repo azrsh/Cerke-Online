@@ -27,9 +27,11 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
 
         public IObservable<Unit> OnSeasonStart => onSeasonStart;
         readonly Subject<Unit> onSeasonStart = new Subject<Unit>();
+        public IObservable<Unit> OnSeasonEnd => onSeasonEnd;
+        readonly Subject<Unit> onSeasonEnd = new Subject<Unit>();
 
-        readonly Subject<Unit> gameEndSubject = new Subject<Unit>();
         public IObservable<Unit> OnGameEnd => gameEndSubject;
+        readonly Subject<Unit> gameEndSubject = new Subject<Unit>();
 
         readonly HandChangeObserver handChangeObserver;
         readonly SeaonSequencer seasonSequencer;
@@ -38,7 +40,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
         {
             FirstPlayer = new Player(firstPlayerEncampment);
             SecondPlayer = new Player(Terminologies.GetReversal(firstPlayerEncampment));
-            
+
             var frontPlayer = GetPlayer(Encampment.Front);
             var backPlayer = GetPlayer(Encampment.Back);
             StartNewSeason();
@@ -48,7 +50,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
             handChangeObserver = new HandChangeObserver(HandDatabase, OnTurnEnd);
             seasonSequencer = new SeaonSequencer(handChangeObserver.Observable, serviceLocator.GetInstance<ISeasonDeclarationProvider>());
             seasonSequencer.OnEnd.Where(_ => seasonSequencer.CurrentSeason != null)
-                .Subscribe(_ => StartNewSeason());
+                .Subscribe(_ => { onSeasonStart.OnNext(Unit.Default); StartNewSeason(); });
             seasonSequencer.OnEnd.Where(_ => seasonSequencer.CurrentSeason == null)
                 .Subscribe(_ => gameEndSubject.OnNext(Unit.Default));
         }

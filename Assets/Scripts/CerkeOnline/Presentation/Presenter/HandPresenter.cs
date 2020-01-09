@@ -24,6 +24,7 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter
             handUseCase = HandUseCaseFactory.Create(Terminologies.FirstOrSecond.First);
             game.OnTurnChanged.TakeUntilDestroy(this).Select(_ => handUseCase.GetHandDifference(notifiedHands))
                 .Subscribe(difference => NotifyHandDifference(difference));
+            game.OnSeasonEnd.TakeUntilDestroy(this).Subscribe(_ => ResetNotifiedHands());
         }
 
         void NotifyHandDifference(HandDifference handDifference)
@@ -33,7 +34,12 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter
             foreach (IHand hand in handDifference.DecreasedDifference)
                 logger.Log("役 " + hand.Name + "が不成立になりました.");
 
-            notifiedHands = handUseCase.GetCurrentHands().ToArray();
+            notifiedHands = handUseCase.GetCurrentHands().ToArray(); //コピーのためのToArray
+        }
+
+        void ResetNotifiedHands()
+        {
+            notifiedHands = new IHand[0];
         }
     }
 }
