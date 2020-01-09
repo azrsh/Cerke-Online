@@ -2,9 +2,9 @@
 
 namespace Azarashi.CerkeOnline.Domain.Entities
 {
-    public class HandDifferenceCalculator
+    public static class HandDifferenceCalculator
     {
-        public HandDifference Calculate(IHand[] previous, IHand[] next)
+        public static HandDifference Calculate(IHand[] previous, IHand[] next)
         {
             var increasedDifference = next?.Except(previous ?? new IHand[] { })?.ToArray() ?? next;
             var decreasedDifference = previous?.Except(next)?.ToArray() ?? new IHand[] { };
