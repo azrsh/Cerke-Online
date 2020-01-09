@@ -13,6 +13,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
         public IBoard Board { get; private set; }
         public IHandDatabase HandDatabase { get; private set; }
         public IScoreHolder ScoreHolder { get; }
+        public int ScoreRate { get; private set; } = 1;
         public FirstOrSecond CurrentTurn { get; private set; }
         public IPlayer FirstPlayer { get; }
         public IPlayer SecondPlayer { get; }
@@ -56,11 +57,13 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
                 .Subscribe(_ => { onSeasonEnd.OnNext(Unit.Default); StartNewSeason(); });
             seasonSequencer.OnEnd.Where(_ => seasonSequencer.CurrentSeason == null)
                 .Subscribe(_ => gameEndSubject.OnNext(Unit.Default));
+            seasonSequencer.OnContinue.Subscribe(_ => ScoreRate *= 2);  //専用のクラス内に隠ぺいすべきかも
 
             var scoreCalculator = new ScoreCalculator(HandDatabase);
             OnSeasonEnd.Select(_ => Terminologies.GetReversal(CurrentTurn)) //終季の時点で終季した人のターンが終わってしまっているのでこの形にしている。
                 .Select(GetPlayer)                                          //終季の時点ではターンが終わらないようにした方がよい？
                 .Select(scoreCalculator.Calculate)
+                .Select(tuple => { tuple.score *= 2; return tuple; })
                 .Subscribe(tuple => ScoreHolder.MoveScore(tuple.scorer, tuple.score));
         }
 
