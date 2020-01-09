@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
+using Azarashi.Utilities;
 using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
 
 namespace Azarashi.CerkeOnline.Application
@@ -7,13 +8,13 @@ namespace Azarashi.CerkeOnline.Application
     public class RulesetList
     {
         readonly Dictionary<int, Ruleset> rulesets;   
-        public RulesetList()
+        public RulesetList(IReadOnlyServiceLocator serviceLocator)
         {
             IGameInstanceFactory[] factories = new IGameInstanceFactory[]
             {
                 new DefaultGameInstanceFactory<Domain.Entities.NoRule.NoRuleGame>(firstPlayerEncampment => new Domain.Entities.NoRule.NoRuleGame(firstPlayerEncampment)),
-                new DefaultGameInstanceFactory<Domain.Entities.Official.OfficialRuleGame>(firstPlayerEncampment => new Domain.Entities.Official.OfficialRuleGame(firstPlayerEncampment)),
-                new DefaultGameInstanceFactory<Domain.Entities.Official.OfficialRuleGame>(firstPlayerEncampment => new Domain.Entities.Official.OfficialRuleGame(firstPlayerEncampment)),
+                new DefaultGameInstanceFactory<Domain.Entities.Official.OfficialRuleGame>(firstPlayerEncampment => new Domain.Entities.Official.OfficialRuleGame(firstPlayerEncampment, serviceLocator)),
+                new DefaultGameInstanceFactory<Domain.Entities.Official.OfficialRuleGame>(firstPlayerEncampment => new Domain.Entities.Official.OfficialRuleGame(firstPlayerEncampment, serviceLocator)),
             };
             
             int i = 0;

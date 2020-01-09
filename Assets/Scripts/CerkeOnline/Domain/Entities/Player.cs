@@ -35,7 +35,8 @@ namespace Azarashi.CerkeOnline.Domain.Entities
 
         public void PickOut(IPiece piece)
         {
-            pieces.Remove(piece);
+            pieces.Remove(piece); 
+            onPieceStrageCahnged.OnNext(Unit.Default);
         }
     }
 }

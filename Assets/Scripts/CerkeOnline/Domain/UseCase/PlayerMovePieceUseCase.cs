@@ -72,7 +72,7 @@ namespace Azarashi.CerkeOnline.Domain.UseCase
         {
             player.GivePiece(pieceMoveResult.gottenPiece);
             if (!pieceMoveResult.isSuccess) logger.Log("駒の移動に失敗しました.");
-            if (pieceMoveResult.isTurnEnd) game.OnTurnEnd();    //ターン処理は移動する
+            if (pieceMoveResult.isTurnEnd) game.TurnEnd();    //ターン処理は移動する
         }
     }
 }

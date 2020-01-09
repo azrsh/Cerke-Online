@@ -5,6 +5,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
 {
     public interface IGame
     {
+        ISeason CurrentSeason { get; }
         IBoard Board { get; }
         IHandDatabase HandDatabase { get; }
         IScoreHolder ScoreHolder { get; }
@@ -15,6 +16,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         IPlayer GetPlayer(Terminologies.FirstOrSecond firstOrSecond);
         IPlayer GetPlayer(Terminologies.Encampment encampment);
         IObservable<Unit> OnTurnChanged { get; }
-        void OnTurnEnd();
+        IObservable<Unit> OnSeasonStart { get; }
+        void TurnEnd();
     }
 }

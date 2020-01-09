@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UniRx;
 using Azarashi.CerkeOnline.Application;
@@ -23,15 +24,31 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter
             IMapProvider<Vector3> columnMapProvider = GetComponentInChildren<IMapProvider<Vector3>>();
             columnMap = columnMapProvider.GetMap();
 
-            GameController.Instance.OnGameReset.TakeUntilDestroy(this).Subscribe(OnGameReset);
+            GameController.Instance.OnGameReset.TakeUntilDestroy(this).Subscribe(Bind);
         }
 
-        void OnGameReset(IGame game)
+        void Bind(IGame game)
         {
+           game.OnSeasonStart.TakeUntilDestroy(this).Select(_ => game).Subscribe(OnSeasonStart);
+           OnSeasonStart(game);     //不格好
+        }
+
+        void OnSeasonStart(IGame game)
+        {
+            ClearPieceView();
+
             Vector2Int position = new Vector2Int(0, 0);
             for (position.x = 0; position.x < Terminologies.LengthOfOneSideOfBoard; position.x++)
                 for (position.y = 0; position.y < Terminologies.LengthOfOneSideOfBoard; position.y++)
                     InitializePieceView(position, columnMap, game);
+        }
+
+        void ClearPieceView()
+        {
+            foreach (var item in database.Select(pair => pair.Value.gameObject))
+                Destroy(item);
+            
+            database.Clear();
         }
 
         void InitializePieceView(Vector2Int position, Vector3[,] columnMap, IGame game)

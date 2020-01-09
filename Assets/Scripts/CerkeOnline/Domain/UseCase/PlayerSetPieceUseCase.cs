@@ -37,7 +37,7 @@ namespace Azarashi.CerkeOnline.Domain.UseCase
             else
             {
                 player.PickOut(piece);
-                game.OnTurnEnd();
+                game.TurnEnd();
             }
         }
     }

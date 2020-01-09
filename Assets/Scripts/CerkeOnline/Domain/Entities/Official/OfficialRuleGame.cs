@@ -1,14 +1,17 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using UniRx;
+using Azarashi.Utilities;
 using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.Official
 {
-    public class OfficialRuleGame : IGame
+    public partial class OfficialRuleGame : IGame
     {
-        public IBoard Board { get; }
-        public IHandDatabase HandDatabase { get; }
+        public ISeason CurrentSeason => seasonSequencer.CurrentSeason;
+        public IBoard Board { get; private set; }
+        public IHandDatabase HandDatabase { get; private set; }
         public IScoreHolder ScoreHolder { get; }
         public FirstOrSecond CurrentTurn { get; private set; }
         public IPlayer FirstPlayer { get; }
@@ -17,19 +20,37 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
         public IObservable<Unit> OnTurnChanged => onTurnChanged;
         readonly Subject<Unit> onTurnChanged = new Subject<Unit>();
 
+        public IObservable<IReadOnlyPlayer> OnTurnEnd => onTurnEnd;
+        readonly Subject<IReadOnlyPlayer> onTurnEnd = new Subject<IReadOnlyPlayer>();
+
         public IPlayer CurrentPlayer => GetPlayer(CurrentTurn);
 
-        public OfficialRuleGame(Encampment firstPlayerEncampment)
+        public IObservable<Unit> OnSeasonStart => onSeasonStart;
+        readonly Subject<Unit> onSeasonStart = new Subject<Unit>();
+
+        readonly Subject<Unit> gameEndSubject = new Subject<Unit>();
+        public IObservable<Unit> OnGameEnd => gameEndSubject;
+
+        readonly HandChangeObserver handChangeObserver;
+        readonly SeaonSequencer seasonSequencer;
+
+        public OfficialRuleGame(Encampment firstPlayerEncampment, IReadOnlyServiceLocator serviceLocator)
         {
             FirstPlayer = new Player(firstPlayerEncampment);
             SecondPlayer = new Player(Terminologies.GetReversal(firstPlayerEncampment));
-            CurrentTurn = FirstOrSecond.First;
-        
+            
             var frontPlayer = GetPlayer(Encampment.Front);
             var backPlayer = GetPlayer(Encampment.Back);
-            Board = BoardFactory.Create(frontPlayer, backPlayer);
-            HandDatabase = new HandDatabase(Board, OnTurnChanged);
+            StartNewSeason();
             ScoreHolder = new DefaultScoreHolder(new Dictionary<IPlayer, int> { { frontPlayer, 20 }, { backPlayer, 20 } });
+
+
+            handChangeObserver = new HandChangeObserver(HandDatabase, OnTurnEnd);
+            seasonSequencer = new SeaonSequencer(handChangeObserver.Observable, serviceLocator.GetInstance<ISeasonDeclarationProvider>());
+            seasonSequencer.OnEnd.Where(_ => seasonSequencer.CurrentSeason != null)
+                .Subscribe(_ => StartNewSeason());
+            seasonSequencer.OnEnd.Where(_ => seasonSequencer.CurrentSeason == null)
+                .Subscribe(_ => gameEndSubject.OnNext(Unit.Default));
         }
 
         public IPlayer GetPlayer(FirstOrSecond firstOrSecond)
@@ -52,10 +73,35 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
             return null;
         }
 
-        public void OnTurnEnd()
+        public void TurnEnd()
         {
+            onTurnEnd.OnNext(CurrentPlayer);
             CurrentTurn = Terminologies.GetReversal(CurrentTurn);
             onTurnChanged.OnNext(Unit.Default);
+        }
+
+        void StartNewSeason()
+        {
+            CurrentTurn = FirstOrSecond.First;
+
+            var frontPlayer = GetPlayer(Encampment.Front);
+            var backPlayer = GetPlayer(Encampment.Back);
+            Board = BoardFactory.Create(frontPlayer, backPlayer); 
+            HandDatabase = new HandDatabase(Board, OnTurnChanged);
+            handChangeObserver?.Reset();
+
+            //PickOut All
+            var frontPlayerPieceListCache = frontPlayer.GetPieceList().ToArray();
+            foreach (var item in frontPlayerPieceListCache)
+                frontPlayer.PickOut(item as IPiece);
+            //PickOut All
+            var backPlayerPieceListCache = backPlayer.GetPieceList().ToArray();
+            foreach (var item in backPlayerPieceListCache)
+                backPlayer.PickOut(item as IPiece);
+
+            //onTurnEnd.OnNext(CurrentPlayer); 
+            onTurnChanged.OnNext(Unit.Default);
+            onSeasonStart.OnNext(Unit.Default);
         }
     }
 }
