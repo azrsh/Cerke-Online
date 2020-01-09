@@ -38,8 +38,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
         {
             FirstPlayer = new Player(firstPlayerEncampment);
             SecondPlayer = new Player(Terminologies.GetReversal(firstPlayerEncampment));
-            CurrentTurn = FirstOrSecond.First;
-        
+            
             var frontPlayer = GetPlayer(Encampment.Front);
             var backPlayer = GetPlayer(Encampment.Back);
             StartNewSeason();
@@ -83,6 +82,8 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
 
         void StartNewSeason()
         {
+            CurrentTurn = FirstOrSecond.First;
+
             var frontPlayer = GetPlayer(Encampment.Front);
             var backPlayer = GetPlayer(Encampment.Back);
             Board = BoardFactory.Create(frontPlayer, backPlayer); 
