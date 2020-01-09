@@ -50,7 +50,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
             handChangeObserver = new HandChangeObserver(HandDatabase, OnTurnEnd);
             seasonSequencer = new SeaonSequencer(handChangeObserver.Observable, serviceLocator.GetInstance<ISeasonDeclarationProvider>());
             seasonSequencer.OnEnd.Where(_ => seasonSequencer.CurrentSeason != null)
-                .Subscribe(_ => { onSeasonStart.OnNext(Unit.Default); StartNewSeason(); });
+                .Subscribe(_ => { onSeasonEnd.OnNext(Unit.Default); StartNewSeason(); });
             seasonSequencer.OnEnd.Where(_ => seasonSequencer.CurrentSeason == null)
                 .Subscribe(_ => gameEndSubject.OnNext(Unit.Default));
         }
