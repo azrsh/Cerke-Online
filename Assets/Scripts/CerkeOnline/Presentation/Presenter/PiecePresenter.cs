@@ -60,6 +60,7 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter
             Terminologies.PieceName pieceName;
             System.Enum.TryParse(piece.GetType().Name, out pieceName);
             GameObject pieceViewObject = Instantiate(pieceViewPrefabs.Prefabs[(int)pieceName]);
+            pieceViewObject.transform.position = new Vector3(0, 0, -10);    //描画優先度の設定
 
             PieceView pieceViewComponent = pieceViewObject.GetComponent<PieceView>();
             pieceViewComponent.Initialize(piece, columnMap);

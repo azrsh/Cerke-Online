@@ -25,6 +25,7 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.PredictionMarker
         public Transform ShowMarker(Vector3 position)
         {
             var marker = predictionMarkerPool.Rent();
+            position.z = -5;            //描画優先度の設定
             marker.position = position;
             markerReturnAction += () => predictionMarkerPool.Return(marker);
             return marker;
