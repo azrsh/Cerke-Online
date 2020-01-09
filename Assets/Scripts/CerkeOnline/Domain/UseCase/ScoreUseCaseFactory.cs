@@ -11,10 +11,8 @@ namespace Azarashi.CerkeOnline.Domain.UseCase
             var handDatabase = game.HandDatabase;
             if (game == null || handDatabase == null) return null;
 
-            var self = game.GetPlayer(firstOrSecond);
-            var opponent = game.GetPlayer(Terminologies.GetReversal(firstOrSecond));
-            var logger = GameController.Instance.SystemLogger;
-            return new ScoreUseCase(self, opponent, handDatabase, game.ScoreHolder, logger);
+            var player = game.GetPlayer(firstOrSecond);
+            return new ScoreUseCase(player, game.ScoreHolder);
         }
     }
 }

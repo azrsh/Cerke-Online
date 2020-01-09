@@ -13,7 +13,7 @@ namespace Azarashi.CerkeOnline.Domain.UseCase
         readonly IPlayer player;
         readonly IScoreHolder scoreHolder;
 
-        public ScoreUseCase(IPlayer player, IPlayer opponent, IHandDatabase handDatabase, IScoreHolder scoreHolder, ILogger logger)
+        public ScoreUseCase(IPlayer player, IScoreHolder scoreHolder)
         {
             this.player = player;
             this.scoreHolder = scoreHolder;
