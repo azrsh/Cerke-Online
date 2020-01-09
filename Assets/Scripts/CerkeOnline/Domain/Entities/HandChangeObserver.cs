@@ -13,17 +13,16 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         public HandChangeObserver(IHandDatabase handDatabase, IObservable<IReadOnlyPlayer> onTurnEnd)
         {
             this.handDatabase = handDatabase;
-            onTurnEnd.Subscribe(CheckHandDifference);
+            onTurnEnd.Where(CheckHandIncrease).Subscribe(subject);
         }
 
         //前回の役の保存、これでいいのか？
         IHand[] previousHands = new IHand[0];
-        void CheckHandDifference(IReadOnlyPlayer currentPlayer)
+        bool CheckHandIncrease(IReadOnlyPlayer currentPlayer)
         {
             IHand[] currentHands = handDatabase.SearchHands(currentPlayer.GetPieceList());
             HandDifference handDifference = HandDifferenceCalculator.Calculate(previousHands, currentHands);
-            if (handDifference.IncreasedDifference.Length > 0)
-                subject.OnNext(currentPlayer);
+            return handDifference.IncreasedDifference.Length > 0;
         }
 
         public void Reset() => previousHands = new IHand[0];
