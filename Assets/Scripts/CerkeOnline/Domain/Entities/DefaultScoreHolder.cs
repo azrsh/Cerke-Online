@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Azarashi.CerkeOnline.Domain.Entities
 {
@@ -14,19 +15,21 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         /// <summary>
         /// fromからtoへ得点を移動する. 得点は0を下限としており、それ以下にはならない.
         /// </summary>
-        /// <param name="from">得点の移動元のプレイヤー</param>
-        /// <param name="to">得点の移動先のプレイヤー</param>
+        /// <param name="scorer">得点を獲得したプレイヤー</param>
         /// <param name="score">移動してほしい得点</param>
         /// <returns>実際に移動した得点</returns>
-        public int MoveScore(IPlayer from, IPlayer to, int score)
+        public int MoveScore(IPlayer scorer, int score)
         {
-            if (!scores.ContainsKey(from) || !scores.ContainsKey(to)) return 0;
+            if (!scores.ContainsKey(scorer)) return 0;
+
+            var from = scores.Keys.Where(item => item != scorer).First();
+            var to = scorer;
 
             if (scores[from] - score < 0) score = scores[from];
             if (scores[to] + score < 0) score = -scores[to];
 
-            scores[from] += score;
-            scores[to] -= score;
+            scores[from] -= score;
+            scores[to] += score;
             return score;
         }
 

@@ -13,6 +13,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
         public IBoard Board { get; private set; }
         public IHandDatabase HandDatabase { get; private set; }
         public IScoreHolder ScoreHolder { get; }
+        public int ScoreRate { get; private set; } = 1;
         public FirstOrSecond CurrentTurn { get; private set; }
         public IPlayer FirstPlayer { get; }
         public IPlayer SecondPlayer { get; }
@@ -27,9 +28,11 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
 
         public IObservable<Unit> OnSeasonStart => onSeasonStart;
         readonly Subject<Unit> onSeasonStart = new Subject<Unit>();
+        public IObservable<Unit> OnSeasonEnd => onSeasonEnd;
+        readonly Subject<Unit> onSeasonEnd = new Subject<Unit>();
 
-        readonly Subject<Unit> gameEndSubject = new Subject<Unit>();
         public IObservable<Unit> OnGameEnd => gameEndSubject;
+        readonly Subject<Unit> gameEndSubject = new Subject<Unit>();
 
         readonly HandChangeObserver handChangeObserver;
         readonly SeaonSequencer seasonSequencer;
@@ -38,19 +41,30 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
         {
             FirstPlayer = new Player(firstPlayerEncampment);
             SecondPlayer = new Player(Terminologies.GetReversal(firstPlayerEncampment));
-            
+
             var frontPlayer = GetPlayer(Encampment.Front);
             var backPlayer = GetPlayer(Encampment.Back);
             StartNewSeason();
             ScoreHolder = new DefaultScoreHolder(new Dictionary<IPlayer, int> { { frontPlayer, 20 }, { backPlayer, 20 } });
 
 
+            //seasonSequencer.OnEndは季の開始の呼び出しと一体化している。
+            //OnSeasonEndは季の開始前に呼び出されることが保証されている。
+
             handChangeObserver = new HandChangeObserver(HandDatabase, OnTurnEnd);
             seasonSequencer = new SeaonSequencer(handChangeObserver.Observable, serviceLocator.GetInstance<ISeasonDeclarationProvider>());
             seasonSequencer.OnEnd.Where(_ => seasonSequencer.CurrentSeason != null)
-                .Subscribe(_ => StartNewSeason());
+                .Subscribe(_ => { onSeasonEnd.OnNext(Unit.Default); StartNewSeason(); });
             seasonSequencer.OnEnd.Where(_ => seasonSequencer.CurrentSeason == null)
                 .Subscribe(_ => gameEndSubject.OnNext(Unit.Default));
+            seasonSequencer.OnContinue.Subscribe(_ => ScoreRate *= 2);  //専用のクラス内に隠ぺいすべきかも
+
+            var scoreCalculator = new ScoreCalculator(HandDatabase);
+            OnSeasonEnd.Select(_ => Terminologies.GetReversal(CurrentTurn)) //終季の時点で終季した人のターンが終わってしまっているのでこの形にしている。
+                .Select(GetPlayer)                                          //終季の時点ではターンが終わらないようにした方がよい？
+                .Select(scoreCalculator.Calculate)
+                .Select(tuple => { tuple.score *= 2; return tuple; })
+                .Subscribe(tuple => ScoreHolder.MoveScore(tuple.scorer, tuple.score));
         }
 
         public IPlayer GetPlayer(FirstOrSecond firstOrSecond)

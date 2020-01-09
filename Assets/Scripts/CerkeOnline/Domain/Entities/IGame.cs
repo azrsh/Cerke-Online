@@ -17,6 +17,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         IPlayer GetPlayer(Terminologies.Encampment encampment);
         IObservable<Unit> OnTurnChanged { get; }
         IObservable<Unit> OnSeasonStart { get; }
+        IObservable<Unit> OnSeasonEnd { get; }
         void TurnEnd();
     }
 }
