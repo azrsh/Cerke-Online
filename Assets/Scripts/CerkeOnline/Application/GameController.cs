@@ -62,7 +62,7 @@ namespace Azarashi.CerkeOnline.Application
 
         void NewGame()
         {
-            var ruleset = rulesetList.GetRuleset((int)preGameSettings.ruleseName);
+            var ruleset = rulesetList.GetRuleset((int)preGameSettings.rulesetName);
             var localPlayerFirstOrSecond = GetFirstOrSecond(preGameSettings.firstOrSecond);
             var localPlayerEncampment = GetEncampment(preGameSettings.encampment);
             var remotePlayerEncampment = Terminologies.GetReversal(localPlayerEncampment);

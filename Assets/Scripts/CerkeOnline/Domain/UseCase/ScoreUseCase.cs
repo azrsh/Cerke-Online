@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using UnityEngine;
-using Azarashi.CerkeOnline.Domain.Entities;
+﻿using Azarashi.CerkeOnline.Domain.Entities;
 
 namespace Azarashi.CerkeOnline.Domain.UseCase
 {
