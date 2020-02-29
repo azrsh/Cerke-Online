@@ -10,11 +10,12 @@ namespace Azarashi.CerkeOnline.Application
         readonly Dictionary<int, Ruleset> rulesets;   
         public RulesetList(IReadOnlyServiceLocator serviceLocator)
         {
+            //RulesetNameとの相互依存関係を明確化する
             IGameInstanceFactory[] factories = new IGameInstanceFactory[]
             {
+                new DefaultGameInstanceFactory<Domain.Entities.Official.OfficialRuleGame>(firstPlayerEncampment => new Domain.Entities.Official.OfficialRuleGame(firstPlayerEncampment, serviceLocator)),
+                new DefaultGameInstanceFactory<Domain.Entities.Official.OfficialRuleGame>(firstPlayerEncampment => new Domain.Entities.Official.OfficialRuleGame(firstPlayerEncampment, serviceLocator)),
                 new DefaultGameInstanceFactory<Domain.Entities.NoRule.NoRuleGame>(firstPlayerEncampment => new Domain.Entities.NoRule.NoRuleGame(firstPlayerEncampment)),
-                new DefaultGameInstanceFactory<Domain.Entities.Official.OfficialRuleGame>(firstPlayerEncampment => new Domain.Entities.Official.OfficialRuleGame(firstPlayerEncampment, serviceLocator)),
-                new DefaultGameInstanceFactory<Domain.Entities.Official.OfficialRuleGame>(firstPlayerEncampment => new Domain.Entities.Official.OfficialRuleGame(firstPlayerEncampment, serviceLocator)),
             };
             
             int i = 0;
