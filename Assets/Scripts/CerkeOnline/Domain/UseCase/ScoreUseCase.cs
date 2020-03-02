@@ -7,7 +7,7 @@ namespace Azarashi.CerkeOnline.Domain.UseCase
     /// </summary>
     public class ScoreUseCase : IScoreUseCase
     {
-        public int Score => scoreHolder.GetScore(player);
+        public int Score => scoreHolder.GetScore(player).Value;
         readonly IPlayer player;
         readonly IScoreHolder scoreHolder;
 

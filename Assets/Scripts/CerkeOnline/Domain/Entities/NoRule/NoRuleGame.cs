@@ -18,6 +18,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.NoRule
         readonly Subject<Unit> onTurnChanged = new Subject<Unit>();
         public IObservable<Unit> OnSeasonStart { get; } = new Subject<Unit>();
         public IObservable<Unit> OnSeasonEnd { get; } = new Subject<Unit>();
+        public IObservable<Unit> OnGameEnd { get; } = new Subject<Unit>();
 
         public IPlayer CurrentPlayer => GetPlayer(CurrentTurn);
 

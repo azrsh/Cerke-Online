@@ -47,6 +47,9 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
             StartNewSeason();
             ScoreHolder = new DefaultScoreHolder(new Dictionary<IPlayer, int> { { frontPlayer, 20 }, { backPlayer, 20 } });
 
+            //終了条件をまとめる
+            ScoreHolder.GetScore(frontPlayer).Where(value => value == 0).Subscribe(_ => gameEndSubject.OnNext(Unit.Default));
+            ScoreHolder.GetScore(backPlayer).Where(value => value == 0).Subscribe(_ => gameEndSubject.OnNext(Unit.Default));
 
             //seasonSequencer.OnEndは季の開始の呼び出しと一体化している。
             //OnSeasonEndは季の開始前に呼び出されることが保証されている。

@@ -18,6 +18,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         IObservable<Unit> OnTurnChanged { get; }
         IObservable<Unit> OnSeasonStart { get; }
         IObservable<Unit> OnSeasonEnd { get; }
+        IObservable<Unit> OnGameEnd { get; }
         void TurnEnd();
     }
 }

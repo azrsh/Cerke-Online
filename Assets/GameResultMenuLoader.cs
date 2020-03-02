@@ -5,15 +5,15 @@ using Azarashi.CerkeOnline.Application;
 
 namespace Azarashi.CerkeOnline.Presentation.Presenter
 {
-    public class SeasonResultMenuLoader : MonoBehaviour
+    public class GameResultMenuLoader : MonoBehaviour
     {
         void Start()
         {
             GameController.Instance.OnGameReset
                 .TakeUntilDestroy(this).Subscribe(game =>
                 {
-                    game.OnSeasonEnd.TakeUntilDestroy(this).Subscribe(_ => 
-                        SceneManager.LoadSceneAsync(SceneName.MainSceneUI.SeasonResultMenu, LoadSceneMode.Additive)
+                    game.OnGameEnd.TakeUntilDestroy(this).Subscribe(_ =>
+                        SceneManager.LoadSceneAsync(SceneName.MainSceneUI.GameResultMenu, LoadSceneMode.Additive)
                     );
                 });
         }

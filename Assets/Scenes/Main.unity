@@ -5739,6 +5739,7 @@ GameObject:
   - component: {fileID: 1369468443}
   - component: {fileID: 1369468444}
   - component: {fileID: 1369468442}
+  - component: {fileID: 1369468445}
   m_Layer: 0
   m_Name: UIPresenters
   m_TagString: Untagged
@@ -5830,6 +5831,18 @@ MonoBehaviour:
   seasonContinueSelectCanvas: {fileID: 1619014421}
   quitButton: {fileID: 1696669684}
   continueButton: {fileID: 2022034276}
+--- !u!114 &1369468445
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1369468438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3eae92b39a8630446855fae0258046d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1372319182
 GameObject:
   m_ObjectHideFlags: 0
