@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 using Azarashi.CerkeOnline.Domain.Entities;
-using Azarashi.CerkeOnline.Domain.Entities.Official;
+using Azarashi.CerkeOnline.Domain.Entities.StandardizedRule;
 
 namespace Azarashi.CerkeOnline.Tests.HandDatabaseTest
 {

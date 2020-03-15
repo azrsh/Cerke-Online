@@ -13,8 +13,8 @@ namespace Azarashi.CerkeOnline.Application
             //RulesetNameとの相互依存関係を明確化する
             IGameInstanceFactory[] factories = new IGameInstanceFactory[]
             {
-                new DefaultGameInstanceFactory<Domain.Entities.Official.OfficialRuleGame>(firstPlayerEncampment => new Domain.Entities.Official.OfficialRuleGame(firstPlayerEncampment, serviceLocator)),
-                new DefaultGameInstanceFactory<Domain.Entities.Official.OfficialRuleGame>(firstPlayerEncampment => new Domain.Entities.Official.OfficialRuleGame(firstPlayerEncampment, serviceLocator)),
+                new DefaultGameInstanceFactory<Domain.Entities.StandardizedRule.StandardizedRuleGame>(firstPlayerEncampment => new Domain.Entities.StandardizedRule.StandardizedRuleGame(firstPlayerEncampment, serviceLocator)),
+                new DefaultGameInstanceFactory<Domain.Entities.StandardizedRule.StandardizedRuleGame>(firstPlayerEncampment => new Domain.Entities.StandardizedRule.StandardizedRuleGame(firstPlayerEncampment, serviceLocator)),
                 new DefaultGameInstanceFactory<Domain.Entities.NoRule.NoRuleGame>(firstPlayerEncampment => new Domain.Entities.NoRule.NoRuleGame(firstPlayerEncampment)),
             };
             

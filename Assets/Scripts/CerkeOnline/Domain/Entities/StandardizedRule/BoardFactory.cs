@@ -2,8 +2,9 @@
 using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
 using Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Pieces;
 using Azarashi.Utilities.Collections;
+using Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction;
 
-namespace Azarashi.CerkeOnline.Domain.Entities.NoRule
+namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
 {
     public static class BoardFactory
     {
@@ -23,7 +24,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.NoRule
                 { FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal },
                 { FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal },
             };
-            StandardizedRule.FieldEffectChecker fieldChecker = new StandardizedRule.FieldEffectChecker(new Vector2YXArrayAccessor<FieldEffect>(fieldEffectMap), tam);
+            FieldEffectChecker fieldChecker = new StandardizedRule.FieldEffectChecker(new Vector2YXArrayAccessor<FieldEffect>(fieldEffectMap), tam);
 
             IPiece[,] piece2DArray = new IPiece[,]
             {
@@ -39,7 +40,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.NoRule
             };
             Vector2YXArrayAccessor<IPiece> pieceMap = new Vector2YXArrayAccessor<IPiece>(piece2DArray);
 
-            IBoard board = new StandardizedRule.Board(pieceMap, fieldChecker, new StandardizedRule.PieceMoveAction.PieceMoveActionFactory());
+            IBoard board = new Board(pieceMap, fieldChecker, new PieceMoveActionFactory());
             return board;
         }
 

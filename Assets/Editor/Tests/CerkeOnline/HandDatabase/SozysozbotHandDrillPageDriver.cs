@@ -5,7 +5,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Remote;
 using UnityEngine;
 using Azarashi.CerkeOnline.Domain.Entities;
-using Azarashi.CerkeOnline.Domain.Entities.Official.Pieces;
+using Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Pieces;
 
 namespace Azarashi.CerkeOnline.Tests.HandDatabaseTest
 {
