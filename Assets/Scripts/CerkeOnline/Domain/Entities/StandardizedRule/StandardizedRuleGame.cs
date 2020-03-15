@@ -102,11 +102,11 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
             //PickOut All
             var frontPlayerPieceListCache = frontPlayer.GetPieceList().ToArray();
             foreach (var item in frontPlayerPieceListCache)
-                frontPlayer.PickOut(item as IPiece);
+                frontPlayer.UseCapturedPiece(item as IPiece);
             //PickOut All
             var backPlayerPieceListCache = backPlayer.GetPieceList().ToArray();
             foreach (var item in backPlayerPieceListCache)
-                backPlayer.PickOut(item as IPiece);
+                backPlayer.UseCapturedPiece(item as IPiece);
 
             //onTurnEnd.OnNext(CurrentPlayer); 
             onTurnChanged.OnNext(Unit.Default);

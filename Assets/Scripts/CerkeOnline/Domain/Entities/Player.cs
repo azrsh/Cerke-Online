@@ -33,7 +33,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
             }
         }
 
-        public void PickOut(IPiece piece)
+        public void UseCapturedPiece(IPiece piece)
         {
             pieces.Remove(piece); 
             onPieceStrageCahnged.OnNext(Unit.Default);

@@ -13,6 +13,6 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         /// Playerが盤外に所持している駒を取りだす.
         /// </summary>
         /// <param name="piece"></param>
-        void PickOut(IPiece piece);
+        void UseCapturedPiece(IPiece piece);
     }
 }

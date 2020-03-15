@@ -36,7 +36,7 @@ namespace Azarashi.CerkeOnline.Domain.UseCase
             if (!result) logger.Log("駒の設置に失敗しました.");
             else
             {
-                player.PickOut(piece);
+                player.UseCapturedPiece(piece);
                 game.TurnEnd();
             }
         }
