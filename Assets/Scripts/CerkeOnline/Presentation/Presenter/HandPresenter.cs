@@ -24,7 +24,7 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter
             handUseCase = HandUseCaseFactory.Create(Terminologies.FirstOrSecond.First);
             game.OnTurnChanged.TakeUntilDestroy(this).Select(_ => handUseCase.GetHandDifference(notifiedHands))
                 .Subscribe(difference => NotifyHandDifference(difference));
-            game.OnSeasonEnd.TakeUntilDestroy(this).Subscribe(_ => ResetNotifiedHands());
+            game.SeasonSequencer.OnEnd.TakeUntilDestroy(this).Subscribe(_ => ResetNotifiedHands());
         }
 
         void NotifyHandDifference(HandDifference handDifference)

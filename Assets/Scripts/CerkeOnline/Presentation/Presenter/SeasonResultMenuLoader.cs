@@ -12,7 +12,7 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter
             GameController.Instance.OnGameReset
                 .TakeUntilDestroy(this).Subscribe(game =>
                 {
-                    game.OnSeasonEnd.TakeUntilDestroy(this).Subscribe(_ => 
+                    game.SeasonSequencer.OnEnd.TakeUntilDestroy(this).Subscribe(_ => 
                         SceneManager.LoadSceneAsync(SceneName.MainSceneUI.SeasonResultMenu, LoadSceneMode.Additive)
                     );
                 });

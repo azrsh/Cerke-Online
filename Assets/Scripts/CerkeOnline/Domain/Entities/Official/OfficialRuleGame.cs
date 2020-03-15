@@ -9,7 +9,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
 {
     public partial class OfficialRuleGame : IGame
     {
-        public ISeason CurrentSeason => seasonSequencer.CurrentSeason;
+        public ISeasonSequencer SeasonSequencer => seasonSequencer;
         public IBoard Board { get; private set; }
         public IHandDatabase HandDatabase { get; private set; }
         public IScoreHolder ScoreHolder { get; }
@@ -26,16 +26,11 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
 
         public IPlayer CurrentPlayer => GetPlayer(CurrentTurn);
 
-        public IObservable<Unit> OnSeasonStart => onSeasonStart;
-        readonly Subject<Unit> onSeasonStart = new Subject<Unit>();
-        public IObservable<Unit> OnSeasonEnd => onSeasonEnd;
-        readonly Subject<Unit> onSeasonEnd = new Subject<Unit>();
-
         public IObservable<Unit> OnGameEnd => gameEndSubject;
         readonly Subject<Unit> gameEndSubject = new Subject<Unit>();
 
         readonly HandChangeObserver handChangeObserver;
-        readonly SeaonSequencer seasonSequencer;
+        readonly SeasonSequencer seasonSequencer;
 
         public OfficialRuleGame(Encampment firstPlayerEncampment, IReadOnlyServiceLocator serviceLocator)
         {
@@ -44,7 +39,6 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
 
             var frontPlayer = GetPlayer(Encampment.Front);
             var backPlayer = GetPlayer(Encampment.Back);
-            StartNewSeason();
             ScoreHolder = new DefaultScoreHolder(new Dictionary<IPlayer, int> { { frontPlayer, 20 }, { backPlayer, 20 } });
 
             //終了条件をまとめる
@@ -54,16 +48,14 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
             //seasonSequencer.OnEndは季の開始の呼び出しと一体化している。
             //OnSeasonEndは季の開始前に呼び出されることが保証されている。
 
+            StartNextSeason(); 
             handChangeObserver = new HandChangeObserver(HandDatabase, OnTurnEnd);
-            seasonSequencer = new SeaonSequencer(handChangeObserver.Observable, serviceLocator.GetInstance<ISeasonDeclarationProvider>());
-            seasonSequencer.OnEnd.Where(_ => seasonSequencer.CurrentSeason != null)
-                .Subscribe(_ => { onSeasonEnd.OnNext(Unit.Default); StartNewSeason(); });
-            seasonSequencer.OnEnd.Where(_ => seasonSequencer.CurrentSeason == null)
-                .Subscribe(_ => gameEndSubject.OnNext(Unit.Default));
+            seasonSequencer = new SeasonSequencer(handChangeObserver.Observable, serviceLocator.GetInstance<ISeasonDeclarationProvider>(), 4);
             seasonSequencer.OnContinue.Subscribe(_ => ScoreRate *= 2);  //専用のクラス内に隠ぺいすべきかも
+            seasonSequencer.OnStart.Subscribe(_ => StartNextSeason());
 
             var scoreCalculator = new ScoreCalculator(HandDatabase);
-            OnSeasonEnd.Select(_ => Terminologies.GetReversal(CurrentTurn)) //終季の時点で終季した人のターンが終わってしまっているのでこの形にしている。
+            seasonSequencer.OnEnd.Select(_ => Terminologies.GetReversal(CurrentTurn)) //終季の時点で終季した人のターンが終わってしまっているのでこの形にしている。
                 .Select(GetPlayer)                                          //終季の時点ではターンが終わらないようにした方がよい？
                 .Select(scoreCalculator.Calculate)
                 .Select(tuple => { tuple.score *= 2; return tuple; })
@@ -97,7 +89,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
             onTurnChanged.OnNext(Unit.Default);
         }
 
-        void StartNewSeason()
+        void StartNextSeason()
         {
             CurrentTurn = FirstOrSecond.First;
 
@@ -118,7 +110,6 @@ namespace Azarashi.CerkeOnline.Domain.Entities.Official
 
             //onTurnEnd.OnNext(CurrentPlayer); 
             onTurnChanged.OnNext(Unit.Default);
-            onSeasonStart.OnNext(Unit.Default);
         }
     }
 }

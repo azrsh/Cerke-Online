@@ -29,7 +29,7 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter
 
         void Bind(IGame game)
         {
-           game.OnSeasonStart.TakeUntilDestroy(this).Select(_ => game).Subscribe(OnSeasonStart);
+           game.SeasonSequencer.OnStart.TakeUntilDestroy(this).Select(_ => game).Subscribe(OnSeasonStart);
            OnSeasonStart(game);     //不格好
         }
 

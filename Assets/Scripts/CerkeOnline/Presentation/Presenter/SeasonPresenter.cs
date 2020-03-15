@@ -17,8 +17,8 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter
 
         void Bind(IGame game)
         {
-            game.OnSeasonStart.TakeUntilDestroy(this).Subscribe(_ => UpdateSeasonView(game.CurrentSeason.Season));
-            UpdateSeasonView(game.CurrentSeason.Season);    //不格好
+            game.SeasonSequencer.OnStart.TakeUntilDestroy(this).Subscribe(season => UpdateSeasonView(season.Season));
+            UpdateSeasonView(game.SeasonSequencer.CurrentSeason.Season);    //不格好
         }
 
         void UpdateSeasonView(Terminologies.Season current)
