@@ -2,9 +2,7 @@
 using UniRx;
 using UnityEngine;
 using Azarashi.Utilities.Collections;
-using Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction;
 using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
-using Azarashi.CerkeOnline.Domain.Entities.Official.PieceMoveAction.DataStructure;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.Official
 {
