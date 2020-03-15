@@ -2,10 +2,9 @@
 namespace Azarashi.CerkeOnline.Domain.Entities
 {
     //quarterとかの方がいいかも？
-    public interface ISeason : IReadOnlySeason
+    public interface ISeason
     {
-        void Continue();
-
-        void Quit();
+        string Name { get; }
+        Terminologies.Season Season { get; }
     }
 }
