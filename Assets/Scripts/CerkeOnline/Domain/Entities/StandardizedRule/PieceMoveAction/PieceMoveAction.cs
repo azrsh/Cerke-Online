@@ -11,7 +11,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction
     /*命名に関する注意
      以下のクラスでは, 
      ・Surmountとその派生を巫の駒越え
-     ・Semorkoを踏み越え
+     ・Steppingを踏み越え
      という意味で使っています.
      */
 
@@ -34,7 +34,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction
         readonly WaterEntryChecker waterEntryChecker;
         readonly MoveFinisher moveFinisher;
         readonly SurmountingChecker surmountingChecker;
-        readonly SemorkoChecker semorkoChecker;
+        readonly SteppingChecker steppingChecker;
 
         public PieceMoveAction(MoveActionData moveActionData, Vector2YXArrayAccessor<IPiece> pieces, IFieldEffectChecker fieldEffectChecker,
             IValueInputProvider<int> valueProvider, PieceMovement start2ViaPieceMovement, PieceMovement via2EndPieceMovement, Action<PieceMoveResult> callback, Action onPiecesChanged, bool isTurnEnd)
@@ -58,7 +58,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction
             waterEntryChecker = new WaterEntryChecker(3, fieldEffectChecker, valueProvider, OnFailure);
             moveFinisher = new MoveFinisher(pieceMover, new Pickupper(pieces));
             surmountingChecker = new SurmountingChecker(pieceMover);
-            semorkoChecker = new SemorkoChecker(moveFinisher, pickupper, pieceMover, callback);
+            steppingChecker = new SteppingChecker(moveFinisher, pickupper, pieceMover, callback);
         }
 
         void OnFailure(IPiece movingPiece)
@@ -90,7 +90,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction
 
             //経由点にいる場合
             Action moveAfterNext = () => Move(movingPiece, worldPathNode.Next.Next);
-            if (!semorkoChecker.CheckSemorko(viaPosition, player, movingPiece, worldPathNode, moveAfterNext, OnFailure))
+            if (!steppingChecker.CheckStepping(viaPosition, player, movingPiece, worldPathNode, moveAfterNext, OnFailure))
                 return;
 
             //PieceMovementが踏み越えに対応しているか

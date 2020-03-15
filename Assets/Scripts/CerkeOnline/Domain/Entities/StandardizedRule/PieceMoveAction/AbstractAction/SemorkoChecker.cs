@@ -10,7 +10,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.
     /// <summary>
     /// 踏み越えチェッククラス
     /// </summary>
-    public class SemorkoChecker
+    public class SteppingChecker
     {
         readonly MoveFinisher moveFinisher;
         readonly Pickupper pickupper;
@@ -18,7 +18,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.
 
         readonly Action<PieceMoveResult> finishCallback;
 
-        public SemorkoChecker(MoveFinisher moveFinisher, Pickupper pickupper, Mover mover,
+        public SteppingChecker(MoveFinisher moveFinisher, Pickupper pickupper, Mover mover,
             Action<PieceMoveResult> finishCallback)
         {
             this.moveFinisher = moveFinisher;
@@ -28,42 +28,42 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.
             this.finishCallback = finishCallback;
         }
 
-        public bool CheckSemorko(Vector2Int viaPosition,IPlayer player, IPiece movingPiece, LinkedListNode<ColumnData> worldPathNode, Action moveAfterNext, Action<IPiece> onFailure)
+        public bool CheckStepping(Vector2Int viaPosition,IPlayer player, IPiece movingPiece, LinkedListNode<ColumnData> worldPathNode, Action moveAfterNext, Action<IPiece> onFailure)
         {
             var nextPiece = worldPathNode.Value.Piece;
             var isViaPosition = worldPathNode.Value.Positin == viaPosition && worldPathNode.Next != null;
             if (!isViaPosition)
                 return true;
 
-            IPiece semorkoNextPiece = worldPathNode.Next.Value.Piece;
-            Action semorkoAction = null;
-            if (semorkoNextPiece == null)
+            IPiece steppingNextPiece = worldPathNode.Next.Value.Piece;
+            Action steppingAction = null;
+            if (steppingNextPiece == null)
             {
-                semorkoAction = () =>
+                steppingAction = () =>
                 {
                     mover.MovePiece(movingPiece, worldPathNode.Next.Value.Positin, true);
                     moveAfterNext?.Invoke();
                 };
             }
-            else if (worldPathNode.Next.Next == null && pickupper.IsPickupable(player, movingPiece, semorkoNextPiece))
+            else if (worldPathNode.Next.Next == null && pickupper.IsPickupable(player, movingPiece, steppingNextPiece))
             {
-                semorkoAction = () =>
+                steppingAction = () =>
                 {
                     moveFinisher.FinishMove(player, movingPiece, worldPathNode.Next.Value.Positin, finishCallback, true);
                 };
             }
 
-            if (nextPiece == null || semorkoAction == null)
+            if (nextPiece == null || steppingAction == null)
             {
                 onFailure(movingPiece);
                 return false;
             }
 
             //Unsafe 踏み越えられた場合のイベント通知
-            if (nextPiece is ISemorkoObserver)
-                (nextPiece as ISemorkoObserver).OnSurmounted.OnNext(Unit.Default);
+            if (nextPiece is ISteppedObserver)
+                (nextPiece as ISteppedObserver).OnSteppied.OnNext(Unit.Default);
 
-            semorkoAction();
+            steppingAction();
 
             return false;
         }

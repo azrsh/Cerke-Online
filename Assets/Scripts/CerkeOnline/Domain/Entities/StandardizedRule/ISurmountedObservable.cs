@@ -3,13 +3,13 @@ using UniRx;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
 {
-    public interface ISemorkoObservable
+    public interface ISteppedObservable
     {
-        IObservable<Unit> OnSemorko { get; }
+        IObservable<Unit> OnStepped { get; }
     }
 
-    public interface ISemorkoObserver
+    public interface ISteppedObserver
     {
-        IObserver<Unit> OnSurmounted { get; }
+        IObserver<Unit> OnSteppied { get; }
     }
 }

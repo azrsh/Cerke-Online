@@ -14,11 +14,11 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Hands
 
         int numberOfSurmounted = 0;
 
-        public LaTamadSemorkovo(int score, ISemorkoObservable surmountedObservable)
+        public LaTamadSemorkovo(int score, ISteppedObservable steppedObservable)
         {
             Name = HandNameDictionary.PascalToJapanese[GetType().Name];
             Score = score;
-            surmountedObservable.OnSemorko.Subscribe(_ => numberOfSurmounted++);
+            steppedObservable.OnStepped.Subscribe(_ => numberOfSurmounted++);
         }
 
         public int GetNumberOfSuccesses(IReadOnlyList<IReadOnlyPiece> pieces)
