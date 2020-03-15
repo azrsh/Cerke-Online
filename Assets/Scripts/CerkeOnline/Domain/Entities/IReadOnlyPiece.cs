@@ -72,7 +72,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         /// この駒は取られることがあるかを返す.
         /// </summary>
         /// <returns></returns>
-        bool IsPickupable();
+        bool IsCapturable();
 
         /// <summary>
         /// 入水判定が必要あるかを返す.

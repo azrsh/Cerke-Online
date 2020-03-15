@@ -72,9 +72,9 @@ namespace Azarashi.CerkeOnline.Domain.Entities
             this.Owner = owner;
         }
 
-        public virtual bool PickUpFromBoard()
+        public virtual bool CaptureFromBoard()
         {
-            if (!IsPickupable()) return false;
+            if (!IsCapturable()) return false;
 
             Position = new Vector2Int(-1, -1);
             return true;
@@ -91,7 +91,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
             return Owner == player;
         }
 
-        public virtual bool IsPickupable()
+        public virtual bool IsCapturable()
         {
             return true;
         }

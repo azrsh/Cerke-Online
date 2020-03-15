@@ -5,14 +5,14 @@ using Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.Actu
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.AbstractAction
 {
-    public class PickupChecker
+    public class CapturingChecker
     {
-        readonly Pickupper pickupper;
+        readonly Capturer capturer;
         readonly MoveFinisher moveFinisher;
 
-        public PickupChecker(Pickupper pickupper, MoveFinisher moveFinisher)
+        public CapturingChecker(Capturer capturer, MoveFinisher moveFinisher)
         {
-            this.pickupper = pickupper;
+            this.capturer = capturer;
             this.moveFinisher = moveFinisher;
         }
 
@@ -24,7 +24,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.
             if (nextPiece == null)
                 return true;
 
-            if (pickupper.IsPickupable(player, movingPiece, nextPiece) && isLast)
+            if (capturer.IsCapturable(player, movingPiece, nextPiece) && isLast)
             {
                 moveFinisher.FinishMove(player, movingPiece, nextPosition, callback, isTurnEnd);
                 return false;

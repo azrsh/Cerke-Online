@@ -30,7 +30,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction
         readonly Vector2Int endPosition;
 
         readonly Mover pieceMover;
-        readonly Pickupper pickupper;
+        readonly Capturer capturer;
         readonly WaterEntryChecker waterEntryChecker;
         readonly MoveFinisher moveFinisher;
         readonly SurmountingChecker surmountingChecker;
@@ -53,12 +53,12 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction
             this.callback = callback;
             this.isTurnEnd = isTurnEnd;
 
-            pickupper = new Pickupper(pieces);
+            capturer = new Capturer(pieces);
             pieceMover = new Mover(pieces, onPiecesChanged);
             waterEntryChecker = new WaterEntryChecker(3, fieldEffectChecker, valueProvider, OnFailure);
-            moveFinisher = new MoveFinisher(pieceMover, new Pickupper(pieces));
+            moveFinisher = new MoveFinisher(pieceMover, new Capturer(pieces));
             surmountingChecker = new SurmountingChecker(pieceMover);
-            steppingChecker = new SteppingChecker(moveFinisher, pickupper, pieceMover, callback);
+            steppingChecker = new SteppingChecker(moveFinisher, capturer, pieceMover, callback);
         }
 
         void OnFailure(IPiece movingPiece)

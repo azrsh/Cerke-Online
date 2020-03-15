@@ -9,12 +9,12 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.
     public class MoveFinisher
     {
         readonly Mover mover;
-        readonly Pickupper pickupper;
+        readonly Capturer capturer;
 
-        public MoveFinisher(Mover mover, Pickupper pickupper)
+        public MoveFinisher(Mover mover, Capturer capturer)
         {
             this.mover = mover;
-            this.pickupper = pickupper;
+            this.capturer = capturer;
         }
 
         public bool CheckIfContinuable(IPlayer player, IPiece movingPiece, LinkedListNode<ColumnData> worldPathNode, Action<PieceMoveResult> callback, Action onFailure, bool isTurnEnd)
@@ -24,7 +24,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.
             var isLast = worldPathNode.Next == null;
             if (nextPiece != null)
             {
-                if (pickupper.IsPickupable(player, movingPiece, nextPiece) && isLast)
+                if (capturer.IsCapturable(player, movingPiece, nextPiece) && isLast)
                 {
                     FinishMove(player, movingPiece, nextPosition, callback, isTurnEnd);
                     return false;
@@ -42,7 +42,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.
         public void FinishMove(IPlayer player, IPiece movingPiece, Vector2Int endWorldPosition, Action<PieceMoveResult> callback, bool isTurnEnd, bool isForceMove = false)
         {
             //移動先の駒を取る
-            IPiece gottenPiece = pickupper.PickUpPiece(player, movingPiece, endWorldPosition);
+            IPiece gottenPiece = capturer.CapturePiece(player, movingPiece, endWorldPosition);
             mover.MovePiece(movingPiece, endWorldPosition, isForceMove);
             callback(new PieceMoveResult(true, isTurnEnd, gottenPiece));
         }

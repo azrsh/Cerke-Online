@@ -13,16 +13,16 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.
     public class SteppingChecker
     {
         readonly MoveFinisher moveFinisher;
-        readonly Pickupper pickupper;
+        readonly Capturer capturer;
         readonly Mover mover;
 
         readonly Action<PieceMoveResult> finishCallback;
 
-        public SteppingChecker(MoveFinisher moveFinisher, Pickupper pickupper, Mover mover,
+        public SteppingChecker(MoveFinisher moveFinisher, Capturer capturer, Mover mover,
             Action<PieceMoveResult> finishCallback)
         {
             this.moveFinisher = moveFinisher;
-            this.pickupper = pickupper;
+            this.capturer = capturer;
             this.mover = mover;
 
             this.finishCallback = finishCallback;
@@ -45,7 +45,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.
                     moveAfterNext?.Invoke();
                 };
             }
-            else if (worldPathNode.Next.Next == null && pickupper.IsPickupable(player, movingPiece, steppingNextPiece))
+            else if (worldPathNode.Next.Next == null && capturer.IsCapturable(player, movingPiece, steppingNextPiece))
             {
                 steppingAction = () =>
                 {

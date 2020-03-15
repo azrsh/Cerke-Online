@@ -20,7 +20,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         /// <summary>
         /// 駒をボード上から取り出したとき呼ばれる.
         /// </summary>
-        bool PickUpFromBoard();
+        bool CaptureFromBoard();
 
         /// <summary>
         /// ボードの外から駒をボード上に配置する.
