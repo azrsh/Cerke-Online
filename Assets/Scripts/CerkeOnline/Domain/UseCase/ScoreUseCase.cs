@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using UnityEngine;
-using Azarashi.CerkeOnline.Domain.Entities;
+﻿using Azarashi.CerkeOnline.Domain.Entities;
 
 namespace Azarashi.CerkeOnline.Domain.UseCase
 {
@@ -9,7 +7,7 @@ namespace Azarashi.CerkeOnline.Domain.UseCase
     /// </summary>
     public class ScoreUseCase : IScoreUseCase
     {
-        public int Score => scoreHolder.GetScore(player);
+        public int Score => scoreHolder.GetScore(player).Value;
         readonly IPlayer player;
         readonly IScoreHolder scoreHolder;
 

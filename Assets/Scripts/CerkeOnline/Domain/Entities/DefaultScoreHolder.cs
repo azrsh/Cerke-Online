@@ -1,15 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using UniRx;
 
 namespace Azarashi.CerkeOnline.Domain.Entities
 {
     public class DefaultScoreHolder : IScoreHolder
     {
-        readonly Dictionary<IPlayer, int> scores;
+        readonly Dictionary<IPlayer, IntReactiveProperty> scores;
 
         public DefaultScoreHolder(Dictionary<IPlayer, int> scores)
         {
-            this.scores = scores;
+            this.scores = scores.ToDictionary(pair => pair.Key, pair => new IntReactiveProperty(pair.Value));
         }
 
         /// <summary>
@@ -25,16 +26,16 @@ namespace Azarashi.CerkeOnline.Domain.Entities
             var from = scores.Keys.Where(item => item != scorer).First();
             var to = scorer;
 
-            if (scores[from] - score < 0) score = scores[from];
-            if (scores[to] + score < 0) score = -scores[to];
+            if (scores[from].Value - score < 0) score = scores[from].Value;
+            if (scores[to].Value + score < 0) score = -scores[to].Value;
 
-            scores[from] -= score;
-            scores[to] += score;
+            scores[from].Value -= score;
+            scores[to].Value += score;
             return score;
         }
 
-        public bool TryGetScore(IPlayer player, out int score) => scores.TryGetValue(player, out score);
+        public bool TryGetScore(IPlayer player, out IntReactiveProperty score) => scores.TryGetValue(player, out score);
         public bool Contains(IPlayer player) => scores.ContainsKey(player);
-        public int GetScore(IPlayer player) => scores[player];
+        public IReadOnlyReactiveProperty<int> GetScore(IPlayer player) => scores[player];
     }
 }

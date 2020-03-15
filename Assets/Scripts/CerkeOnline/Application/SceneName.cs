@@ -10,6 +10,8 @@
         {
             public static readonly string PauseMenu = "PauseMenu";
             public static readonly string PreGameSettings = "PreGameSettings";
+            public static readonly string GameResultMenu = "GameResultMenu";
+            public static readonly string SeasonResultMenu = "SeasonResultMenu";
         }
     }
 }

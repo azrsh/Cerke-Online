@@ -3,17 +3,31 @@ using UniRx;
 
 namespace Azarashi.CerkeOnline.Domain.Entities
 {
-    public class SeaonSequencer
+    public interface ISeasonSequencer
+    {
+        ISeason CurrentSeason { get; }
+        IObservable<ISeason> OnStart { get; }
+        IObservable<ISeason> OnContinue { get; }
+        IObservable<ISeason> OnEnd { get; }
+        bool StartNextSeason();
+    }
+
+    public class SeasonSequencer : ISeasonSequencer
     {
         public ISeason CurrentSeason { get; private set; }
-        
-        readonly Subject<Unit> continueSubject = new Subject<Unit>();
-        public IObservable<Unit> OnContinue => continueSubject;
 
-        readonly Subject<Unit> endSubject = new Subject<Unit>();
-        public IObservable<Unit> OnEnd => endSubject;
+        readonly IObserver<ISeason> startObserver;
+        public IObservable<ISeason> OnStart { get; }
 
-        public SeaonSequencer(IObservable<IReadOnlyPlayer> onSeasonChangeable, ISeasonDeclarationProvider seasonDeclarationProvider)
+        readonly IObserver<ISeason> continueObserver;
+        public IObservable<ISeason> OnContinue { get; }
+
+        readonly IObserver<ISeason> endObserver;
+        public IObservable<ISeason> OnEnd { get; }
+
+        ISeason previousSeason = null;
+
+        public SeasonSequencer(IObservable<IReadOnlyPlayer> onSeasonChangeable, ISeasonDeclarationProvider seasonDeclarationProvider, int seasonMaximamNumber)
         {
             CurrentSeason = new DefaultSeason(Terminologies.Season.Spring);
 
@@ -22,7 +36,17 @@ namespace Azarashi.CerkeOnline.Domain.Entities
                 seasonDeclarationProvider.RequestValue(OnDeclarated);
             });
 
-            OnEnd.Subscribe(EndSeason);
+            var startSubject = new Subject<ISeason>();
+            startObserver = startSubject;
+            OnStart = startSubject.Take(seasonMaximamNumber);
+
+            var endSubject = new Subject<ISeason>();
+            endObserver = endSubject;
+            OnEnd = endSubject.Take(seasonMaximamNumber);
+
+            var continueSubject = new Subject<ISeason>();
+            continueObserver = continueSubject;
+            OnContinue = continueSubject.TakeUntil(OnEnd.Skip(seasonMaximamNumber - 1));    //終季の最後の一回と同時に購読停止
         }
 
         void OnDeclarated(SeasonContinueOrEnd continueOrEnd)
@@ -30,23 +54,36 @@ namespace Azarashi.CerkeOnline.Domain.Entities
             switch (continueOrEnd)
             {
                 case SeasonContinueOrEnd.Continue:
-                    continueSubject.OnNext(Unit.Default);
+                    continueObserver.OnNext(CurrentSeason);
                     break;
                 case SeasonContinueOrEnd.End:
-                    endSubject.OnNext(Unit.Default);
+                    endObserver.OnNext(CurrentSeason);
+                    EndSeason();
                     break;
             }
         }
 
-        void EndSeason(Unit unit)
+        public bool StartNextSeason()
         {
-            Terminologies.Season current = CurrentSeason.Season;
-            Terminologies.Season next = Terminologies.GetNextSeason(current);
+            if (CurrentSeason != null) return false;
 
-            if (next != Terminologies.Season.None)
+            Terminologies.Season previous = previousSeason.Season;
+            Terminologies.Season next = Terminologies.GetNextSeason(previous);
+
+            bool isNone = next != Terminologies.Season.None;
+            if (isNone)
+            {
                 CurrentSeason = new DefaultSeason(next);
-            else
-                CurrentSeason = null;
+                startObserver.OnNext(CurrentSeason);
+            }
+
+            return isNone;
+        }
+
+        void EndSeason()
+        {
+            previousSeason = CurrentSeason;
+            CurrentSeason = null;
         }
 
     }

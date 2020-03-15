@@ -30,7 +30,7 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.UI
 
         void Bind()
         {
-            gameRuleSelectionView.OnDropDownChanged.TakeUntilDestroy(this).Subscribe(value => preGameSettings.ruleseName = (RulesetName)value);
+            gameRuleSelectionView.OnDropDownChanged.TakeUntilDestroy(this).Subscribe(value => preGameSettings.rulesetName = (RulesetName)value);
             firstOrSecondSelectionView.OnDropDownChanged.TakeUntilDestroy(this).Subscribe(value => preGameSettings.firstOrSecond = (FirstOrSecond)value);
             encampmentSelectionView.OnDropDownChanged.TakeUntilDestroy(this).Subscribe(value => preGameSettings.encampment = (Encampment)value);
             

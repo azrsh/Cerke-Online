@@ -11,7 +11,7 @@ namespace Azarashi.CerkeOnline.Data.DataStructure
         public IObservable<Unit> OnStartButtonClicked => onStartButtonClicked;
         readonly Subject<Unit> onStartButtonClicked = new Subject<Unit>();
 
-        public RulesetName ruleseName;
+        public RulesetName rulesetName;
         public FirstOrSecond firstOrSecond;
         public Encampment encampment;
         public bool isZeroDistanceMovementPermitted;

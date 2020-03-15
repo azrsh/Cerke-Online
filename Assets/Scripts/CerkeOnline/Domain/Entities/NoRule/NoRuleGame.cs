@@ -6,7 +6,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.NoRule
 {
     public class NoRuleGame : IGame
     {
-        public ISeason CurrentSeason { get; }
+        public ISeasonSequencer SeasonSequencer { get; }
         public IBoard Board { get; }
         public IHandDatabase HandDatabase { get; } = null;
         public IScoreHolder ScoreHolder { get; } = null;
@@ -18,13 +18,19 @@ namespace Azarashi.CerkeOnline.Domain.Entities.NoRule
         readonly Subject<Unit> onTurnChanged = new Subject<Unit>();
         public IObservable<Unit> OnSeasonStart { get; } = new Subject<Unit>();
         public IObservable<Unit> OnSeasonEnd { get; } = new Subject<Unit>();
+        public IObservable<Unit> OnGameEnd { get; } = new Subject<Unit>();
 
         public IPlayer CurrentPlayer => GetPlayer(CurrentTurn);
 
-        
+
+        class AnonymousSeasonDeclarationProvider : ISeasonDeclarationProvider
+        {
+            public bool IsRequestCompleted => true;
+            public void RequestValue(Action<SeasonContinueOrEnd> callback) => callback(SeasonContinueOrEnd.End);
+        }
         public NoRuleGame(Encampment firstPlayerEncampment)
         {
-            CurrentSeason = new DefaultSeason(Season.Spring);
+            SeasonSequencer = new SeasonSequencer(Observable.Empty<IReadOnlyPlayer>(), new AnonymousSeasonDeclarationProvider(), 4);
 
             FirstPlayer = new Player(firstPlayerEncampment);
             SecondPlayer = new Player(Terminologies.GetReversal(firstPlayerEncampment));
