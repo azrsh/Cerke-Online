@@ -13,7 +13,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction
             PieceMovement start2ViaPieceMovement, PieceMovement via2EndPieceMovement, 
             Action<PieceMoveResult> callback, Action onPiecesChanged, bool isTurnEnd)
         {
-            var worldPath = new PieceMovePathCalculator().CalculatePath(startPosition, viaPosition, endPosition, pieces, start2ViaPieceMovement, via2EndPieceMovement);
+            var worldPath = PieceMovePathCalculator.CalculatePath(startPosition, viaPosition, endPosition, pieces, start2ViaPieceMovement, via2EndPieceMovement);
             var viaPositionNode = worldPath.Find(new ColumnData(viaPosition, pieces));
             
             //worldPathに開始地点は含まれない

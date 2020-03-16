@@ -10,7 +10,7 @@ using Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.Data
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction
 {
     //interface, straightPath, brockenPathでクラスを分けたい
-    public class PieceMovePathCalculator
+    public static class PieceMovePathCalculator
     {
         /// <summary>
         /// 返却されるPathには開始地点は含まれない。
@@ -22,7 +22,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction
         /// <param name="start2ViaPieceMovement"></param>
         /// <param name="via2EndPieceMovement"></param>
         /// <returns></returns>
-        public LinkedList<ColumnData> CalculatePath(Vector2Int startPosition, Vector2Int viaPosition, Vector2Int endPosition, 
+        public static LinkedList<ColumnData> CalculatePath(Vector2Int startPosition, Vector2Int viaPosition, Vector2Int endPosition, 
             Vector2YXArrayAccessor<IPiece> pieces, PieceMovement start2ViaPieceMovement, PieceMovement via2EndPieceMovement)
         {
             //startPositionは各直線ではなく全体の開始地点でなければならない
@@ -33,7 +33,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction
             return CalculateBrockenPath(startPosition, viaPosition, endPosition, pieces, start2ViaPieceMovement, via2EndPieceMovement, isFrontPlayersPiece);
         }
 
-        LinkedList<ColumnData> CalculateBrockenPath(Vector2Int startPosition, Vector2Int viaPosition, Vector2Int endPosition,
+        static LinkedList<ColumnData> CalculateBrockenPath(Vector2Int startPosition, Vector2Int viaPosition, Vector2Int endPosition,
             Vector2YXArrayAccessor<IPiece> pieces, PieceMovement start2ViaPieceMovement, PieceMovement via2EndPieceMovement, bool isFrontPlayersPiece)
         {
             var start2ViaPath = CalculateStraightPath(startPosition, viaPosition, pieces, start2ViaPieceMovement, isFrontPlayersPiece);
@@ -44,7 +44,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction
             return new LinkedList<ColumnData>(tempPath);
         }
 
-        LinkedList<ColumnData> CalculateStraightPath(Vector2Int startPosition, Vector2Int endPosition, 
+        static LinkedList<ColumnData> CalculateStraightPath(Vector2Int startPosition, Vector2Int endPosition, 
             Vector2YXArrayAccessor<IPiece> pieces, PieceMovement pieceMovement, bool isFrontPlayersPiece)
         {
             var relativeStart2EndPath = GetPath(startPosition, endPosition, isFrontPlayersPiece, pieceMovement);
@@ -53,10 +53,10 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction
             return new LinkedList<ColumnData>(worldPath.Select(value => new ColumnData(value, pieces)));
         }
 
-        bool IsFrontPlayersPiece(Vector2YXArrayAccessor<IPiece> pieces, Vector2Int startPosition) 
+        static bool IsFrontPlayersPiece(Vector2YXArrayAccessor<IPiece> pieces, Vector2Int startPosition) 
             => pieces.Read(startPosition).Owner != null && pieces.Read(startPosition).Owner.Encampment == Encampment.Front;
 
-        IReadOnlyList<Vector2Int> GetPath(Vector2Int from, Vector2Int to, bool isFrontPlayersPiece, PieceMovement pieceMovement)
+        static IReadOnlyList<Vector2Int> GetPath(Vector2Int from, Vector2Int to, bool isFrontPlayersPiece, PieceMovement pieceMovement)
         {
             Vector2Int relativePosition = (to - from) * (isFrontPlayersPiece ? -1 : 1);
             return pieceMovement.GetPath(relativePosition) ?? throw new ArgumentException("移動不可能な移動先が指定されました.");
