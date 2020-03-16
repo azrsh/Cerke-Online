@@ -2,7 +2,6 @@
 using UnityEngine;
 using Azarashi.Utilities.Collections;
 using Azarashi.CerkeOnline.Domain.Entities.StandardizedRule;
-using Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction;
 
 namespace Azarashi.CerkeOnline.Domain.Entities
 {
