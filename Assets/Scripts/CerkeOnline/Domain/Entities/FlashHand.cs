@@ -7,7 +7,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
     /// <summary>
     /// 同色役
     /// </summary>
-    public class LaDejixeceHand : IHand
+    public class FlashHand : IHand
     {
         readonly IPieceStacksProvider pieceStacksProvider;
         readonly HandSuccessChecker handSuccessChecker;
@@ -15,7 +15,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         public string Name { get; }
         public int Score { get; }
 
-        public LaDejixeceHand(IPieceStacksProvider pieceStacksProvider, int score)
+        public FlashHand(IPieceStacksProvider pieceStacksProvider, int score)
         {
             this.pieceStacksProvider = pieceStacksProvider;
             handSuccessChecker = new HandSuccessChecker(pieceStacksProvider);

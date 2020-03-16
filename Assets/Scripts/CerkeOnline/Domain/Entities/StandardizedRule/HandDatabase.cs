@@ -45,7 +45,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
             for (int i = 0; i < NumberOfPieceStacksProviders; i++)
             {
                 hands[i * 2] = new DefaultHand(pieceStacksProviders[i], baseScores[i]);
-                hands[i * 2 + 1] = new LaDejixeceHand(pieceStacksProviders[i], baseScores[i] + bounus);
+                hands[i * 2 + 1] = new FlashHand(pieceStacksProviders[i], baseScores[i] + bounus);
                 overwriteHandPairs[i] = new OverwriteHandPair(hands[i * 2], hands[i * 2 + 1]);
             }
 
