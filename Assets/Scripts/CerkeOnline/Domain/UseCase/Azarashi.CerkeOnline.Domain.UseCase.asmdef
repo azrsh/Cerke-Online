@@ -1,0 +1,16 @@
+{
+    "name": "Azarashi.CerkeOnline.Domain.UseCase",
+    "references": [
+        "GUID:66568b5b492a38645953eb040b9ec357",
+        "GUID:560b04d1a97f54a4e82edc0cbbb69285"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

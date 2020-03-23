@@ -2,7 +2,6 @@
 using UniRx;
 using Azarashi.CerkeOnline.Application;
 using Azarashi.CerkeOnline.Domain.Entities;
-using Azarashi.CerkeOnline.Domain.UseCase;
 using Azarashi.CerkeOnline.Presentation.Presenter.Columns;
 
 namespace Azarashi.CerkeOnline.Presentation.Presenter

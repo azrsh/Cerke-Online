@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Azarashi.CerkeOnline.Data.DataStructure;
+using Azarashi.CerkeOnline.Application;
 using Azarashi.CerkeOnline.Presentation;
 
 public class TestModeLoader : MonoBehaviour

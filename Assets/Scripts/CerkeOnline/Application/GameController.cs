@@ -5,7 +5,6 @@ using Azarashi.Utilities;
 using Azarashi.CerkeOnline.Domain.Entities;
 using Azarashi.CerkeOnline.Networking.Client;
 using Azarashi.CerkeOnline.Networking.Components;
-using Azarashi.CerkeOnline.Data.DataStructure;
 
 namespace Azarashi.CerkeOnline.Application
 {
