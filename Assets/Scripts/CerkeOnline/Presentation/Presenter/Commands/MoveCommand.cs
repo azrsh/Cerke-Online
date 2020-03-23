@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
-using Azarashi.CerkeOnline.Domain.UseCase;
+using Azarashi.CerkeOnline.Application;
 
 namespace Azarashi.CerkeOnline.Presentation.Presenter.Commands
 {

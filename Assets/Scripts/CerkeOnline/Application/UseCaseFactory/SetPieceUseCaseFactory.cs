@@ -1,7 +1,7 @@
-﻿using Azarashi.CerkeOnline.Application;
-using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
+﻿using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
+using Azarashi.CerkeOnline.Domain.UseCase;
 
-namespace Azarashi.CerkeOnline.Domain.UseCase
+namespace Azarashi.CerkeOnline.Application
 {
     public static class SetPieceUseCaseFactory
     {

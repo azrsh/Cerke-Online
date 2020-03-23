@@ -1,7 +1,7 @@
-﻿using Azarashi.CerkeOnline.Application;
-using Azarashi.CerkeOnline.Domain.Entities;
+﻿using Azarashi.CerkeOnline.Domain.Entities;
+using Azarashi.CerkeOnline.Domain.UseCase;
 
-namespace Azarashi.CerkeOnline.Domain.UseCase
+namespace Azarashi.CerkeOnline.Application
 {
     public static class ScoreeUseCaseFactory
     {
