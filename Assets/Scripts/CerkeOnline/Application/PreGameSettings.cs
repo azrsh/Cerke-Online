@@ -3,7 +3,7 @@ using UnityEngine;
 using UniRx;
 using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
 
-namespace Azarashi.CerkeOnline.Data.DataStructure
+namespace Azarashi.CerkeOnline.Application
 {
     [CreateAssetMenu(menuName = "ScriptableObject/PreGameSettings")]
     public class PreGameSettings : ScriptableObject

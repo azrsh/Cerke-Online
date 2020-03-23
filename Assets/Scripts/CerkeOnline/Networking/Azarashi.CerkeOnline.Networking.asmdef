@@ -1,8 +1,10 @@
 {
-    "name": "Azarasi.CerkeOnline.Domain.UseCase",
+    "name": "Azarashi.CerkeOnline.Networking",
     "references": [
+        "GUID:51a0b6755d1303c468f50271fd99947b",
+        "GUID:560b04d1a97f54a4e82edc0cbbb69285",
         "GUID:66568b5b492a38645953eb040b9ec357",
-        "GUID:560b04d1a97f54a4e82edc0cbbb69285"
+        "GUID:30817c1a0e6d646d99c048fc403f5979"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
