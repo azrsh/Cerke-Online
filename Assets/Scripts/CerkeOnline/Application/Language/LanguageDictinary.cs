@@ -18,11 +18,13 @@ namespace Azarashi.CerkeOnline.Application.Language
         public ILanguageDictionary Create(IDictionary<string, string> source)
         {
             //LanguageDictionaryのKeyとtranlatableNameCodesが一致することを保証する
-            bool isSame = tranlatableNameCodes.Count == source.Count && tranlatableNameCodes.All(code => source.ContainsKey(code));
-            if (!isSame) return null;
+            if (!VerifyDictionary(source)) return null;
 
             return new LanguageDictionary(source);
         }
+
+        private bool VerifyDictionary(IDictionary<string, string> source)
+            => tranlatableNameCodes.Count == source.Count && tranlatableNameCodes.All(code => source.ContainsKey(code));
 
         private class LanguageDictionary : ILanguageDictionary
         {

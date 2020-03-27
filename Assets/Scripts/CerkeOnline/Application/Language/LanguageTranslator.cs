@@ -1,19 +1,21 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
+﻿using System.Collections.Generic;
 
 namespace Azarashi.CerkeOnline.Application.Language
 {
+    public interface ILanguageTranslator
+    {
+        string Translate(string textCode);
+    }
+
     public class LanguageTranslator
     {
-        IReadOnlyDictionary<string,string> dictionary = new Dictionary<string,string>();
+        readonly IReadOnlyDictionary<string,string> dictionary = new Dictionary<string,string>();
 
         public string Translate(string nameCode)
         {
+            if (!dictionary.ContainsKey(nameCode)) return string.Empty;
             
-            dictionary.TryGetValue(nameCode, out string result);
-            return result;
+            return dictionary[nameCode];
         }
     }
 }
