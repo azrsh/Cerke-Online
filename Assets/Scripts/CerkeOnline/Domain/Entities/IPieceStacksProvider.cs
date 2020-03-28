@@ -2,7 +2,7 @@
 
 namespace Azarashi.CerkeOnline.Domain.Entities
 {
-    public interface IPieceStacksProvider
+    internal interface IPieceStacksProvider
     {
         IReadOnlyList<PieceStack> GetPieceStacks();
     }

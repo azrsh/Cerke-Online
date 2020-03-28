@@ -1,7 +1,7 @@
 ﻿
 namespace Azarashi.CerkeOnline.Domain.Entities
 {
-    public interface IPieceMoveAction
+    internal interface IPieceMoveAction
     {
         void StartMove();
     }
