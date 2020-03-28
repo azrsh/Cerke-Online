@@ -38,10 +38,9 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter
         {
             ClearPieceView();
 
-            IntegerVector2 position = new IntegerVector2(0, 0);
-            for (position.x = 0; position.x < Terminologies.LengthOfOneSideOfBoard; position.x++)
-                for (position.y = 0; position.y < Terminologies.LengthOfOneSideOfBoard; position.y++)
-                    InitializePieceView(position, columnMap, game);
+            for (int x = 0; x < Terminologies.LengthOfOneSideOfBoard; x++)
+                for (int y = 0; y < Terminologies.LengthOfOneSideOfBoard; y++)
+                    InitializePieceView(new IntegerVector2(x, y), columnMap, game);
         }
 
         void ClearPieceView()

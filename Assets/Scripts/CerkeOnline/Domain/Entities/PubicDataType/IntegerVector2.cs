@@ -2,10 +2,6 @@
 
 namespace Azarashi.CerkeOnline.Domain.Entities.PublicDataType
 {
-    /// <summary>
-    /// この型のGetHashCodeでは可変変数を用いてハッシュを生成しています. そのため, 辞書型等のKeyとして運用すると不具合が出る恐れがあります.
-    /// もし辞書型のKeyとして整数二次元ベクトル構造体を利用した場合は, 新たに不変型の整数二次元ベクトル構造体を作成して利用してください.
-    /// </summary>
     public struct IntegerVector2 : IEquatable<IntegerVector2>
     {
         #region StaticMethod
@@ -16,8 +12,8 @@ namespace Azarashi.CerkeOnline.Domain.Entities.PublicDataType
         #endregion
 
 
-        public int x { get; set; }
-        public int y { get; set; }
+        public int x { get; }
+        public int y { get; }
         public int sqrMagnitude { get { return x * x + y * y; } }
         public IntegerVector2(int x, int y)
         {
@@ -39,21 +35,15 @@ namespace Azarashi.CerkeOnline.Domain.Entities.PublicDataType
         public static bool operator !=(IntegerVector2 left, IntegerVector2 right) => !left.Equals(right);
         public static IntegerVector2 operator+(IntegerVector2 left, IntegerVector2 right)
         {
-            left.x += right.x;
-            left.y += right.y;
-            return left;
+            return new IntegerVector2(left.x + right.x, left.y + right.y);
         }
         public static IntegerVector2 operator-(IntegerVector2 left, IntegerVector2 right)
         {
-            left.x -= right.x;
-            left.y -= right.y;
-            return left;
+            return new IntegerVector2(left.x - right.x, left.y - right.y);
         }
         public static IntegerVector2 operator*(IntegerVector2 left, int right)
         {
-            left.x *= right;
-            left.y *= right;
-            return left;
+            return new IntegerVector2(left.x * right, left.y * right);
         }
 
 

@@ -14,11 +14,10 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.Commands
                 return new IntegerVector2(NumberStringToInt(xy[0]), NumberStringToInt(xy[1]));
             }
 
-            IntegerVector2 result = new IntegerVector2(-1, -1);
-            result.x = EnumNameToInt<Terminologies.BoardRow>((name) => word.StartsWith(name));
-            if (result.x != -1) word = word.Remove(0, typeof(Terminologies.BoardRow).GetEnumName(result.x).Length);
-            result.y = EnumNameToInt<Terminologies.BoardLine>((name) => word == name);
-            return result;
+            int x = EnumNameToInt<Terminologies.BoardRow>((name) => word.StartsWith(name));
+            if (x != -1) word = word.Remove(0, typeof(Terminologies.BoardRow).GetEnumName(x).Length);
+            int y = EnumNameToInt<Terminologies.BoardLine>((name) => word == name);
+            return new IntegerVector2(x, y);
         }
 
         public bool CheckFormat(string[] words, int wordCount)
