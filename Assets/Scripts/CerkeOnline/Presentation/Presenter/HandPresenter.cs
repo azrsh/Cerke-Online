@@ -10,7 +10,7 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter
     public class HandPresenter : MonoBehaviour
     {
         IHandUseCase handUseCase;
-        ILogger logger;
+        UnityEngine.ILogger logger;
         IHand[] notifiedHands = new IHand[0];
 
         void Start()

@@ -13,7 +13,7 @@ namespace Azarashi.CerkeOnline.Application
 
             var player = game.GetPlayer(firstOrSecond);
             var logger = GameController.Instance.SystemLogger;
-            return new PlayerMovePieceUseCase(game, player, valueProvider, logger);
+            return new PlayerMovePieceUseCase(game, player, valueProvider, logger.ToUseCaseLogger());
         }
     }
 }
