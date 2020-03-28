@@ -71,5 +71,5 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter
     }
 
     [System.Serializable] public class IReadOnlyPieceUnityEvent : UnityEngine.Events.UnityEvent<IReadOnlyPiece> { }
-    [System.Serializable] public class IntVector2UnityEvent : UnityEngine.Events.UnityEvent<IntegerVector2> { }
+    [System.Serializable] public class IntegerVector2UnityEvent : UnityEngine.Events.UnityEvent<IntegerVector2> { }
 }

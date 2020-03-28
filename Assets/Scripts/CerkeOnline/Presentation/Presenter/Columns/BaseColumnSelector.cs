@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using Azarashi.Utilities.UnityEvents;
 using Azarashi.CerkeOnline.Domain.Entities.PublicDataType;
 
 namespace Azarashi.CerkeOnline.Presentation.Presenter.Columns
@@ -7,8 +6,8 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.Columns
     public abstract class BaseColumnSelector : MonoBehaviour
     {
         [SerializeField] IReadOnlyPieceUnityEvent onPieceSelected = default;
-        [SerializeField] IntVector2UnityEvent onViaPositionSelected = default;
-        [SerializeField] IntVector2UnityEvent onTargetPositionSelected = default;
+        [SerializeField] IntegerVector2UnityEvent onViaPositionSelected = default;
+        [SerializeField] IntegerVector2UnityEvent onTargetPositionSelected = default;
 
         static readonly IntegerVector2 NonePosition = new IntegerVector2(-1, -1);
         IntegerVector2 startPosition = NonePosition;
