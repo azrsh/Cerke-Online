@@ -3,7 +3,7 @@ using Azarashi.Utilities.Collections;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.DataStructure
 {
-    public struct ColumnData
+    internal struct ColumnData
     {
         public Vector2Int Positin { get; }
         public IPiece Piece { get { return pieces.Read(Positin); } }

@@ -12,7 +12,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         bool StartNextSeason();
     }
 
-    public class SeasonSequencer : ISeasonSequencer
+    internal class SeasonSequencer : ISeasonSequencer
     {
         public ISeason CurrentSeason { get; private set; }
 

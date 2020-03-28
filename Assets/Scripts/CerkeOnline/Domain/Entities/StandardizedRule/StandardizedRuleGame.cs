@@ -7,7 +7,7 @@ using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
 {
-    public partial class StandardizedRuleGame : IGame
+    public class StandardizedRuleGame : IGame
     {
         public ISeasonSequencer SeasonSequencer => seasonSequencer;
         public IBoard Board { get; private set; }

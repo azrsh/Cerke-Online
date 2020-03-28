@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
-using Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.DataStructure;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.AbstractAction
 {
-    public class WaterEntryChecker
+    internal class WaterEntryChecker
     {
         readonly int threshold;
         readonly IFieldEffectChecker fieldEffectChecker;

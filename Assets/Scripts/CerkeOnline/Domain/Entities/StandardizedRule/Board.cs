@@ -6,7 +6,7 @@ using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
 {
-    public class Board : IBoard
+    internal class Board : IBoard
     {
         readonly Vector2YXArrayAccessor<IPiece> pieces;
         readonly IFieldEffectChecker fieldChecker;
@@ -19,7 +19,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
         //ターン管理をここでするな！
         readonly OperationStatus operationStatus = new OperationStatus();
 
-        public Board(Vector2YXArrayAccessor<IPiece> pieceMap, FieldEffectChecker fieldChecker, IPieceMoveActionFactory pieceMoveActionFactory)
+        internal Board(Vector2YXArrayAccessor<IPiece> pieceMap, FieldEffectChecker fieldChecker, IPieceMoveActionFactory pieceMoveActionFactory)
         {
             this.pieces = pieceMap;
             this.fieldChecker = fieldChecker;

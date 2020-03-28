@@ -3,12 +3,12 @@ using UnityEngine;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Pieces
 {
-    public class Stistyst : DefaultPiece
+    internal class Stistyst : DefaultPiece
     {
         protected readonly PieceMovement[] normalPieceMovements;
         protected readonly PieceMovement[] expansionPieceMovements;
 
-        public Stistyst(Terminologies.PieceColor color, Vector2Int position, IPlayer owner, IExpandingMoveFieldChecker fieldChecker) : base(position, color, owner, Terminologies.PieceName.Stistyst, fieldChecker)
+        internal Stistyst(Terminologies.PieceColor color, Vector2Int position, IPlayer owner, IExpandingMoveFieldChecker fieldChecker) : base(position, color, owner, Terminologies.PieceName.Stistyst, fieldChecker)
         {
             normalPieceMovements = new PieceMovement[]
             {

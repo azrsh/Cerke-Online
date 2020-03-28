@@ -10,7 +10,7 @@ using Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.Data
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction
 {
     //interface, straightPath, brockenPathでクラスを分けたい
-    public static class PieceMovePathCalculator
+    internal static class PieceMovePathCalculator
     {
         /// <summary>
         /// 返却されるPathには開始地点は含まれない。

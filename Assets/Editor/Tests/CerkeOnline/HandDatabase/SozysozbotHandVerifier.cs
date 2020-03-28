@@ -4,7 +4,7 @@ using Azarashi.CerkeOnline.Domain.Entities;
 
 namespace Azarashi.CerkeOnline.Tests.HandDatabaseTest
 {
-    public class SozysozbotHandVerifier
+    internal class SozysozbotHandVerifier
     {
         readonly Func<IReadOnlyPiece[], IHand[]> solveFunction;
         readonly int drillCount;

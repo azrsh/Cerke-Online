@@ -2,7 +2,7 @@
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
 {
-    public interface IFieldEffectChecker : IExpandingMoveFieldChecker
+    internal interface IFieldEffectChecker : IExpandingMoveFieldChecker
     {
         /// <summary>
         /// 指定されたマスが皇処かを調べる.

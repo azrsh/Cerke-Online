@@ -5,7 +5,7 @@ using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
 {
-    public class FieldEffectChecker : IFieldEffectChecker
+    internal class FieldEffectChecker : IFieldEffectChecker
     {
         readonly Vector2YXArrayAccessor<FieldEffect> columns;
         readonly IReadOnlyPiece[] pieces;

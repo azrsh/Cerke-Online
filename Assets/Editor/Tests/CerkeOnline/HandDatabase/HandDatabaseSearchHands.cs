@@ -4,7 +4,7 @@ using Azarashi.CerkeOnline.Domain.Entities.StandardizedRule;
 
 namespace Azarashi.CerkeOnline.Tests.HandDatabaseTest
 {
-    public class HandDatabaseSearchHands
+    internal class HandDatabaseSearchHands
     {
         [Test]
         public void HandDatabaseSearchHandsSimplePasses()

@@ -4,12 +4,12 @@ using UnityEngine;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Pieces
 {
-    public class Felkana : DefaultPiece
+    internal class Felkana : DefaultPiece
     {
         protected readonly PieceMovement[] normalPieceMovements;
         protected readonly PieceMovement[] expansionPieceMovements;
-        
-        public Felkana(Terminologies.PieceColor color, Vector2Int position, IPlayer owner, IExpandingMoveFieldChecker fieldChecker) : base(position, color, owner, Terminologies.PieceName.Felkana, fieldChecker)
+
+        internal Felkana(Terminologies.PieceColor color, Vector2Int position, IPlayer owner, IExpandingMoveFieldChecker fieldChecker) : base(position, color, owner, Terminologies.PieceName.Felkana, fieldChecker)
         {
             normalPieceMovements = new PieceMovement[]
             {

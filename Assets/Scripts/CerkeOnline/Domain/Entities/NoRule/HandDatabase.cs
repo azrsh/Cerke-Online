@@ -2,7 +2,7 @@
 
 namespace Azarashi.CerkeOnline.Domain.Entities.NoRule
 {
-    public class HandDatabase : IHandDatabase
+    internal class HandDatabase : IHandDatabase
     {
         readonly IHand[] hands = { };
 

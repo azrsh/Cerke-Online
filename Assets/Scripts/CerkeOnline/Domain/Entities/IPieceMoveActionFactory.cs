@@ -5,7 +5,7 @@ using Azarashi.CerkeOnline.Domain.Entities.StandardizedRule;
 
 namespace Azarashi.CerkeOnline.Domain.Entities
 {
-    public interface IPieceMoveActionFactory
+    internal interface IPieceMoveActionFactory
     {
         IPieceMoveAction Create(IPlayer player, Vector2Int startPosition, Vector2Int viaPosition, Vector2Int endPosition,
             Vector2YXArrayAccessor<IPiece> pieces, IFieldEffectChecker fieldEffectChecker, IValueInputProvider<int> valueProvider,

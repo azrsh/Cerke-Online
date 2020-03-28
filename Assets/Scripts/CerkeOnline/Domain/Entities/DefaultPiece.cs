@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Azarashi.CerkeOnline.Domain.Entities
 {
-    public abstract class DefaultPiece : IPiece
+    internal abstract class DefaultPiece : IPiece
     {
         //駒の情報
         public IPlayer Owner { get; private set; }
@@ -21,7 +21,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         /// <param name="position"></param>
         /// <param name="normalPieceMovements"></param>
         /// <param name="expansionPieceMovements"></param>
-        public DefaultPiece(Vector2Int position, Terminologies.PieceColor color, IPlayer owner, Terminologies.PieceName pieceName, IExpandingMoveFieldChecker fieldChecker)
+        internal DefaultPiece(Vector2Int position, Terminologies.PieceColor color, IPlayer owner, Terminologies.PieceName pieceName, IExpandingMoveFieldChecker fieldChecker)
         {
             this.PieceName = pieceName;
             this.Position = position;

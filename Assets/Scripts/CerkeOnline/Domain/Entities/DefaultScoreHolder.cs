@@ -4,11 +4,11 @@ using UniRx;
 
 namespace Azarashi.CerkeOnline.Domain.Entities
 {
-    public class DefaultScoreHolder : IScoreHolder
+    internal class DefaultScoreHolder : IScoreHolder
     {
         readonly Dictionary<IPlayer, IntReactiveProperty> scores;
 
-        public DefaultScoreHolder(Dictionary<IPlayer, int> scores)
+        internal DefaultScoreHolder(Dictionary<IPlayer, int> scores)
         {
             this.scores = scores.ToDictionary(pair => pair.Key, pair => new IntReactiveProperty(pair.Value));
         }

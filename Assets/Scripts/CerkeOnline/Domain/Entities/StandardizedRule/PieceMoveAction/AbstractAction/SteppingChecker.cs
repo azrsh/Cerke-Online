@@ -10,7 +10,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.
     /// <summary>
     /// 踏み越えチェッククラス
     /// </summary>
-    public class SteppingChecker
+    internal class SteppingChecker
     {
         readonly MoveFinisher moveFinisher;
         readonly Capturer capturer;

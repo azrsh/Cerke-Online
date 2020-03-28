@@ -3,7 +3,7 @@ using Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.Data
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction
 {
-    public class MoveActionData
+    internal class MoveActionData
     {
         public IPiece MovingPiece { get; }
         public IPlayer Player { get; }

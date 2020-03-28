@@ -2,9 +2,9 @@
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Hands.PieceStackProviders
 {
-    public class LaMeunerfergal : DefaultPieceStacksProviderr
+    internal class LaMeunerfergal : DefaultPieceStacksProviderr
     {
-        public LaMeunerfergal()
+        internal LaMeunerfergal()
         {
             pieceStacks = new PieceStack[] { new PieceStack(PieceName.Kua, 1), new PieceStack(PieceName.Terlsk, 1), new PieceStack(PieceName.Varxle, 1) };
         }

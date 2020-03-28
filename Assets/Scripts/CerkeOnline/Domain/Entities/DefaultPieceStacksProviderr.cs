@@ -2,13 +2,10 @@
 
 namespace Azarashi.CerkeOnline.Domain.Entities
 {
-    public abstract class DefaultPieceStacksProviderr : IPieceStacksProvider
+    internal abstract class DefaultPieceStacksProviderr : IPieceStacksProvider
     {
         protected PieceStack[] pieceStacks;
 
-        public IReadOnlyList<PieceStack> GetPieceStacks()
-        {
-            return pieceStacks;
-        }
+        public IReadOnlyList<PieceStack> GetPieceStacks() => pieceStacks;
     }
 }

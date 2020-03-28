@@ -7,7 +7,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
     /// <summary>
     /// Unused
     /// </summary>
-    public class Column
+    internal class Column
     {
         Vector2Int center;
     }

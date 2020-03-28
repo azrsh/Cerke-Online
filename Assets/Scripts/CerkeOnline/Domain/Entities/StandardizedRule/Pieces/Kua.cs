@@ -4,12 +4,12 @@ using UnityEngine;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Pieces
 {
-    public class Kua : DefaultPiece
+    internal class Kua : DefaultPiece
     {
         protected readonly PieceMovement[] normalPieceMovements;
         protected readonly PieceMovement[] expansionPieceMovements;
 
-        public Kua(Terminologies.PieceColor color, Vector2Int position, IPlayer owner, IExpandingMoveFieldChecker fieldChecker) : base(position, color, owner, Terminologies.PieceName.Kua, fieldChecker)
+        internal Kua(Terminologies.PieceColor color, Vector2Int position, IPlayer owner, IExpandingMoveFieldChecker fieldChecker) : base(position, color, owner, Terminologies.PieceName.Kua, fieldChecker)
         {
             normalPieceMovements = new PieceMovement[]
             {

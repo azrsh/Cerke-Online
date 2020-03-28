@@ -4,12 +4,12 @@ using UnityEngine;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Pieces
 {
-    public class Elmer : DefaultPiece
+    internal class Elmer : DefaultPiece
     {
         protected readonly PieceMovement[] normalPieceMovements;
         protected readonly PieceMovement[] expansionPieceMovements;
 
-        public Elmer(Terminologies.PieceColor color, Vector2Int position, IPlayer owner, IExpandingMoveFieldChecker fieldChecker) : base(position, color, owner, Terminologies.PieceName.Elmer, fieldChecker)
+        internal Elmer(Terminologies.PieceColor color, Vector2Int position, IPlayer owner, IExpandingMoveFieldChecker fieldChecker) : base(position, color, owner, Terminologies.PieceName.Elmer, fieldChecker)
         {
             normalPieceMovements = new PieceMovement[]
             {

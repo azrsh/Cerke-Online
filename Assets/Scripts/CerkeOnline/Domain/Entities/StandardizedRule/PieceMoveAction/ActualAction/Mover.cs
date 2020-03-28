@@ -4,7 +4,7 @@ using Azarashi.Utilities.Collections;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.ActualAction
 {
-    public class Mover
+    internal class Mover
     {
         readonly Vector2YXArrayAccessor<IPiece> pieces;
         readonly Action onPiecesChanged;

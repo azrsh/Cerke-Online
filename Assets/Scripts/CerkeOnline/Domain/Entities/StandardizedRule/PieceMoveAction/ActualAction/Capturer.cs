@@ -1,10 +1,9 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 using Azarashi.Utilities.Collections;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.ActualAction
 {
-    public class Capturer
+    internal class Capturer
     {
         readonly Vector2YXArrayAccessor<IPiece> pieces;
 

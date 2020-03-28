@@ -3,12 +3,12 @@ using UnityEngine;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Pieces
 {
-    public class Terlsk : DefaultPiece
+    internal class Terlsk : DefaultPiece
     {
         readonly PieceMovement[] normalPieceMovements;
         readonly PieceMovement[] expansionPieceMovements;
 
-        public Terlsk(Terminologies.PieceColor color, Vector2Int position, IPlayer owner, IExpandingMoveFieldChecker fieldChecker) : base(position, color, owner, Terminologies.PieceName.Terlsk, fieldChecker)
+        internal Terlsk(Terminologies.PieceColor color, Vector2Int position, IPlayer owner, IExpandingMoveFieldChecker fieldChecker) : base(position, color, owner, Terminologies.PieceName.Terlsk, fieldChecker)
         {
             normalPieceMovements = new PieceMovement[]
             {

@@ -3,12 +3,12 @@ using UniRx;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
 {
-    public interface ISteppedObservable
+    internal interface ISteppedObservable
     {
         IObservable<Unit> OnStepped { get; }
     }
 
-    public interface ISteppedObserver
+    internal interface ISteppedObserver
     {
         IObserver<Unit> OnSteppied { get; }
     }

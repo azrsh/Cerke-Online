@@ -6,7 +6,7 @@ using Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
 {
-    public static class BoardFactory
+    internal static class BoardFactory
     {
         public static IBoard Create(IPlayer frontPlayer, IPlayer backPlayer)
         {

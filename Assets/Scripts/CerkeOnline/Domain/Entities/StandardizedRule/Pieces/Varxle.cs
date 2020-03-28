@@ -4,12 +4,12 @@ using UnityEngine;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Pieces
 {
-    public class Varxle : DefaultPiece
+    internal class Varxle : DefaultPiece
     {
         readonly PieceMovement[] normalPieceMovements;
         readonly PieceMovement[] expansionPieceMovements;
 
-        public Varxle(Terminologies.PieceColor color, Vector2Int position, IPlayer owner, IExpandingMoveFieldChecker fieldChecker) : base(position, color, owner, Terminologies.PieceName.Varxle, fieldChecker)
+        internal Varxle(Terminologies.PieceColor color, Vector2Int position, IPlayer owner, IExpandingMoveFieldChecker fieldChecker) : base(position, color, owner, Terminologies.PieceName.Varxle, fieldChecker)
         {
             normalPieceMovements = new PieceMovement[]
             {

@@ -24,7 +24,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
     -官定ルールで採用されていない役
     声無行処(la ytartanerfergal) 
     */
-    public class HandDatabase : IHandDatabase
+    internal class HandDatabase : IHandDatabase
     {
         readonly IHand[] hands;
         readonly OverwriteHandPair[] overwriteHandPairs;

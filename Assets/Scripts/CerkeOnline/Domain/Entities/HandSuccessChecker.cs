@@ -4,16 +4,16 @@ using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
 
 namespace Azarashi.CerkeOnline.Domain.Entities
 {
-    public class HandSuccessChecker
+    internal class HandSuccessChecker
     {
         readonly IReadOnlyList<PieceStack> pieceStacks;
 
-        public HandSuccessChecker(IPieceStacksProvider pieceStacksProvider)
+        internal HandSuccessChecker(IPieceStacksProvider pieceStacksProvider)
         {
             pieceStacks = pieceStacksProvider.GetPieceStacks();
         }
 
-        public bool Check(IEnumerable<IReadOnlyPiece> holdingPieces)
+        internal bool Check(IEnumerable<IReadOnlyPiece> holdingPieces)
         {
             if (holdingPieces.Count() < pieceStacks.Count) return false;
             

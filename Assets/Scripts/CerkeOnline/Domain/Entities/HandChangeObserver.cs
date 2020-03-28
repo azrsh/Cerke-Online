@@ -3,14 +3,14 @@ using UniRx;
 
 namespace Azarashi.CerkeOnline.Domain.Entities
 {
-    public class HandChangeObserver
+    internal class HandChangeObserver
     {
         readonly IHandDatabase handDatabase;
         
-        public IObservable<IReadOnlyPlayer> Observable => subject;
+        internal IObservable<IReadOnlyPlayer> Observable => subject;
         Subject<IReadOnlyPlayer> subject = new Subject<IReadOnlyPlayer>();
 
-        public HandChangeObserver(IHandDatabase handDatabase, IObservable<IReadOnlyPlayer> onTurnEnd)
+        internal HandChangeObserver(IHandDatabase handDatabase, IObservable<IReadOnlyPlayer> onTurnEnd)
         {
             this.handDatabase = handDatabase;
             onTurnEnd.Where(CheckHandIncrease).Subscribe(subject);
@@ -25,6 +25,6 @@ namespace Azarashi.CerkeOnline.Domain.Entities
             return handDifference.IncreasedDifference.Length > 0;
         }
 
-        public void Reset() => previousHands = new IHand[0];
+        internal void Reset() => previousHands = new IHand[0];
     }
 }

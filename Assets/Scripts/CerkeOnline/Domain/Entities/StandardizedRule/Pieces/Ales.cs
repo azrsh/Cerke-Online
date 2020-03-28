@@ -3,12 +3,12 @@ using UnityEngine;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Pieces
 {
-    public class Ales : DefaultPiece
+    internal class Ales : DefaultPiece
     {
         readonly PieceMovement[] normalPieceMovements;
         readonly PieceMovement[] expansionPieceMovements;
 
-        public Ales(Terminologies.PieceColor color, Vector2Int position, IPlayer owner, IExpandingMoveFieldChecker fieldChecker) : base(position, color, owner, Terminologies.PieceName.Ales, fieldChecker)
+        internal Ales(Terminologies.PieceColor color, Vector2Int position, IPlayer owner, IExpandingMoveFieldChecker fieldChecker) : base(position, color, owner, Terminologies.PieceName.Ales, fieldChecker)
         {
             normalPieceMovements = new PieceMovement[]
             {

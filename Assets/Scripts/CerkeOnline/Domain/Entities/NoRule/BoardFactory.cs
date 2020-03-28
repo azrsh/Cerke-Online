@@ -5,7 +5,7 @@ using Azarashi.Utilities.Collections;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.NoRule
 {
-    public static class BoardFactory
+    internal static class BoardFactory
     {
         public static IBoard Create(IPlayer frontPlayer, IPlayer backPlayer)
         {

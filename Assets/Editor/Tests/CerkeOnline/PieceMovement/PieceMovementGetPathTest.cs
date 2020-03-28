@@ -5,7 +5,7 @@ using Assert = NUnit.Framework.Assert;
  
 namespace Azarashi.CerkeOnline.Tests.PieceMovementTest
 {
-    public class PieceMovementGetPathTest
+    internal class PieceMovementGetPathTest
     {
         [Test]
         public void Case1()

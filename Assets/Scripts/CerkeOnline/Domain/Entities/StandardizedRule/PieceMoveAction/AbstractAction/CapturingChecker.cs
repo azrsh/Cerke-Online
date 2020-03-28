@@ -5,7 +5,7 @@ using Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.Actu
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.AbstractAction
 {
-    public class CapturingChecker
+    internal class CapturingChecker
     {
         readonly Capturer capturer;
         readonly MoveFinisher moveFinisher;
