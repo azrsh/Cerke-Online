@@ -10,12 +10,12 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.Columns
         [SerializeField] IntVector2UnityEvent onViaPositionSelected = default;
         [SerializeField] IntVector2UnityEvent onTargetPositionSelected = default;
 
-        static readonly IntVector2 NonePosition = new IntVector2(-1, -1);
-        IntVector2 startPosition = NonePosition;
-        IntVector2 viaPosition = NonePosition;
+        static readonly IntegerVector2 NonePosition = new IntegerVector2(-1, -1);
+        IntegerVector2 startPosition = NonePosition;
+        IntegerVector2 viaPosition = NonePosition;
         protected bool isLockSelecting = false;
 
-        public void OnClickColumn(IntVector2 position)
+        public void OnClickColumn(IntegerVector2 position)
         {
             if (isLockSelecting || this.startPosition == NonePosition || position == NonePosition)
             {
@@ -39,9 +39,9 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.Columns
             this.startPosition = NonePosition;
         }
 
-        protected abstract void OnColumnSelected(IntVector2 start, IntVector2 via, IntVector2 last);
+        protected abstract void OnColumnSelected(IntegerVector2 start, IntegerVector2 via, IntegerVector2 last);
 
-        void CallPieceSelectedEvent(IntVector2 position)
+        void CallPieceSelectedEvent(IntegerVector2 position)
         {
             var game = Application.GameController.Instance.Game;
             var board = game.Board;
@@ -49,7 +49,7 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.Columns
             onPieceSelected.Invoke(piece);
         }
         
-        void CallViaPositionSelectedEvent(IntVector2 position)
+        void CallViaPositionSelectedEvent(IntegerVector2 position)
         {
             var game = Application.GameController.Instance.Game;
             var board = game.Board;

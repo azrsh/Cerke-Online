@@ -28,7 +28,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.
             this.finishCallback = finishCallback;
         }
 
-        public bool CheckStepping(PublicDataType.IntVector2 viaPosition,IPlayer player, IPiece movingPiece, LinkedListNode<ColumnData> worldPathNode, Action moveAfterNext, Action<IPiece> onFailure)
+        public bool CheckStepping(PublicDataType.IntegerVector2 viaPosition,IPlayer player, IPiece movingPiece, LinkedListNode<ColumnData> worldPathNode, Action moveAfterNext, Action<IPiece> onFailure)
         {
             var nextPiece = worldPathNode.Value.Piece;
             var isViaPosition = worldPathNode.Value.Positin == viaPosition && worldPathNode.Next != null;

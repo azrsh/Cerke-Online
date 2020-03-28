@@ -10,7 +10,7 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.Columns
     {
         // 現在はColumnSelectorを継承しているが, ColumnSelectorの内部処理は分離してPureC#にした方がいいかも
         
-        protected override void OnColumnSelected(IntVector2 start, IntVector2 via, IntVector2 last)
+        protected override void OnColumnSelected(IntegerVector2 start, IntegerVector2 via, IntegerVector2 last)
         {
             IGame game = GameController.Instance.Game;
             if (game == null)

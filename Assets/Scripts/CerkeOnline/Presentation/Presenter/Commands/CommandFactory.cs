@@ -38,10 +38,10 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.Commands
             if (!analyzer.CheckFormat(words, 4)/* || words[0] != CommandEnum.move.ToString()*/)
                 return null;
 
-            IntVector2 startPosition = analyzer.GetPosition(words[1]);
+            IntegerVector2 startPosition = analyzer.GetPosition(words[1]);
             PieceName pieceName = PieceName.None;
             Enum.TryParse(words[2], true, out pieceName);
-            IntVector2 endPosition = analyzer.GetPosition(words[3]);
+            IntegerVector2 endPosition = analyzer.GetPosition(words[3]);
             return new MoveCommand(startPosition, pieceName, endPosition);
         }
 

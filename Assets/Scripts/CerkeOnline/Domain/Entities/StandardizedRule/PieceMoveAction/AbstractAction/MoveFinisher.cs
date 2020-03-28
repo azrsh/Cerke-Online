@@ -39,7 +39,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.
         }
 
 
-        public void FinishMove(IPlayer player, IPiece movingPiece, PublicDataType.IntVector2 endWorldPosition, Action<PieceMoveResult> callback, bool isTurnEnd, bool isForceMove = false)
+        public void FinishMove(IPlayer player, IPiece movingPiece, PublicDataType.IntegerVector2 endWorldPosition, Action<PieceMoveResult> callback, bool isTurnEnd, bool isForceMove = false)
         {
             //移動先の駒を取る
             IPiece gottenPiece = capturer.CapturePiece(player, movingPiece, endWorldPosition);

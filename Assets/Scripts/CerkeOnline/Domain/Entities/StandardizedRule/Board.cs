@@ -27,7 +27,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
             onEveryValueChanged.OnNext(Unit.Default);
         }
 
-        public IReadOnlyPiece GetPiece(PublicDataType.IntVector2 position)
+        public IReadOnlyPiece GetPiece(PublicDataType.IntegerVector2 position)
         {
             if (!IsOnBoard(position))
                 return null;
@@ -41,7 +41,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
             {
                 for (int j = 0; j < pieces.Height; j++)
                 {
-                    IReadOnlyPiece piece = pieces.Read(new PublicDataType.IntVector2(i, j));
+                    IReadOnlyPiece piece = pieces.Read(new PublicDataType.IntegerVector2(i, j));
                     if (piece != null && piece.PieceName == pieceName)
                         return piece;
                 }
@@ -51,7 +51,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
         }
 
         bool isLocked = false;
-        public void MovePiece(PublicDataType.IntVector2 startPosition, PublicDataType.IntVector2 viaPosition, PublicDataType.IntVector2 endPosition, IPlayer player, IValueInputProvider<int> valueProvider, Action<PieceMoveResult> callback)
+        public void MovePiece(PublicDataType.IntegerVector2 startPosition, PublicDataType.IntegerVector2 viaPosition, PublicDataType.IntegerVector2 endPosition, IPlayer player, IValueInputProvider<int> valueProvider, Action<PieceMoveResult> callback)
         {
             if (isLocked) return;
 
@@ -108,16 +108,16 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
             pieceMoveAction.StartMove();
         }
 
-        public void MovePiece(PublicDataType.IntVector2 startPosition, PublicDataType.IntVector2 lastPosition, IPlayer player, IValueInputProvider<int> valueProvider, Action<PieceMoveResult> callback)
+        public void MovePiece(PublicDataType.IntegerVector2 startPosition, PublicDataType.IntegerVector2 lastPosition, IPlayer player, IValueInputProvider<int> valueProvider, Action<PieceMoveResult> callback)
             => MovePiece(startPosition, lastPosition, lastPosition, player, valueProvider, callback);
             
         
-        public bool SetPiece(PublicDataType.IntVector2 position, IPiece piece)
+        public bool SetPiece(PublicDataType.IntegerVector2 position, IPiece piece)
         {
             if (!IsOnBoard(position) || pieces.Read(position) != null)
                 return false;
 
-            if (piece.Position != new PublicDataType.IntVector2(-1, -1))
+            if (piece.Position != new PublicDataType.IntegerVector2(-1, -1))
                 return false;
 
             piece.SetOnBoard(position);
@@ -126,7 +126,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
             return true;
         }
 
-        public bool IsOnBoard(PublicDataType.IntVector2 position)
+        public bool IsOnBoard(PublicDataType.IntegerVector2 position)
         {
             return position.x >= 0 && position.y >= 0 && position.x < pieces.Width && position.y < pieces.Height;
         }

@@ -9,6 +9,6 @@ namespace Azarashi.CerkeOnline.Domain.Entities
     /// </summary>
     internal class Column
     {
-        PublicDataType.IntVector2 center;
+        PublicDataType.IntegerVector2 center;
     }
 }

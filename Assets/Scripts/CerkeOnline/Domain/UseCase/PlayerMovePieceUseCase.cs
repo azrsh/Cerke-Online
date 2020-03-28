@@ -18,7 +18,7 @@ namespace Azarashi.CerkeOnline.Domain.UseCase
             this.logger = logger;
         }
 
-        bool CommonCheck(IntVector2 startPosition)
+        bool CommonCheck(IntegerVector2 startPosition)
         {
             if (game.CurrentPlayer != player)
             {
@@ -43,7 +43,7 @@ namespace Azarashi.CerkeOnline.Domain.UseCase
             return true;
         }
 
-        public void RequestToMovePiece(IntVector2 startPosition, IntVector2 viaPosition, IntVector2 lastPosition)
+        public void RequestToMovePiece(IntegerVector2 startPosition, IntegerVector2 viaPosition, IntegerVector2 lastPosition)
         {
             if (!CommonCheck(startPosition)) return;
             if (game.Board.GetPiece(viaPosition) == null)
@@ -59,7 +59,7 @@ namespace Azarashi.CerkeOnline.Domain.UseCase
             board.MovePiece(startPosition, viaPosition, lastPosition, player, inputProvider, OnPieceMoved);
         }
 
-        public void RequestToMovePiece(IntVector2 startPosition, IntVector2 lastPosition)
+        public void RequestToMovePiece(IntegerVector2 startPosition, IntegerVector2 lastPosition)
         {
             if (!CommonCheck(startPosition)) return;
 

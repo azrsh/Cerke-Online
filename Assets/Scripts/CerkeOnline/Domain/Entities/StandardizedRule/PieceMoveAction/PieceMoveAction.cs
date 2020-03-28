@@ -24,9 +24,9 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction
         readonly bool isTurnEnd;
         bool surmounted = false;
 
-        readonly PublicDataType.IntVector2 startPosition;
-        readonly PublicDataType.IntVector2 viaPosition;
-        readonly PublicDataType.IntVector2 endPosition;
+        readonly PublicDataType.IntegerVector2 startPosition;
+        readonly PublicDataType.IntegerVector2 viaPosition;
+        readonly PublicDataType.IntegerVector2 endPosition;
 
         readonly Mover pieceMover;
         readonly Capturer capturer;

@@ -7,11 +7,11 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.Commands
 {
     public class MoveCommand : ICommand
     {
-        readonly IntVector2 startPosition;
+        readonly IntegerVector2 startPosition;
         readonly PieceName pieceName;
-        readonly IntVector2 endPosition;
+        readonly IntegerVector2 endPosition;
 
-        public MoveCommand(IntVector2 startPosition, PieceName pieceName, IntVector2 endPosition)
+        public MoveCommand(IntegerVector2 startPosition, PieceName pieceName, IntegerVector2 endPosition)
         {
             if (pieceName == PieceName.None)
                 throw new InvalidOperationException();

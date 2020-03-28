@@ -14,7 +14,7 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.Columns
             columns = new Vector2XYArrayAccessor<Transform>(transformMap);
         }
 
-        public Vector3 Convert(IntVector2 logicPosition)
+        public Vector3 Convert(IntegerVector2 logicPosition)
         {
             return columns.Read(new Vector2Int(logicPosition.x, logicPosition.y)).position;
         }

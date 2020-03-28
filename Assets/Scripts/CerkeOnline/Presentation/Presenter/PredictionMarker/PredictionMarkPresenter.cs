@@ -37,25 +37,25 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.PredictionMarker
         }
 
         public void OnPieceSelected(IReadOnlyPiece movingPiece)
-            => CalculateAndDisplay(movingPiece?.Position ?? new IntVector2(-1, -1), this.movingPiece = movingPiece);
+            => CalculateAndDisplay(movingPiece?.Position ?? new IntegerVector2(-1, -1), this.movingPiece = movingPiece);
         
-        public void OnViaPositionSelected(IntVector2 position) 
+        public void OnViaPositionSelected(IntegerVector2 position) 
         {
             /*中継地点からの移動先ハイライトは未実装*/
             CalculateAndDisplay(position, movingPiece);
             movingPiece = null;
         }
 
-        public void OnTargetPositionSelected(IntVector2 position) => markerObjects.HideAllMarker();
+        public void OnTargetPositionSelected(IntegerVector2 position) => markerObjects.HideAllMarker();
 
-        void CalculateAndDisplay(IntVector2 position, IReadOnlyPiece movingPiece)
+        void CalculateAndDisplay(IntegerVector2 position, IReadOnlyPiece movingPiece)
         {
             var logicPositions = movePredictor.PredictMoveableColumns(position, movingPiece);
             var worldPositions = ConvertLogicPositionToWorldPosition(logicPositions);
             UpdateMarker(worldPositions);
         }
 
-        IReadOnlyList<Vector3> ConvertLogicPositionToWorldPosition(IReadOnlyList<IntVector2> logicPositions)
+        IReadOnlyList<Vector3> ConvertLogicPositionToWorldPosition(IReadOnlyList<IntegerVector2> logicPositions)
         {
             return logicPositions.Select(value => columnPositionConverter.Convert(value)).ToList();
         }

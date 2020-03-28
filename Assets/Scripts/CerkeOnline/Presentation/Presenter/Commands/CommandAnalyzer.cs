@@ -6,15 +6,15 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.Commands
 {
     public class CommandAnalyzer
     {
-        public IntVector2 GetPosition(string word)
+        public IntegerVector2 GetPosition(string word)
         {
             if (word.IndexOf('-') >= 0)
             {
                 string[] xy = word.Split('-');
-                return new IntVector2(NumberStringToInt(xy[0]), NumberStringToInt(xy[1]));
+                return new IntegerVector2(NumberStringToInt(xy[0]), NumberStringToInt(xy[1]));
             }
 
-            IntVector2 result = new IntVector2(-1, -1);
+            IntegerVector2 result = new IntegerVector2(-1, -1);
             result.x = EnumNameToInt<Terminologies.BoardRow>((name) => word.StartsWith(name));
             if (result.x != -1) word = word.Remove(0, typeof(Terminologies.BoardRow).GetEnumName(result.x).Length);
             result.y = EnumNameToInt<Terminologies.BoardLine>((name) => word == name);

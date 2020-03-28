@@ -35,7 +35,7 @@ namespace Azarashi.CerkeOnline.Tests.HandSuccessCheckerTest
         {
             public IPlayer Owner => throw new System.NotImplementedException();
             public Terminologies.PieceName PieceName { get; }
-            public IntVector2 Position => throw new System.NotImplementedException();
+            public IntegerVector2 Position => throw new System.NotImplementedException();
             public Terminologies.PieceColor Color => throw new System.NotImplementedException();
             public int NumberOfMoves => throw new System.NotImplementedException();
 
@@ -48,10 +48,10 @@ namespace Azarashi.CerkeOnline.Tests.HandSuccessCheckerTest
             public bool CanTakePiece() => throw new System.NotImplementedException();
             public IReadOnlyList<PieceMovement> GetMoveablePosition(bool isExpanded = false) => throw new System.NotImplementedException();
             public bool IsCapturable() => throw new System.NotImplementedException();
-            public bool IsMoveable(IntVector2 position) => throw new System.NotImplementedException();
+            public bool IsMoveable(IntegerVector2 position) => throw new System.NotImplementedException();
             public bool IsOwner(IPlayer player) => throw new System.NotImplementedException();
-            public bool TryToGetPieceMovement(IntVector2 worldPosition, out PieceMovement pieceMovement) => throw new System.NotImplementedException();
-            public bool TryToGetPieceMovementByRelativePosition(IntVector2 relativePosition, out PieceMovement pieceMovement) => throw new System.NotImplementedException();
+            public bool TryToGetPieceMovement(IntegerVector2 worldPosition, out PieceMovement pieceMovement) => throw new System.NotImplementedException();
+            public bool TryToGetPieceMovementByRelativePosition(IntegerVector2 relativePosition, out PieceMovement pieceMovement) => throw new System.NotImplementedException();
         }
     }
 }

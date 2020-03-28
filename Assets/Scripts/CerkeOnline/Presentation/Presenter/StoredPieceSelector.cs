@@ -10,11 +10,11 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter
     [RequireComponent(typeof(BaseColumnSelector))]
     public class StoredPieceSelector : MonoBehaviour
     {
-        static readonly IntVector2 NonePosition = new IntVector2(-1, -1);
+        static readonly IntegerVector2 NonePosition = new IntegerVector2(-1, -1);
 
         IPiece selectedPiece;
         
-        public void OnClickColumn(IntVector2 position)
+        public void OnClickColumn(IntegerVector2 position)
         {
             IGame game = GameController.Instance.Game;
             if (game == null || selectedPiece == null)

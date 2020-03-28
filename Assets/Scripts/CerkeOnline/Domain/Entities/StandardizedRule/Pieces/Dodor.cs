@@ -9,17 +9,17 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Pieces
         protected readonly PieceMovement[] normalPieceMovements;
         protected readonly PieceMovement[] expansionPieceMovements;
 
-        internal Dodor(Terminologies.PieceColor color, PublicDataType.IntVector2 position, IPlayer owner, IExpandingMoveFieldChecker fieldChecker) : base(position, color, owner, Terminologies.PieceName.Dodor, fieldChecker)
+        internal Dodor(Terminologies.PieceColor color, PublicDataType.IntegerVector2 position, IPlayer owner, IExpandingMoveFieldChecker fieldChecker) : base(position, color, owner, Terminologies.PieceName.Dodor, fieldChecker)
         {
             normalPieceMovements = new PieceMovement[]
             {
-                new PieceMovement(new PublicDataType.IntVector2(2, 2), 1), new PieceMovement(new PublicDataType.IntVector2(2, -2), 1),
-                new PieceMovement(new PublicDataType.IntVector2(-2, 2), 1), new PieceMovement(new PublicDataType.IntVector2(-2, -2), 1),
+                new PieceMovement(new PublicDataType.IntegerVector2(2, 2), 1), new PieceMovement(new PublicDataType.IntegerVector2(2, -2), 1),
+                new PieceMovement(new PublicDataType.IntegerVector2(-2, 2), 1), new PieceMovement(new PublicDataType.IntegerVector2(-2, -2), 1),
             };
             expansionPieceMovements = new PieceMovement[]
             {
-                new PieceMovement(new PublicDataType.IntVector2(2, 2), -1), new PieceMovement(new PublicDataType.IntVector2(2, -2), -1),
-                new PieceMovement(new PublicDataType.IntVector2(-2, 2), -1), new PieceMovement(new PublicDataType.IntVector2(-2, -2), -1),
+                new PieceMovement(new PublicDataType.IntegerVector2(2, 2), -1), new PieceMovement(new PublicDataType.IntegerVector2(2, -2), -1),
+                new PieceMovement(new PublicDataType.IntegerVector2(-2, 2), -1), new PieceMovement(new PublicDataType.IntegerVector2(-2, -2), -1),
             };
         }
 

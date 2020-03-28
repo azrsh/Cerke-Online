@@ -15,21 +15,21 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
             this.pieces = pieces;
         }
 
-        public bool IsInTammua(PublicDataType.IntVector2 position)
+        public bool IsInTammua(PublicDataType.IntegerVector2 position)
         {
             return columns.Read(position) == FieldEffect.Tammua || columns.Read(position) == FieldEffect.Tanzo;
         }
 
-        public bool IsInTarfe(PublicDataType.IntVector2 position)
+        public bool IsInTarfe(PublicDataType.IntegerVector2 position)
         {
             return columns.Read(position) == FieldEffect.Tarfe || columns.Read(position) == FieldEffect.Tanzo || IsInAroundPieces(position);
         }
 
-        bool IsInAroundPieces(PublicDataType.IntVector2 position)
+        bool IsInAroundPieces(PublicDataType.IntegerVector2 position)
         {
             return pieces.Select(piece => piece.Position).All(piecePosition => (piecePosition - position).sqrMagnitude <= 8);
         }
 
-        public bool IsExpandedMoveField(PublicDataType.IntVector2 position) => IsInTarfe(position);
+        public bool IsExpandedMoveField(PublicDataType.IntegerVector2 position) => IsInTarfe(position);
     }
 }

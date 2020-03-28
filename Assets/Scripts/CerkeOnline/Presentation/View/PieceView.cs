@@ -53,8 +53,8 @@ namespace Azarashi.CerkeOnline.Presentation.View
 
         void UpdateView(Unit unit)
         {   
-            IntVector2 position = piece.Position;
-            if (position == new IntVector2(-1, -1))
+            IntegerVector2 position = piece.Position;
+            if (position == new IntegerVector2(-1, -1))
             {
                 UpdateOutOfBoard(position);
                 return;
@@ -63,7 +63,7 @@ namespace Azarashi.CerkeOnline.Presentation.View
             UpdateOnBoard(position);
         }
 
-        void UpdateOnBoard(IntVector2 position)
+        void UpdateOnBoard(IntegerVector2 position)
         {
             //TODO マルチ対応
             float positionZ = transform.position.z;
@@ -79,7 +79,7 @@ namespace Azarashi.CerkeOnline.Presentation.View
             if (pieceCollider != null) pieceCollider.enabled = false;
         }
 
-        void UpdateOutOfBoard(IntVector2 position)
+        void UpdateOutOfBoard(IntegerVector2 position)
         {
             transform.localScale = PieceStrageScale;
             if (pieceCollider != null) pieceCollider.enabled = true;

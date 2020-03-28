@@ -21,7 +21,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.
             return canMovingPieceTakePiece && isPieceCapturable && !isSameOwner;
         }
 
-        public IPiece CapturePiece(IPlayer player, IPiece movingPiece, PublicDataType.IntVector2 endWorldPosition)
+        public IPiece CapturePiece(IPlayer player, IPiece movingPiece, PublicDataType.IntegerVector2 endWorldPosition)
         {
             IPiece originalPiece = pieces.Read(endWorldPosition);     //命名が分かりにくい. 行先にある駒.
             if (!IsCapturable(player ,movingPiece, originalPiece))

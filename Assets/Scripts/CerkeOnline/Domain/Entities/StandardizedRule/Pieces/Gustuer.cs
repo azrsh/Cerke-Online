@@ -9,17 +9,17 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Pieces
         protected readonly PieceMovement[] normalPieceMovements;
         protected readonly PieceMovement[] expansionPieceMovements;
 
-        internal Gustuer(Terminologies.PieceColor color, PublicDataType.IntVector2 position, IPlayer owner, IExpandingMoveFieldChecker fieldChecker) : base(position, color, owner, Terminologies.PieceName.Gustuer, fieldChecker)
+        internal Gustuer(Terminologies.PieceColor color, PublicDataType.IntegerVector2 position, IPlayer owner, IExpandingMoveFieldChecker fieldChecker) : base(position, color, owner, Terminologies.PieceName.Gustuer, fieldChecker)
         {
             normalPieceMovements = new PieceMovement[]
             {
-                new PieceMovement(new PublicDataType.IntVector2(0, 1), -1), new PieceMovement(new PublicDataType.IntVector2(0, -1), -1),
-                new PieceMovement(new PublicDataType.IntVector2(1, 0), -1), new PieceMovement(new PublicDataType.IntVector2(-1, 0), -1),
+                new PieceMovement(new PublicDataType.IntegerVector2(0, 1), -1), new PieceMovement(new PublicDataType.IntegerVector2(0, -1), -1),
+                new PieceMovement(new PublicDataType.IntegerVector2(1, 0), -1), new PieceMovement(new PublicDataType.IntegerVector2(-1, 0), -1),
             };
             expansionPieceMovements = new PieceMovement[]
             {
-                new PieceMovement(new PublicDataType.IntVector2(1,1), -1), new PieceMovement(new PublicDataType.IntVector2(1,-1), -1),
-                new PieceMovement(new PublicDataType.IntVector2(-1,1), -1), new PieceMovement(new PublicDataType.IntVector2(-1,-1), -1)
+                new PieceMovement(new PublicDataType.IntegerVector2(1,1), -1), new PieceMovement(new PublicDataType.IntegerVector2(1,-1), -1),
+                new PieceMovement(new PublicDataType.IntegerVector2(-1,1), -1), new PieceMovement(new PublicDataType.IntegerVector2(-1,-1), -1)
             };
         }
 

@@ -5,6 +5,6 @@ namespace Azarashi.CerkeOnline.Domain.UseCase
 {
     public interface ISetPieceUseCase
     {
-        void RequestToSetPiece(IntVector2 position, IPiece piece);
+        void RequestToSetPiece(IntegerVector2 position, IPiece piece);
     }
 }

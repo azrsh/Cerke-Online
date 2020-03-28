@@ -16,7 +16,7 @@ namespace Azarashi.CerkeOnline.Domain.UseCase
             this.logger = logger;
         }
 
-        public void RequestToSetPiece(IntVector2 position, IPiece piece)
+        public void RequestToSetPiece(IntegerVector2 position, IPiece piece)
         {
             if (game.CurrentPlayer != player)
             {
