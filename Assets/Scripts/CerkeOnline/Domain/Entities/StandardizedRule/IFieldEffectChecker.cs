@@ -9,13 +9,13 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
         /// </summary>
         /// <param name="position"></param>
         /// <returns></returns>
-        bool IsInTarfe(Vector2Int position);
+        bool IsInTarfe(PublicDataType.IntVector2 position);
 
         /// <summary>
         /// 指定されたマスが皇水か調べる.
         /// </summary>
         /// <param name="position"></param>
         /// <returns></returns>
-        bool IsInTammua(Vector2Int position);
+        bool IsInTammua(PublicDataType.IntVector2 position);
     }
 }

@@ -1,20 +1,20 @@
 ﻿using System;
-using UnityEngine;
 using Azarashi.CerkeOnline.Domain.Entities;
+using Azarashi.CerkeOnline.Domain.Entities.PublicDataType;
 
 namespace Azarashi.CerkeOnline.Presentation.Presenter.Commands
 {
     public class CommandAnalyzer
     {
-        public Vector2Int GetPosition(string word)
+        public IntVector2 GetPosition(string word)
         {
             if (word.IndexOf('-') >= 0)
             {
                 string[] xy = word.Split('-');
-                return new Vector2Int(NumberStringToInt(xy[0]), NumberStringToInt(xy[1]));
+                return new IntVector2(NumberStringToInt(xy[0]), NumberStringToInt(xy[1]));
             }
 
-            Vector2Int result = new Vector2Int(-1, -1);
+            IntVector2 result = new IntVector2(-1, -1);
             result.x = EnumNameToInt<Terminologies.BoardRow>((name) => word.StartsWith(name));
             if (result.x != -1) word = word.Remove(0, typeof(Terminologies.BoardRow).GetEnumName(result.x).Length);
             result.y = EnumNameToInt<Terminologies.BoardLine>((name) => word == name);

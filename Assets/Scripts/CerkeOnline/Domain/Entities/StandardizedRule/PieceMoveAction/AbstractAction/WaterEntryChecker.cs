@@ -19,7 +19,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.
             this.onJudgementFailure = onJudgementFailure;
         }
 
-        public bool CheckWaterEntry(IPiece movingPiece, Vector2Int start, Vector2Int end, Action onSuccess)
+        public bool CheckWaterEntry(IPiece movingPiece, PublicDataType.IntVector2 start, PublicDataType.IntVector2 end, Action onSuccess)
         {
             if (!IsJudgmentNecessary(movingPiece, start,end)) return true;
 
@@ -27,7 +27,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.
             return false;
         }
 
-        public bool IsJudgmentNecessary(IPiece movingPiece,Vector2Int start, Vector2Int end)
+        public bool IsJudgmentNecessary(IPiece movingPiece,PublicDataType.IntVector2 start, PublicDataType.IntVector2 end)
         {
             bool isInWater = fieldEffectChecker.IsInTammua(start);
             bool isIntoWater = fieldEffectChecker.IsInTammua(end);

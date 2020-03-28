@@ -12,7 +12,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         /// <param name="position">設置位置</param>
         /// <param name="piece">設置する駒</param>
         /// <returns>成功時にtrue, 失敗時にfalse</returns>
-        bool SetPiece(Vector2Int position, IPiece piece);
+        bool SetPiece(PublicDataType.IntVector2 position, IPiece piece);
 
         /// <summary>
         /// 盤上の駒を指定された座標に移動する. 移動は引数に指定されたプレイヤーの権限で行われる.
@@ -22,7 +22,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         /// <param name="player">移動したプレイヤー</param>
         /// <param name="valueProvider">賽による判定値の提供者</param>
         /// <param name="callback">コールバック関数</param>
-        void MovePiece(Vector2Int startPosition, Vector2Int endPosition, IPlayer player, IValueInputProvider<int> valueProvider, Action<PieceMoveResult> callback);
+        void MovePiece(PublicDataType.IntVector2 startPosition, PublicDataType.IntVector2 endPosition, IPlayer player, IValueInputProvider<int> valueProvider, Action<PieceMoveResult> callback);
 
         /// <summary>
         /// 盤上の駒を指定された座標に移動する. 移動は引数に指定されたプレイヤーの権限で行われる.
@@ -33,14 +33,14 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         /// <param name="player">移動したプレイヤー</param>
         /// <param name="valueProvider">賽による判定値の提供者</param>
         /// <param name="callback">コールバック関数</param>
-        void MovePiece(Vector2Int startPosition, Vector2Int viaPosition, Vector2Int endPosition, IPlayer player, IValueInputProvider<int> valueProvider, Action<PieceMoveResult> callback);
+        void MovePiece(PublicDataType.IntVector2 startPosition, PublicDataType.IntVector2 viaPosition, PublicDataType.IntVector2 endPosition, IPlayer player, IValueInputProvider<int> valueProvider, Action<PieceMoveResult> callback);
 
         /// <summary>
         /// 指定座標の駒のインスタンスを取得する.
         /// </summary>
         /// <param name="position">取得したい駒の座標</param>
         /// <returns></returns>
-        IReadOnlyPiece GetPiece(Vector2Int position);
+        IReadOnlyPiece GetPiece(PublicDataType.IntVector2 position);
 
         /// <summary>
         /// 指定された種類の駒を検索する. 同種の駒が複数ある場合の動作は不定.
@@ -58,6 +58,6 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         /// 引数の論理座標は盤上か判定する.
         /// </summary>
         /// <returns></returns>
-        bool IsOnBoard(Vector2Int position);
+        bool IsOnBoard(PublicDataType.IntVector2 position);
     }
 }

@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Azarashi.CerkeOnline.Domain.Entities
 {
@@ -10,19 +10,19 @@ namespace Azarashi.CerkeOnline.Domain.Entities
     {
         public readonly bool surmountable;
         public readonly int numberOfMove;
-        public readonly Vector2Int direction;
+        public readonly PublicDataType.IntVector2 direction;
         public readonly int distance;
-        public readonly List<Vector2Int> calcuratedMoveablePositions;
+        public readonly List<PublicDataType.IntVector2> calcuratedMoveablePositions;
 
         public static PieceMovement Default { get { return default; } }
 
-        public PieceMovement(Vector2Int direction, int distance, bool surmountable = false, int numberOfMove = 1)
+        public PieceMovement(PublicDataType.IntVector2 direction, int distance, bool surmountable = false, int numberOfMove = 1)
         {
             this.direction = direction;
             this.distance = distance;
             this.surmountable = surmountable;
             this.numberOfMove = numberOfMove;
-            calcuratedMoveablePositions = new List<Vector2Int>();
+            calcuratedMoveablePositions = new List<PublicDataType.IntVector2>();
         }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         /// </summary>
         /// <param name="relativePosition"></param>
         /// <returns></returns>
-        public bool IsMoveable(Vector2Int relativePosition)
+        public bool IsMoveable(PublicDataType.IntVector2 relativePosition)
         {
             if (!IsSameDirection(relativePosition,direction)) return false;
             if (relativePosition.sqrMagnitude < direction.sqrMagnitude) return false;
@@ -39,7 +39,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
 
             for (int i = 1; i <= distance; i++)
             {
-                Vector2Int current = direction * i;
+                PublicDataType.IntVector2 current = direction * i;
                 if (current == relativePosition)
                 {
                     calcuratedMoveablePositions.Add(relativePosition);
@@ -55,14 +55,14 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         /// </summary>
         /// <param name="relativePosition"></param>
         /// <returns></returns>
-        public IReadOnlyList<Vector2Int> GetPath(Vector2Int relativePosition)
+        public IReadOnlyList<PublicDataType.IntVector2> GetPath(PublicDataType.IntVector2 relativePosition)
         {
             if (!IsSameDirection(relativePosition, direction)) return null;
             if (relativePosition.sqrMagnitude < direction.sqrMagnitude) return null;
-            List<Vector2Int> list = new List<Vector2Int>();
+            List<PublicDataType.IntVector2> list = new List<PublicDataType.IntVector2>();
             for (int i = 1; i <= distance || distance == -1; i++)
             {
-                Vector2Int current = direction * i;
+                PublicDataType.IntVector2 current = direction * i;
                 list.Add(current);
                 if (current == relativePosition)
                     return list;
@@ -70,10 +70,11 @@ namespace Azarashi.CerkeOnline.Domain.Entities
             return null;
         }
 
-        bool IsSameDirection(Vector2Int vector1, Vector2Int vector2)
+        bool IsSameDirection(PublicDataType.IntVector2 vector1, PublicDataType.IntVector2 vector2)
         {
             if ((vector1.x > 0) != (vector2.x > 0) || (vector1.y > 0) != (vector2.y > 0)) return false;
-            return Mathf.Approximately(Vector2.Dot(vector1, vector2) * Vector2.Dot(vector1, vector2), vector1.sqrMagnitude * vector2.sqrMagnitude);
+            var dot = PublicDataType.IntVector2.Dot(vector1, vector2);
+            return dot * dot == vector1.sqrMagnitude * vector2.sqrMagnitude;
         }
     }
 }

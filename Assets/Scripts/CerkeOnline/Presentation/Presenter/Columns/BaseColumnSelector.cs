@@ -1,20 +1,21 @@
 ﻿using UnityEngine;
 using Azarashi.Utilities.UnityEvents;
+using Azarashi.CerkeOnline.Domain.Entities.PublicDataType;
 
 namespace Azarashi.CerkeOnline.Presentation.Presenter.Columns
 {
     public abstract class BaseColumnSelector : MonoBehaviour
     {
         [SerializeField] IReadOnlyPieceUnityEvent onPieceSelected = default;
-        [SerializeField] Vector2IntUnityEvent onViaPositionSelected = default;
-        [SerializeField] Vector2IntUnityEvent onTargetPositionSelected = default;
+        [SerializeField] IntVector2UnityEvent onViaPositionSelected = default;
+        [SerializeField] IntVector2UnityEvent onTargetPositionSelected = default;
 
-        static readonly Vector2Int NonePosition = new Vector2Int(-1, -1);
-        Vector2Int startPosition = NonePosition;
-        Vector2Int viaPosition = NonePosition;
+        static readonly IntVector2 NonePosition = new IntVector2(-1, -1);
+        IntVector2 startPosition = NonePosition;
+        IntVector2 viaPosition = NonePosition;
         protected bool isLockSelecting = false;
 
-        public void OnClickColumn(Vector2Int position)
+        public void OnClickColumn(IntVector2 position)
         {
             if (isLockSelecting || this.startPosition == NonePosition || position == NonePosition)
             {
@@ -38,9 +39,9 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.Columns
             this.startPosition = NonePosition;
         }
 
-        protected abstract void OnColumnSelected(Vector2Int start, Vector2Int via, Vector2Int last);
+        protected abstract void OnColumnSelected(IntVector2 start, IntVector2 via, IntVector2 last);
 
-        void CallPieceSelectedEvent(Vector2Int position)
+        void CallPieceSelectedEvent(IntVector2 position)
         {
             var game = Application.GameController.Instance.Game;
             var board = game.Board;
@@ -48,7 +49,7 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.Columns
             onPieceSelected.Invoke(piece);
         }
         
-        void CallViaPositionSelectedEvent(Vector2Int position)
+        void CallViaPositionSelectedEvent(IntVector2 position)
         {
             var game = Application.GameController.Instance.Game;
             var board = game.Board;

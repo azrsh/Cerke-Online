@@ -5,6 +5,7 @@ using UniRx;
 using Azarashi.CerkeOnline.Application;
 using Azarashi.CerkeOnline.Data.DataStructure;
 using Azarashi.CerkeOnline.Domain.Entities;
+using Azarashi.CerkeOnline.Domain.Entities.PublicDataType;
 using Azarashi.CerkeOnline.Presentation.View;
 
 namespace Azarashi.CerkeOnline.Presentation.Presenter
@@ -37,7 +38,7 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter
         {
             ClearPieceView();
 
-            Vector2Int position = new Vector2Int(0, 0);
+            IntVector2 position = new IntVector2(0, 0);
             for (position.x = 0; position.x < Terminologies.LengthOfOneSideOfBoard; position.x++)
                 for (position.y = 0; position.y < Terminologies.LengthOfOneSideOfBoard; position.y++)
                     InitializePieceView(position, columnMap, game);
@@ -51,7 +52,7 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter
             database.Clear();
         }
 
-        void InitializePieceView(Vector2Int position, Vector3[,] columnMap, IGame game)
+        void InitializePieceView(IntVector2 position, Vector3[,] columnMap, IGame game)
         {
             IBoard board = game.Board;
             IReadOnlyPiece piece = board.GetPiece(position);
@@ -70,4 +71,5 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter
     }
 
     [System.Serializable] public class IReadOnlyPieceUnityEvent : UnityEngine.Events.UnityEvent<IReadOnlyPiece> { }
+    [System.Serializable] public class IntVector2UnityEvent : UnityEngine.Events.UnityEvent<IntVector2> { }
 }

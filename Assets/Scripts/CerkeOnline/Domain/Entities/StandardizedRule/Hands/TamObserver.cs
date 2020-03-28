@@ -13,8 +13,8 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Hands
         int numberOfTamenMako = 0;              //皇再来の成立回数
         bool isMoved = false;                   //現在のターン中に駒が動いたか
         bool isPrevoiusMoved = false;           //前回のターンに駒が動いたか
-        Vector2Int previousTurnPosition;        //前回のターン終了時の皇の座標
-        Vector2Int currentPosition;             //現在のtamの座標
+        PublicDataType.IntVector2 previousTurnPosition;        //前回のターン終了時の皇の座標
+        PublicDataType.IntVector2 currentPosition;             //現在のtamの座標
 
         public TamObserver(IObservable<Unit> onTurnChanged, IObservable<Unit> onEveruValueChangedOnBoard, IReadOnlyPiece tam)
         {
@@ -23,7 +23,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Hands
             onTurnChanged.Subscribe(OnTurnChanged);
         }
         
-        void OnTamMoved(Vector2Int position)
+        void OnTamMoved(PublicDataType.IntVector2 position)
         {
             if (isPrevoiusMoved || (isMoved && previousTurnPosition == position)) numberOfTamenMako++;
             isMoved = true;

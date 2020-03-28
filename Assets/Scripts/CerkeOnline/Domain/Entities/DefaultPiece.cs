@@ -8,7 +8,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         //駒の情報
         public IPlayer Owner { get; private set; }
         public Terminologies.PieceName PieceName { get; }
-        public Vector2Int Position { get; private set; }
+        public PublicDataType.IntVector2 Position { get; private set; }
         public Terminologies.PieceColor Color { get; }
         public virtual int NumberOfMoves { get { return 1; } }
 
@@ -21,7 +21,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         /// <param name="position"></param>
         /// <param name="normalPieceMovements"></param>
         /// <param name="expansionPieceMovements"></param>
-        internal DefaultPiece(Vector2Int position, Terminologies.PieceColor color, IPlayer owner, Terminologies.PieceName pieceName, IExpandingMoveFieldChecker fieldChecker)
+        internal DefaultPiece(PublicDataType.IntVector2 position, Terminologies.PieceColor color, IPlayer owner, Terminologies.PieceName pieceName, IExpandingMoveFieldChecker fieldChecker)
         {
             this.PieceName = pieceName;
             this.Position = position;
@@ -32,26 +32,26 @@ namespace Azarashi.CerkeOnline.Domain.Entities
 
         public abstract IReadOnlyList<PieceMovement> GetMoveablePosition(bool isExpanded = false);
 
-        public bool MoveTo(Vector2Int position, bool isForceMove = false)
+        public bool MoveTo(PublicDataType.IntVector2 position, bool isForceMove = false)
         {
             if (!isForceMove && !IsMoveable(position)) return false;
             this.Position = position;
             return true;
         }
 
-        public bool IsMoveable(Vector2Int worldPosition)
+        public bool IsMoveable(PublicDataType.IntVector2 worldPosition)
         {
             PieceMovement pieceMovement;
             return TryToGetPieceMovement(worldPosition, out pieceMovement);
         }
 
-        public bool TryToGetPieceMovement(Vector2Int worldPosition, out PieceMovement pieceMovement)
+        public bool TryToGetPieceMovement(PublicDataType.IntVector2 worldPosition, out PieceMovement pieceMovement)
         {
             var relativePosition = ConvertWorldPositionToRelativePosition(worldPosition);
             return TryToGetPieceMovementByRelativePosition(relativePosition, out pieceMovement);
         }
 
-        public bool TryToGetPieceMovementByRelativePosition(Vector2Int relativePosition, out PieceMovement pieceMovement)
+        public bool TryToGetPieceMovementByRelativePosition(PublicDataType.IntVector2 relativePosition, out PieceMovement pieceMovement)
         {
             bool isExpanded = fieldChecker != null && fieldChecker.IsExpandedMoveField(this.Position);
             foreach (PieceMovement moveable in GetMoveablePosition(isExpanded))
@@ -76,13 +76,13 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         {
             if (!IsCapturable()) return false;
 
-            Position = new Vector2Int(-1, -1);
+            Position = new PublicDataType.IntVector2(-1, -1);
             return true;
         }
 
-        public void SetOnBoard(Vector2Int position)
+        public void SetOnBoard(PublicDataType.IntVector2 position)
         {
-            if (this.Position == new Vector2Int(-1, -1))
+            if (this.Position == new PublicDataType.IntVector2(-1, -1))
                 this.Position = position;
         }
 
@@ -101,19 +101,19 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         public virtual bool CanTakePiece() => true;
 
 
-        Vector2Int ConvertWorldPositionToRelativePosition(Vector2Int worldPosition)
+        PublicDataType.IntVector2 ConvertWorldPositionToRelativePosition(PublicDataType.IntVector2 worldPosition)
         {
             bool isFrontPlayer = Owner != null && Owner.Encampment == Terminologies.Encampment.Front;//仮の条件
-            Vector2Int relativePosition = worldPosition - this.Position;
+            PublicDataType.IntVector2 relativePosition = worldPosition - this.Position;
             if (isFrontPlayer) relativePosition *= -1;                                          //逆にしたい（!isLocalPlayerのとき-1をかける）
             return relativePosition;
         }
 
-        Vector2Int ConvertRelativePositionToWorldPosition(Vector2Int relativePosition)
+        PublicDataType.IntVector2 ConvertRelativePositionToWorldPosition(PublicDataType.IntVector2 relativePosition)
         {
             bool isFrontPlayer = Owner != null && Owner.Encampment == Terminologies.Encampment.Front;//仮の条件
             if (isFrontPlayer) relativePosition *= -1;                                          //逆にしたい（!isLocalPlayerのとき-1をかける）
-            Vector2Int worldPosition = relativePosition + this.Position;
+            PublicDataType.IntVector2 worldPosition = relativePosition + this.Position;
             return worldPosition;
         }
     }

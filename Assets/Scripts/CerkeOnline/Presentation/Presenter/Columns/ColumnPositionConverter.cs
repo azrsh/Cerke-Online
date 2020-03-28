@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Azarashi.Utilities.Collections;
+using Azarashi.CerkeOnline.Domain.Entities.PublicDataType;
 
 namespace Azarashi.CerkeOnline.Presentation.Presenter.Columns
 { 
@@ -13,9 +14,9 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.Columns
             columns = new Vector2XYArrayAccessor<Transform>(transformMap);
         }
 
-        public Vector3 Convert(Vector2Int logicPosition)
+        public Vector3 Convert(IntVector2 logicPosition)
         {
-            return columns.Read(logicPosition).position;
+            return columns.Read(new Vector2Int(logicPosition.x, logicPosition.y)).position;
         }
     }
 }

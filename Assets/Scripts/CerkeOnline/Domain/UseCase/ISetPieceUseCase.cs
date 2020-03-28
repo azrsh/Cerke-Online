@@ -1,10 +1,10 @@
-﻿using UnityEngine;
-using Azarashi.CerkeOnline.Domain.Entities;
+﻿using Azarashi.CerkeOnline.Domain.Entities;
+using Azarashi.CerkeOnline.Domain.Entities.PublicDataType;
 
 namespace Azarashi.CerkeOnline.Domain.UseCase
 {
     public interface ISetPieceUseCase
     {
-        void RequestToSetPiece(Vector2Int position, IPiece piece);
+        void RequestToSetPiece(IntVector2 position, IPiece piece);
     }
 }

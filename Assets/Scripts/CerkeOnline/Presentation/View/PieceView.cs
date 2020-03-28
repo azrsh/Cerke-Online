@@ -5,6 +5,7 @@ using UniRx;
 using Azarashi.CerkeOnline.Application;
 using Azarashi.CerkeOnline.Data.DataStructure;
 using Azarashi.CerkeOnline.Domain.Entities;
+using Azarashi.CerkeOnline.Domain.Entities.PublicDataType;
 
 namespace Azarashi.CerkeOnline.Presentation.View
 {
@@ -30,9 +31,9 @@ namespace Azarashi.CerkeOnline.Presentation.View
                 throw new NullReferenceException();
 
             board = GameController.Instance.Game.Board;
-            //IObservable<Vector2Int> observable = board.OnEveruValueChanged.TakeUntilDestroy(this).Select(_ => piece.Position).DistinctUntilChanged();
-            //observable.Where(position => position != new Vector2Int(-1, -1)).Subscribe(UpdateOnBoard);
-            //observable.Where(position => position == new Vector2Int(-1, -1)).Subscribe(UpdateOutOfBoard);
+            //IObservable<IntVector2> observable = board.OnEveruValueChanged.TakeUntilDestroy(this).Select(_ => piece.Position).DistinctUntilChanged();
+            //observable.Where(position => position != new IntVector2(-1, -1)).Subscribe(UpdateOnBoard);
+            //observable.Where(position => position == new IntVector2(-1, -1)).Subscribe(UpdateOutOfBoard);
             board.OnEveruValueChanged.TakeUntilDestroy(this).Subscribe(UpdateView);
 
             pieceCollider = GetComponent<Collider2D>();
@@ -52,8 +53,8 @@ namespace Azarashi.CerkeOnline.Presentation.View
 
         void UpdateView(Unit unit)
         {   
-            Vector2Int position = piece.Position;
-            if (position == new Vector2Int(-1, -1))
+            IntVector2 position = piece.Position;
+            if (position == new IntVector2(-1, -1))
             {
                 UpdateOutOfBoard(position);
                 return;
@@ -62,7 +63,7 @@ namespace Azarashi.CerkeOnline.Presentation.View
             UpdateOnBoard(position);
         }
 
-        void UpdateOnBoard(Vector2Int position)
+        void UpdateOnBoard(IntVector2 position)
         {
             //TODO マルチ対応
             float positionZ = transform.position.z;
@@ -78,7 +79,7 @@ namespace Azarashi.CerkeOnline.Presentation.View
             if (pieceCollider != null) pieceCollider.enabled = false;
         }
 
-        void UpdateOutOfBoard(Vector2Int position)
+        void UpdateOutOfBoard(IntVector2 position)
         {
             transform.localScale = PieceStrageScale;
             if (pieceCollider != null) pieceCollider.enabled = true;
