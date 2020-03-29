@@ -7,8 +7,8 @@ namespace Azarashi.CerkeOnline.Domain.Entities
     {
         public static HandDifference Calculate(IEnumerable<IHand> previous, IEnumerable<IHand> next)
         {
-            var increasedDifference = next?.Except(previous ?? new IHand[] { }) ?? next;
-            var decreasedDifference = previous?.Except(next) ?? Enumerable.Empty<IHand>();
+            var increasedDifference = next.Except(previous);
+            var decreasedDifference = previous.Except(next);
             return new HandDifference(increasedDifference, decreasedDifference);
         }
     }
