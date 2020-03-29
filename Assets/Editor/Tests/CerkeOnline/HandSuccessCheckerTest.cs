@@ -1,7 +1,6 @@
 ﻿using NUnit.Framework;
 using System.Linq;
 using System.Collections.Generic;
-using UnityEngine;
 using UniRx;
 using Azarashi.CerkeOnline.Domain.Entities;
 using Azarashi.CerkeOnline.Domain.Entities.PublicDataType;
