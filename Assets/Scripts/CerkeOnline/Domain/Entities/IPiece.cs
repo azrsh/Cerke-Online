@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-
+﻿
 namespace Azarashi.CerkeOnline.Domain.Entities
 {
     public interface IPiece : IReadOnlyPiece

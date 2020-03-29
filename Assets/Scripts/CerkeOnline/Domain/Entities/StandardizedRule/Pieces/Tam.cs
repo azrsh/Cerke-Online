@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using UniRx;
-using UnityEngine;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Pieces
 {

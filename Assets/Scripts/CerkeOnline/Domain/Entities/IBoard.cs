@@ -1,5 +1,4 @@
 ﻿using System;
-using UnityEngine;
 using UniRx;
 
 namespace Azarashi.CerkeOnline.Domain.Entities
