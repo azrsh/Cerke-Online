@@ -4,7 +4,8 @@
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
         "UniRx",
-        "Azarashi.CerkeOnline.Domain.Entities"
+        "Azarashi.CerkeOnline.Domain.Entities",
+        "Azarashi.Utilities"
     ],
     "includePlatforms": [
         "Editor"

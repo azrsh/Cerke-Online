@@ -7,6 +7,9 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
 {
     internal class Board : IBoard
     {
+        public int Width { get; }
+        public int Height { get; }
+
         readonly PositionArrayAccessor<IPiece> pieces;
         readonly IFieldEffectChecker fieldChecker;
         readonly IPieceMoveActionFactory pieceMoveActionFactory;
@@ -23,6 +26,9 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
             this.pieces = pieceMap;
             this.fieldChecker = fieldChecker;
             this.pieceMoveActionFactory = pieceMoveActionFactory;
+
+            Width = pieces.Width;
+            Height = pieces.Height;
             
             onEveryValueChanged.OnNext(Unit.Default);
         }

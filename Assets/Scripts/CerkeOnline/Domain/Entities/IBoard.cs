@@ -6,6 +6,16 @@ namespace Azarashi.CerkeOnline.Domain.Entities
     public interface IBoard
     {
         /// <summary>
+        /// 盤の横のマスの数.
+        /// </summary>
+        int Width { get; }
+
+        /// <summary>
+        /// 盤の縦のマスの数
+        /// </summary>
+        int Height { get; }
+
+        /// <summary>
         /// 盤外の駒を盤上に設置する.
         /// </summary>
         /// <param name="position">設置位置</param>
