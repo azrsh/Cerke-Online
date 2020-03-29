@@ -8,7 +8,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Pieces
         protected readonly PieceMovement[] normalPieceMovements;
         protected readonly PieceMovement[] expansionPieceMovements;
 
-        internal Felkana(Terminologies.PieceColor color, PublicDataType.IntegerVector2 position, IPlayer owner, IExpandingMoveFieldChecker fieldChecker) : base(position, color, owner, Terminologies.PieceName.Felkana, fieldChecker)
+        public Felkana(Terminologies.PieceColor color, PublicDataType.IntegerVector2 position, IPlayer owner, IExpandingMoveFieldChecker fieldChecker) : base(position, color, owner, Terminologies.PieceName.Felkana, fieldChecker)
         {
             normalPieceMovements = new PieceMovement[]
             {
