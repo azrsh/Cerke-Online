@@ -8,9 +8,9 @@ namespace Azarashi.CerkeOnline.Application.Language
     
     public class LanguageDictionaryFactory
     {
-        readonly IReadOnlyList<string> tranlatableNameCodes;
+        readonly IEnumerable<string> tranlatableNameCodes;
 
-        public LanguageDictionaryFactory(IReadOnlyList<string> tranlatableNameCodes)
+        public LanguageDictionaryFactory(IEnumerable<string> tranlatableNameCodes)
         {
             this.tranlatableNameCodes = tranlatableNameCodes;
         }
@@ -24,7 +24,7 @@ namespace Azarashi.CerkeOnline.Application.Language
         }
 
         private bool VerifyDictionary(IDictionary<string, string> source)
-            => tranlatableNameCodes.Count == source.Count && tranlatableNameCodes.All(code => source.ContainsKey(code));
+            => tranlatableNameCodes.Count() == source.Count && tranlatableNameCodes.All(code => source.ContainsKey(code));
 
         private class LanguageDictionary : ILanguageDictionary
         {

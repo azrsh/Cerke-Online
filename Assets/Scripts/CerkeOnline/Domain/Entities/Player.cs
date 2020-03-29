@@ -19,7 +19,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
             Encampment = encampment;
         }
 
-        public IReadOnlyList<IReadOnlyPiece> GetPieceList()
+        public IEnumerable<IReadOnlyPiece> GetPieceList()
         {
             return pieces;
         }

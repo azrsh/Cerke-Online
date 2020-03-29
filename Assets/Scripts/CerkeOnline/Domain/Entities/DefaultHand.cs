@@ -20,7 +20,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
             Score = score;
         }
 
-        public int GetNumberOfSuccesses(IReadOnlyList<IReadOnlyPiece> holdingPieces)
+        public int GetNumberOfSuccesses(IEnumerable<IReadOnlyPiece> holdingPieces)
         {
             bool isSuccess = handSuccessChecker.Check(holdingPieces);
             return isSuccess ? 1 : 0;

@@ -24,7 +24,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Pieces
             }).ToArray();
         }
 
-        public override IReadOnlyList<PieceMovement> GetMoveablePosition(bool isExpanded)
+        public override IEnumerable<PieceMovement> GetMoveablePosition(bool isExpanded)
         {
             if (!isExpanded)
                 return normalPieceMovements;

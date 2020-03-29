@@ -23,7 +23,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Hands
             this.tamObserver = tamObserver;
         }
 
-        public int GetNumberOfSuccesses(IReadOnlyList<IReadOnlyPiece> pieces)
+        public int GetNumberOfSuccesses(IEnumerable<IReadOnlyPiece> pieces)
         {
             return tamObserver.GetNumberOfTamenMako();
         }

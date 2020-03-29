@@ -12,7 +12,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
             this.board = board;
         }
 
-        public IReadOnlyList<PublicDataType.IntegerVector2> PredictMoveableColumns(PublicDataType.IntegerVector2 hypotheticalPosition, IReadOnlyPiece movingPiece)
+        public IEnumerable<PublicDataType.IntegerVector2> PredictMoveableColumns(PublicDataType.IntegerVector2 hypotheticalPosition, IReadOnlyPiece movingPiece)
         {
             List<PublicDataType.IntegerVector2> result = new List<PublicDataType.IntegerVector2>();
 

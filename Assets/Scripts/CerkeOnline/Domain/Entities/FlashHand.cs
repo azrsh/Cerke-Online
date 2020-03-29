@@ -21,7 +21,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
             Score = score;
         }
 
-        public int GetNumberOfSuccesses(IReadOnlyList<IReadOnlyPiece> holdingPieces)
+        public int GetNumberOfSuccesses(IEnumerable<IReadOnlyPiece> holdingPieces)
         {
             IEnumerable<IReadOnlyPiece> blackPieces = holdingPieces.Where(piece => piece.Color == PieceColor.Black);
             if (handSuccessChecker.Check(blackPieces)) return 1;

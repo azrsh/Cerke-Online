@@ -20,7 +20,7 @@ namespace Azarashi.CerkeOnline.Application.Language
         }
 
 
-        public IReadOnlyList<string> TranslatableKeys => translatableKeysObject.TranslatableKeys;
+        public IEnumerable<string> TranslatableKeys => translatableKeysObject.TranslatableKeys;
         public IObservable<ILanguageTranslator> OnLanguageChanged { get; } = new Subject<ILanguageTranslator>();
 
         [SerializeField] public TranslatableKeysObject translatableKeysObject;

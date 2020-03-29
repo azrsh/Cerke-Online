@@ -55,16 +55,16 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.PredictionMarker
             UpdateMarker(worldPositions);
         }
 
-        IReadOnlyList<Vector3> ConvertLogicPositionToWorldPosition(IReadOnlyList<IntegerVector2> logicPositions)
+        IEnumerable<Vector3> ConvertLogicPositionToWorldPosition(IEnumerable<IntegerVector2> logicPositions)
         {
-            return logicPositions.Select(value => columnPositionConverter.Convert(value)).ToList();
+            return logicPositions.Select(value => columnPositionConverter.Convert(value));
         }
 
-        void UpdateMarker(IReadOnlyList<Vector3> columns)
+        void UpdateMarker(IEnumerable<Vector3> columns)
         {
             markerObjects.HideAllMarker();
-            for (int i = 0; i < columns.Count; i++)
-                markerObjects.ShowMarker(columns[i]);
+            foreach (var column in columns)
+                markerObjects.ShowMarker(column);
         }
     }
 }

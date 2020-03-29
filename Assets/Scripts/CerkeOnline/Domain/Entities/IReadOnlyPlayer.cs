@@ -18,6 +18,6 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         /// Playerが盤外に所持している駒のリストを取り出す.
         /// </summary>
         /// <returns></returns>
-        IReadOnlyList<IReadOnlyPiece> GetPieceList();
+        IEnumerable<IReadOnlyPiece> GetPieceList();
     }
 }

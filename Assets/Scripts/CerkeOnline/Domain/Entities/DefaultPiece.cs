@@ -30,7 +30,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
             this.fieldChecker = fieldChecker;
         }
 
-        public abstract IReadOnlyList<PieceMovement> GetMoveablePosition(bool isExpanded = false);
+        public abstract IEnumerable<PieceMovement> GetMoveablePosition(bool isExpanded = false);
 
         public bool MoveTo(PublicDataType.IntegerVector2 position, bool isForceMove = false)
         {

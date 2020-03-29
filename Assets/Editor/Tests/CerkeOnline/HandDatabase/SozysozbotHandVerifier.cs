@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using OpenQA.Selenium.Chrome;
 using Azarashi.CerkeOnline.Domain.Entities;
 
@@ -6,10 +7,10 @@ namespace Azarashi.CerkeOnline.Tests.HandDatabaseTest
 {
     internal class SozysozbotHandVerifier
     {
-        readonly Func<IReadOnlyPiece[], IHand[]> solveFunction;
+        readonly Func<IReadOnlyPiece[], IEnumerable<IHand>> solveFunction;
         readonly int drillCount;
         
-        public SozysozbotHandVerifier(Func<IReadOnlyPiece[], IHand[]> solveFunction, int drillCount = 50)
+        public SozysozbotHandVerifier(Func<IReadOnlyPiece[], IEnumerable<IHand>> solveFunction, int drillCount = 50)
         {
             this.solveFunction = solveFunction;
             this.drillCount = drillCount;
@@ -39,7 +40,7 @@ namespace Azarashi.CerkeOnline.Tests.HandDatabaseTest
         void VerifyEachCase(SozysozbotHandDrillPageDriver drillPageDriver)
         {
             IReadOnlyPiece[] questionPieces = drillPageDriver.LoadQuestion();
-            IHand[] hands = solveFunction(questionPieces);
+            IEnumerable<IHand> hands = solveFunction(questionPieces);
             drillPageDriver.PostAnswers(hands);
             drillPageDriver.DecideAnswer();
 

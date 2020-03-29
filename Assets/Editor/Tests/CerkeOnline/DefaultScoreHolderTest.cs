@@ -36,7 +36,7 @@ namespace Azarashi.CerkeOnline.Tests.DefaultScoreHolderTest
 
             public IObservable<Unit> OnPieceStrageCahnged => throw new NotImplementedException();
 
-            public IReadOnlyList<IReadOnlyPiece> GetPieceList()
+            public IEnumerable<IReadOnlyPiece> GetPieceList()
             {
                 throw new NotImplementedException();
             }

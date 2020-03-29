@@ -15,7 +15,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         /// </summary>
         /// <param name="isExpanded"></param>
         /// <returns></returns>
-        IReadOnlyList<PieceMovement> GetMoveablePosition(bool isExpanded = false);
+        IEnumerable<PieceMovement> GetMoveablePosition(bool isExpanded = false);
 
         /// <summary>
         /// 指定座標(論理座標)に移動可能かどうかを返す.

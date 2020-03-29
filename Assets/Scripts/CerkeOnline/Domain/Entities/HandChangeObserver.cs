@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using UniRx;
 
 namespace Azarashi.CerkeOnline.Domain.Entities
@@ -20,9 +22,9 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         IHand[] previousHands = new IHand[0];
         bool CheckHandIncrease(IReadOnlyPlayer currentPlayer)
         {
-            IHand[] currentHands = handDatabase.SearchHands(currentPlayer.GetPieceList());
+            IEnumerable<IHand> currentHands = handDatabase.SearchHands(currentPlayer.GetPieceList());
             HandDifference handDifference = HandDifferenceCalculator.Calculate(previousHands, currentHands);
-            return handDifference.IncreasedDifference.Length > 0;
+            return handDifference.IncreasedDifference.Count() > 0;
         }
 
         internal void Reset() => previousHands = new IHand[0];

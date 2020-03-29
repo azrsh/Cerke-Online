@@ -46,7 +46,7 @@ namespace Azarashi.CerkeOnline.Tests.HandSuccessCheckerTest
 
             public bool CanLittuaWithoutJudge() => throw new System.NotImplementedException();
             public bool CanTakePiece() => throw new System.NotImplementedException();
-            public IReadOnlyList<PieceMovement> GetMoveablePosition(bool isExpanded = false) => throw new System.NotImplementedException();
+            public IEnumerable<PieceMovement> GetMoveablePosition(bool isExpanded = false) => throw new System.NotImplementedException();
             public bool IsCapturable() => throw new System.NotImplementedException();
             public bool IsMoveable(IntegerVector2 position) => throw new System.NotImplementedException();
             public bool IsOwner(IPlayer player) => throw new System.NotImplementedException();

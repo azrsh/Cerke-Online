@@ -55,7 +55,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction
         static bool IsFrontPlayersPiece(PositionArrayAccessor<IPiece> pieces, PublicDataType.IntegerVector2 startPosition) 
             => pieces.Read(startPosition).Owner != null && pieces.Read(startPosition).Owner.Encampment == Encampment.Front;
 
-        static IReadOnlyList<PublicDataType.IntegerVector2> GetPath(PublicDataType.IntegerVector2 from, PublicDataType.IntegerVector2 to, bool isFrontPlayersPiece, PieceMovement pieceMovement)
+        static IEnumerable<PublicDataType.IntegerVector2> GetPath(PublicDataType.IntegerVector2 from, PublicDataType.IntegerVector2 to, bool isFrontPlayersPiece, PieceMovement pieceMovement)
         {
             PublicDataType.IntegerVector2 relativePosition = (to - from) * (isFrontPlayersPiece ? -1 : 1);
             return pieceMovement.GetPath(relativePosition) ?? throw new ArgumentException("移動不可能な移動先が指定されました.");

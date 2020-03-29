@@ -6,6 +6,6 @@ namespace Azarashi.CerkeOnline.Domain.Entities
     {
         protected PieceStack[] pieceStacks;
 
-        public IReadOnlyList<PieceStack> GetPieceStacks() => pieceStacks;
+        public IEnumerable<PieceStack> GetPieceStacks() => pieceStacks;
     }
 }

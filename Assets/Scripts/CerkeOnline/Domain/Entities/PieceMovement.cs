@@ -55,7 +55,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         /// </summary>
         /// <param name="relativePosition"></param>
         /// <returns></returns>
-        public IReadOnlyList<PublicDataType.IntegerVector2> GetPath(PublicDataType.IntegerVector2 relativePosition)
+        public IEnumerable<PublicDataType.IntegerVector2> GetPath(PublicDataType.IntegerVector2 relativePosition)
         {
             if (!IsSameDirection(relativePosition, direction)) return null;
             if (relativePosition.sqrMagnitude < direction.sqrMagnitude) return null;
