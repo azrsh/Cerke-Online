@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UniRx;
 using Azarashi.CerkeOnline.Application;
@@ -34,17 +35,20 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter
 
         void OnPieceStrageChanged(Unit unit)
         {
-            IReadOnlyList<IReadOnlyPiece> pieces = player.GetPieceList();
-            for(int i = 0;i < pieces.Count;i++)
+            IEnumerable<IReadOnlyPiece> pieces = player.GetPieceList();
+            int i = 0;
+            foreach (var piece in pieces)
             {
                 PieceView pieceView;
-                piecePresenter.ViewDatabese.TryGetValue(pieces[i], out pieceView);
+                piecePresenter.ViewDatabese.TryGetValue(piece, out pieceView);
 
                 if (pieceView != null)
                 {
                     pieceView.transform.position = GetNextPlace(i);
-                    pieceView.transform.rotation = GetPieceQuaternion(pieces[i]);
+                    pieceView.transform.rotation = GetPieceQuaternion(piece);
                 }
+
+                i++;
             }
         }
 

@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using System.Linq;
+using System.Collections.Generic;
 
 namespace Azarashi.CerkeOnline.Domain.Entities
 {
@@ -12,27 +12,23 @@ namespace Azarashi.CerkeOnline.Domain.Entities
             this.board = board;
         }
 
-        public IReadOnlyList<Vector2Int> PredictMoveableColumns(Vector2Int hypotheticalPosition, IReadOnlyPiece movingPiece)
+        public IEnumerable<PublicDataType.IntegerVector2> PredictMoveableColumns(PublicDataType.IntegerVector2 hypotheticalPosition, IReadOnlyPiece movingPiece)
         {
-            List<Vector2Int> result = new List<Vector2Int>();
+            if (movingPiece == null || !board.IsOnBoard(hypotheticalPosition)) 
+                return Enumerable.Empty<PublicDataType.IntegerVector2>();
 
-            if (movingPiece == null || !board.IsOnBoard(hypotheticalPosition)) return result;
+            bool isFrontPlayer = movingPiece.Owner != null && movingPiece.Owner.Encampment == Terminologies.Encampment.Front;
+            PieceMovement unused;
+            IEnumerable<PublicDataType.IntegerVector2> allColumn
+                = Enumerable.Range(0, board.Width * board.Height)
+                .Select(x => new PublicDataType.IntegerVector2(x / board.Height, x % board.Height));
 
-            for (int i = 0; i < 9; i++)
-            {
-                for (int j = 0; j < 9; j++)
-                {
-                    Vector2Int currentPosition = new Vector2Int(i, j);
-                    bool isFrontPlayer = movingPiece.Owner != null && movingPiece.Owner.Encampment == Terminologies.Encampment.Front;
-                    Vector2Int relativePosition = (currentPosition - hypotheticalPosition) * (isFrontPlayer ? -1 : 1);
-                    PieceMovement unused;
-                    if (board.IsOnBoard(currentPosition) &&
-                        movingPiece.TryToGetPieceMovementByRelativePosition(relativePosition, out unused))
-                        result.Add(currentPosition);
-                }
-            }
+            IEnumerable<PublicDataType.IntegerVector2> moveable = allColumn
+                .Select(absolutePosition => (absolutePosition - hypotheticalPosition) * (isFrontPlayer ? -1 : 1))
+                .Where(relativePosition => movingPiece.TryToGetPieceMovementByRelativePosition(relativePosition, out unused))
+                .Select(relativePosition => relativePosition * (isFrontPlayer ? -1 : 1) + hypotheticalPosition);
 
-            return result;
+            return moveable;
         }
     }
 }

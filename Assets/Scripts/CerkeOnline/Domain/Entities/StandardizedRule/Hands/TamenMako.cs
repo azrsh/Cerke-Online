@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
-using UniRx;
 using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Hands
@@ -23,7 +21,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Hands
             this.tamObserver = tamObserver;
         }
 
-        public int GetNumberOfSuccesses(IReadOnlyList<IReadOnlyPiece> pieces)
+        public int GetNumberOfSuccesses(IEnumerable<IReadOnlyPiece> pieces)
         {
             return tamObserver.GetNumberOfTamenMako();
         }

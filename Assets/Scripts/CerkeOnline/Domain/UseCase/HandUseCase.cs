@@ -18,7 +18,7 @@ namespace Azarashi.CerkeOnline.Domain.UseCase
         public HandDifference GetHandDifference(IEnumerable<IHand> previousHands)
         {
             var currentHands = GetCurrentHands();
-            return HandDifferenceCalculator.Calculate(previousHands.ToArray(), currentHands.ToArray());
+            return HandDifferenceCalculator.Calculate(previousHands, currentHands);
         }
 
         public IEnumerable<IHand> GetCurrentHands()

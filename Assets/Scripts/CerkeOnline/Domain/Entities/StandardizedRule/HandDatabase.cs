@@ -24,7 +24,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
     -官定ルールで採用されていない役
     声無行処(la ytartanerfergal) 
     */
-    public class HandDatabase : IHandDatabase
+    internal class HandDatabase : IHandDatabase
     {
         readonly IHand[] hands;
         readonly OverwriteHandPair[] overwriteHandPairs;
@@ -55,10 +55,10 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
             hands[NumberOfPieceStacksProviders * 2 + 1] = new TamenMako(-3, tamObserver);
         }
 
-        public IHand[] SearchHands(IReadOnlyList<IReadOnlyPiece> pieces)
+        public IEnumerable<IHand> SearchHands(IEnumerable<IReadOnlyPiece> pieces)
         {
             var successfulHands = hands.Where(hand => hand != null && hand.GetNumberOfSuccesses(pieces) > 0);
-            return RemoveOverwritableHands(successfulHands).ToArray();
+            return RemoveOverwritableHands(successfulHands);
         }
 
         IEnumerable<IHand> RemoveOverwritableHands(IEnumerable<IHand> hands)

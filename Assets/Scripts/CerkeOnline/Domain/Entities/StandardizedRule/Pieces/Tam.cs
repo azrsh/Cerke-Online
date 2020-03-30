@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using UniRx;
-using UnityEngine;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Pieces
 {
-    public class Tam : DefaultPiece, ISteppedObservable, ISteppedObserver
+    internal class Tam : DefaultPiece, ISteppedObservable, ISteppedObserver
     {
         public override int NumberOfMoves => 2;
 
@@ -16,19 +15,19 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Pieces
         readonly PieceMovement[] normalPieceMovements;
         readonly PieceMovement[] expansionPieceMovements;
 
-        public Tam(Terminologies.PieceColor color, Vector2Int position, IPlayer owner, IExpandingMoveFieldChecker fieldChecker) : base(position, color, owner, Terminologies.PieceName.Tam, fieldChecker)
+        public Tam(Terminologies.PieceColor color, PublicDataType.IntegerVector2 position, IPlayer owner, IExpandingMoveFieldChecker fieldChecker) : base(position, color, owner, Terminologies.PieceName.Tam, fieldChecker)
         {
             normalPieceMovements = new PieceMovement[]
             {
-                new PieceMovement(new Vector2Int(0, 1), 1, false, 2), new PieceMovement(new Vector2Int(0, -1), 1, false, 2),
-                new PieceMovement(new Vector2Int(1, 0), 1, false, 2), new PieceMovement(new Vector2Int(-1, 0), 1, false, 2),
-                new PieceMovement(new Vector2Int(1, 1), 1, false, 2), new PieceMovement(new Vector2Int(1, -1), 1, false, 2),
-                new PieceMovement(new Vector2Int(-1, 1), 1, false, 2), new PieceMovement(new Vector2Int(-1, -1), 1, false, 2)
+                new PieceMovement(new PublicDataType.IntegerVector2(0, 1), 1, false, 2), new PieceMovement(new PublicDataType.IntegerVector2(0, -1), 1, false, 2),
+                new PieceMovement(new PublicDataType.IntegerVector2(1, 0), 1, false, 2), new PieceMovement(new PublicDataType.IntegerVector2(-1, 0), 1, false, 2),
+                new PieceMovement(new PublicDataType.IntegerVector2(1, 1), 1, false, 2), new PieceMovement(new PublicDataType.IntegerVector2(1, -1), 1, false, 2),
+                new PieceMovement(new PublicDataType.IntegerVector2(-1, 1), 1, false, 2), new PieceMovement(new PublicDataType.IntegerVector2(-1, -1), 1, false, 2)
             };
             expansionPieceMovements = normalPieceMovements;
         }
 
-        public override IReadOnlyList<PieceMovement> GetMoveablePosition(bool isExpanded)
+        public override IEnumerable<PieceMovement> GetMoveablePosition(bool isExpanded)
         {
             if (!isExpanded)
                 return normalPieceMovements;

@@ -1,17 +1,17 @@
 ﻿using System;
-using UnityEngine;
 using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
+using Azarashi.CerkeOnline.Domain.Entities.PublicDataType;
 using Azarashi.CerkeOnline.Application;
 
 namespace Azarashi.CerkeOnline.Presentation.Presenter.Commands
 {
     public class MoveCommand : ICommand
     {
-        readonly Vector2Int startPosition;
+        readonly IntegerVector2 startPosition;
         readonly PieceName pieceName;
-        readonly Vector2Int endPosition;
+        readonly IntegerVector2 endPosition;
 
-        public MoveCommand(Vector2Int startPosition, PieceName pieceName, Vector2Int endPosition)
+        public MoveCommand(IntegerVector2 startPosition, PieceName pieceName, IntegerVector2 endPosition)
         {
             if (pieceName == PieceName.None)
                 throw new InvalidOperationException();

@@ -1,24 +1,23 @@
 ﻿using System;
-using UnityEngine;
 using Azarashi.CerkeOnline.Domain.Entities;
+using Azarashi.CerkeOnline.Domain.Entities.PublicDataType;
 
 namespace Azarashi.CerkeOnline.Presentation.Presenter.Commands
 {
     public class CommandAnalyzer
     {
-        public Vector2Int GetPosition(string word)
+        public IntegerVector2 GetPosition(string word)
         {
             if (word.IndexOf('-') >= 0)
             {
                 string[] xy = word.Split('-');
-                return new Vector2Int(NumberStringToInt(xy[0]), NumberStringToInt(xy[1]));
+                return new IntegerVector2(NumberStringToInt(xy[0]), NumberStringToInt(xy[1]));
             }
 
-            Vector2Int result = new Vector2Int(-1, -1);
-            result.x = EnumNameToInt<Terminologies.BoardRow>((name) => word.StartsWith(name));
-            if (result.x != -1) word = word.Remove(0, typeof(Terminologies.BoardRow).GetEnumName(result.x).Length);
-            result.y = EnumNameToInt<Terminologies.BoardLine>((name) => word == name);
-            return result;
+            int x = EnumNameToInt<Terminologies.BoardRow>((name) => word.StartsWith(name));
+            if (x != -1) word = word.Remove(0, typeof(Terminologies.BoardRow).GetEnumName(x).Length);
+            int y = EnumNameToInt<Terminologies.BoardLine>((name) => word == name);
+            return new IntegerVector2(x, y);
         }
 
         public bool CheckFormat(string[] words, int wordCount)

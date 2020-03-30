@@ -3,7 +3,7 @@ using UniRx;
 using UniRx.Triggers;
 using Azarashi.CerkeOnline.Application;
 using Azarashi.CerkeOnline.Domain.Entities;
-using Azarashi.CerkeOnline.Domain.UseCase;
+using Azarashi.CerkeOnline.Domain.Entities.PublicDataType;
 using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
 
 namespace Azarashi.CerkeOnline.Presentation.Presenter.Columns
@@ -37,7 +37,7 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.Columns
             firstOrSecond = GameController.Instance.Game.CurrentTurn;
         }
 
-        protected override void OnColumnSelected(Vector2Int start, Vector2Int via, Vector2Int last)
+        protected override void OnColumnSelected(IntegerVector2 start, IntegerVector2 via, IntegerVector2 last)
         {
             if(via == last)
                 MovePieceUseCaseFactory.Create(firstOrSecond, valueProvider).RequestToMovePiece(start, last);

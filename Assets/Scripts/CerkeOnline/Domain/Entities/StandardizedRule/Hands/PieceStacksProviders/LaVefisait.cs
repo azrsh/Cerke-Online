@@ -2,9 +2,9 @@
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Hands.PieceStackProviders
 {
-    public class LaVefisait : DefaultPieceStacksProviderr
+    internal class LaVefisait : DefaultPieceStacksProviderr
     {
-        public LaVefisait()
+        internal LaVefisait()
         {
             pieceStacks = new PieceStack[] { new PieceStack(PieceName.Elmer, 1), new PieceStack(PieceName.Gustuer, 1), new PieceStack(PieceName.Dodor, 1) };
         }

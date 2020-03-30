@@ -1,9 +1,7 @@
-﻿using UnityEngine;
-
-namespace Azarashi.CerkeOnline.Domain.Entities
+﻿namespace Azarashi.CerkeOnline.Domain.Entities
 {
-    public interface IExpandingMoveFieldChecker
+    internal interface IExpandingMoveFieldChecker
     {
-        bool IsExpandedMoveField(Vector2Int position);
+        bool IsExpandedMoveField(PublicDataType.IntegerVector2 position);
     }
 }

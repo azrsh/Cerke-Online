@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using UnityEngine;
-using Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.DataStructure;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.AbstractAction
 {
-    public class WaterEntryChecker
+    internal class WaterEntryChecker
     {
         readonly int threshold;
         readonly IFieldEffectChecker fieldEffectChecker;
@@ -21,7 +18,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.
             this.onJudgementFailure = onJudgementFailure;
         }
 
-        public bool CheckWaterEntry(IPiece movingPiece, Vector2Int start, Vector2Int end, Action onSuccess)
+        public bool CheckWaterEntry(IPiece movingPiece, PublicDataType.IntegerVector2 start, PublicDataType.IntegerVector2 end, Action onSuccess)
         {
             if (!IsJudgmentNecessary(movingPiece, start,end)) return true;
 
@@ -29,7 +26,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.
             return false;
         }
 
-        public bool IsJudgmentNecessary(IPiece movingPiece,Vector2Int start, Vector2Int end)
+        public bool IsJudgmentNecessary(IPiece movingPiece,PublicDataType.IntegerVector2 start, PublicDataType.IntegerVector2 end)
         {
             bool isInWater = fieldEffectChecker.IsInTammua(start);
             bool isIntoWater = fieldEffectChecker.IsInTammua(end);

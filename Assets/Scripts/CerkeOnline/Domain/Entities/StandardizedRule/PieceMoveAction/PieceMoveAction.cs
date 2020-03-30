@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
-using Azarashi.Utilities.Collections;
+using Azarashi.CerkeOnline.Domain.Entities.PublicDataType;
 using Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.DataStructure;
 using Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.ActualAction;
 using Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.AbstractAction;
@@ -15,19 +14,19 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction
      という意味で使っています.
      */
 
-    public class PieceMoveAction : IPieceMoveAction
+    internal class PieceMoveAction : IPieceMoveAction
     {
         readonly IPlayer player;
-        readonly Vector2YXArrayAccessor<IPiece> pieces;
+        readonly PositionArrayAccessor<IPiece> pieces;
         readonly LinkedList<ColumnData> worldPath;
         readonly PieceMovement viaPieceMovement;
         readonly Action<PieceMoveResult> callback;
         readonly bool isTurnEnd;
         bool surmounted = false;
 
-        readonly Vector2Int startPosition;
-        readonly Vector2Int viaPosition;
-        readonly Vector2Int endPosition;
+        readonly PublicDataType.IntegerVector2 startPosition;
+        readonly PublicDataType.IntegerVector2 viaPosition;
+        readonly PublicDataType.IntegerVector2 endPosition;
 
         readonly Mover pieceMover;
         readonly Capturer capturer;
@@ -36,7 +35,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction
         readonly SurmountingChecker surmountingChecker;
         readonly SteppingChecker steppingChecker;
 
-        public PieceMoveAction(MoveActionData moveActionData, Vector2YXArrayAccessor<IPiece> pieces, IFieldEffectChecker fieldEffectChecker,
+        public PieceMoveAction(MoveActionData moveActionData, PositionArrayAccessor<IPiece> pieces, IFieldEffectChecker fieldEffectChecker,
             IValueInputProvider<int> valueProvider, PieceMovement start2ViaPieceMovement, PieceMovement via2EndPieceMovement, Action<PieceMoveResult> callback, Action onPiecesChanged, bool isTurnEnd)
         {
             this.player = moveActionData?.Player ?? throw new ArgumentNullException("駒を操作するプレイヤーを指定してください.");

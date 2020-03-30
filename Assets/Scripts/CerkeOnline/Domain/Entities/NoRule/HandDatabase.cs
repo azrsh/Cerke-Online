@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
+using System.Collections.Generic;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.NoRule
 {
-    public class HandDatabase : IHandDatabase
+    internal class HandDatabase : IHandDatabase
     {
-        readonly IHand[] hands = { };
+        readonly IEnumerable<IHand> hands = Enumerable.Empty<IHand>();
 
-        public IHand[] SearchHands(IReadOnlyList<IReadOnlyPiece> pieces)
+        public IEnumerable<IHand> SearchHands(IEnumerable<IReadOnlyPiece> pieces)
         {
             return  hands;
         }

@@ -2,6 +2,7 @@
 using UniRx;
 using Azarashi.CerkeOnline.Application;
 using Azarashi.CerkeOnline.Domain.Entities;
+using Azarashi.CerkeOnline.Domain.Entities.PublicDataType;
 using Azarashi.CerkeOnline.Presentation.Presenter.Columns;
 
 namespace Azarashi.CerkeOnline.Presentation.Presenter
@@ -9,11 +10,11 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter
     [RequireComponent(typeof(BaseColumnSelector))]
     public class StoredPieceSelector : MonoBehaviour
     {
-        static readonly Vector2Int NonePosition = new Vector2Int(-1, -1);
+        static readonly IntegerVector2 NonePosition = new IntegerVector2(-1, -1);
 
         IPiece selectedPiece;
         
-        public void OnClickColumn(Vector2Int position)
+        public void OnClickColumn(IntegerVector2 position)
         {
             IGame game = GameController.Instance.Game;
             if (game == null || selectedPiece == null)

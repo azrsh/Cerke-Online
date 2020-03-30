@@ -1,23 +1,24 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Azarashi.CerkeOnline.Domain.Entities
 {
     public static class HandDifferenceCalculator
     {
-        public static HandDifference Calculate(IHand[] previous, IHand[] next)
+        public static HandDifference Calculate(IEnumerable<IHand> previous, IEnumerable<IHand> next)
         {
-            var increasedDifference = next?.Except(previous ?? new IHand[] { })?.ToArray() ?? next;
-            var decreasedDifference = previous?.Except(next)?.ToArray() ?? new IHand[] { };
+            var increasedDifference = next.Except(previous);
+            var decreasedDifference = previous.Except(next);
             return new HandDifference(increasedDifference, decreasedDifference);
         }
     }
 
     public struct HandDifference
     {
-        public IHand[] IncreasedDifference { get; }
-        public IHand[] DecreasedDifference { get; }
+        public IEnumerable<IHand> IncreasedDifference { get; }
+        public IEnumerable<IHand> DecreasedDifference { get; }
 
-        public HandDifference(IHand[] increasedDifference, IHand[] decreasedDifference)
+        public HandDifference(IEnumerable<IHand> increasedDifference, IEnumerable<IHand> decreasedDifference)
         {
             IncreasedDifference = increasedDifference;
             DecreasedDifference = decreasedDifference;

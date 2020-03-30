@@ -1,14 +1,16 @@
 ﻿using System;
 using UniRx;
-using UnityEngine;
-using Azarashi.Utilities.Collections;
 using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
+using Azarashi.CerkeOnline.Domain.Entities.PublicDataType;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
 {
-    public class Board : IBoard
+    internal class Board : IBoard
     {
-        readonly Vector2YXArrayAccessor<IPiece> pieces;
+        public int Width { get; }
+        public int Height { get; }
+
+        readonly PositionArrayAccessor<IPiece> pieces;
         readonly IFieldEffectChecker fieldChecker;
         readonly IPieceMoveActionFactory pieceMoveActionFactory;
 
@@ -19,16 +21,19 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
         //ターン管理をここでするな！
         readonly OperationStatus operationStatus = new OperationStatus();
 
-        public Board(Vector2YXArrayAccessor<IPiece> pieceMap, FieldEffectChecker fieldChecker, IPieceMoveActionFactory pieceMoveActionFactory)
+        internal Board(PositionArrayAccessor<IPiece> pieceMap, FieldEffectChecker fieldChecker, IPieceMoveActionFactory pieceMoveActionFactory)
         {
             this.pieces = pieceMap;
             this.fieldChecker = fieldChecker;
             this.pieceMoveActionFactory = pieceMoveActionFactory;
+
+            Width = pieces.Width;
+            Height = pieces.Height;
             
             onEveryValueChanged.OnNext(Unit.Default);
         }
 
-        public IReadOnlyPiece GetPiece(Vector2Int position)
+        public IReadOnlyPiece GetPiece(PublicDataType.IntegerVector2 position)
         {
             if (!IsOnBoard(position))
                 return null;
@@ -42,7 +47,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
             {
                 for (int j = 0; j < pieces.Height; j++)
                 {
-                    IReadOnlyPiece piece = pieces.Read(new Vector2Int(i, j));
+                    IReadOnlyPiece piece = pieces.Read(new PublicDataType.IntegerVector2(i, j));
                     if (piece != null && piece.PieceName == pieceName)
                         return piece;
                 }
@@ -52,7 +57,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
         }
 
         bool isLocked = false;
-        public void MovePiece(Vector2Int startPosition, Vector2Int viaPosition, Vector2Int endPosition, IPlayer player, IValueInputProvider<int> valueProvider, Action<PieceMoveResult> callback)
+        public void MovePiece(PublicDataType.IntegerVector2 startPosition, PublicDataType.IntegerVector2 viaPosition, PublicDataType.IntegerVector2 endPosition, IPlayer player, IValueInputProvider<int> valueProvider, Action<PieceMoveResult> callback)
         {
             if (isLocked) return;
 
@@ -109,16 +114,16 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
             pieceMoveAction.StartMove();
         }
 
-        public void MovePiece(Vector2Int startPosition, Vector2Int lastPosition, IPlayer player, IValueInputProvider<int> valueProvider, Action<PieceMoveResult> callback)
+        public void MovePiece(PublicDataType.IntegerVector2 startPosition, PublicDataType.IntegerVector2 lastPosition, IPlayer player, IValueInputProvider<int> valueProvider, Action<PieceMoveResult> callback)
             => MovePiece(startPosition, lastPosition, lastPosition, player, valueProvider, callback);
             
         
-        public bool SetPiece(Vector2Int position, IPiece piece)
+        public bool SetPiece(PublicDataType.IntegerVector2 position, IPiece piece)
         {
             if (!IsOnBoard(position) || pieces.Read(position) != null)
                 return false;
 
-            if (piece.Position != new Vector2Int(-1, -1))
+            if (piece.Position != new PublicDataType.IntegerVector2(-1, -1))
                 return false;
 
             piece.SetOnBoard(position);
@@ -127,7 +132,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
             return true;
         }
 
-        public bool IsOnBoard(Vector2Int position)
+        public bool IsOnBoard(PublicDataType.IntegerVector2 position)
         {
             return position.x >= 0 && position.y >= 0 && position.x < pieces.Width && position.y < pieces.Height;
         }

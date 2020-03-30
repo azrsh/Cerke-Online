@@ -5,7 +5,7 @@ using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
 
 namespace Azarashi.CerkeOnline.Domain.Entities
 {
-    public class Player : IPlayer
+    internal class Player : IPlayer
     {
         readonly List<IPiece> pieces = new List<IPiece>();
 
@@ -14,12 +14,12 @@ namespace Azarashi.CerkeOnline.Domain.Entities
 
         public Encampment Encampment { get; }
 
-        public Player(Encampment encampment)
+        internal Player(Encampment encampment)
         {
             Encampment = encampment;
         }
 
-        public IReadOnlyList<IReadOnlyPiece> GetPieceList()
+        public IEnumerable<IReadOnlyPiece> GetPieceList()
         {
             return pieces;
         }

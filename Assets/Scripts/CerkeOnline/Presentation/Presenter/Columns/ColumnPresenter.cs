@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UniRx;
-using Azarashi.Utilities.UnityEvents;
+using Azarashi.CerkeOnline.Domain.Entities.PublicDataType;
 using Azarashi.CerkeOnline.Presentation.View;
 
 namespace Azarashi.CerkeOnline.Presentation.Presenter.Columns
@@ -8,7 +8,7 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.Columns
     [RequireComponent(typeof(IMapProvider<Transform>))]
     public class ColumnPresenter : MonoBehaviour
     {
-        [SerializeField] Vector2IntUnityEvent onColumnClicked = default;
+        [SerializeField] IntegerVector2UnityEvent onColumnClicked = default;
 
         private void Start()
         {
@@ -19,7 +19,7 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.Columns
                 for (int y = 0; y < columns.GetLength(1); y++)
                 {
                     ColumnView columnView = columns[x, y].gameObject.AddComponent<ColumnView>();
-                    Vector2Int columnPosition = new Vector2Int(x, y);
+                    IntegerVector2 columnPosition = new IntegerVector2(x, y);
                     columnView.OnClick.TakeUntilDestroy(this).Select(_ => columnPosition).Subscribe(onColumnClicked.Invoke);
                 }
             }

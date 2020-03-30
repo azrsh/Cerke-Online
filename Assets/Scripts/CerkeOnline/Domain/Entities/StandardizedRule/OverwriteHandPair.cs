@@ -1,13 +1,9 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Collections.Generic;
-using UniRx;
-using Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Hands;
-using Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Hands.PieceStackProviders;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
 {
-    public class OverwriteHandPair
+    internal class OverwriteHandPair
     {
         public IHand Overwritten { get; }
         public IHand Overwriter { get; }

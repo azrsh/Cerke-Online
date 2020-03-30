@@ -1,14 +1,12 @@
-﻿using System.Collections;
-using UnityEngine;
-using Azarashi.Utilities.Collections;
+﻿using Azarashi.CerkeOnline.Domain.Entities.PublicDataType;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.ActualAction
 {
-    public class Capturer
+    internal class Capturer
     {
-        readonly Vector2YXArrayAccessor<IPiece> pieces;
+        readonly PositionArrayAccessor<IPiece> pieces;
 
-        public Capturer(Vector2YXArrayAccessor<IPiece> pieces)
+        public Capturer(PositionArrayAccessor<IPiece> pieces)
         {
             this.pieces = pieces;
         }
@@ -23,7 +21,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.
             return canMovingPieceTakePiece && isPieceCapturable && !isSameOwner;
         }
 
-        public IPiece CapturePiece(IPlayer player, IPiece movingPiece, Vector2Int endWorldPosition)
+        public IPiece CapturePiece(IPlayer player, IPiece movingPiece, PublicDataType.IntegerVector2 endWorldPosition)
         {
             IPiece originalPiece = pieces.Read(endWorldPosition);     //命名が分かりにくい. 行先にある駒.
             if (!IsCapturable(player ,movingPiece, originalPiece))

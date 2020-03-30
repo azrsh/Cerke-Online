@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
 using UniRx;
 using Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.ActualAction;
 using Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.DataStructure;
@@ -10,7 +9,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.
     /// <summary>
     /// 踏み越えチェッククラス
     /// </summary>
-    public class SteppingChecker
+    internal class SteppingChecker
     {
         readonly MoveFinisher moveFinisher;
         readonly Capturer capturer;
@@ -28,7 +27,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.
             this.finishCallback = finishCallback;
         }
 
-        public bool CheckStepping(Vector2Int viaPosition,IPlayer player, IPiece movingPiece, LinkedListNode<ColumnData> worldPathNode, Action moveAfterNext, Action<IPiece> onFailure)
+        public bool CheckStepping(PublicDataType.IntegerVector2 viaPosition,IPlayer player, IPiece movingPiece, LinkedListNode<ColumnData> worldPathNode, Action moveAfterNext, Action<IPiece> onFailure)
         {
             var nextPiece = worldPathNode.Value.Piece;
             var isViaPosition = worldPathNode.Value.Positin == viaPosition && worldPathNode.Next != null;

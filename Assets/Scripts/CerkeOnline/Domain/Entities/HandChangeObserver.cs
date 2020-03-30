@@ -1,30 +1,41 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using UniRx;
 
 namespace Azarashi.CerkeOnline.Domain.Entities
 {
-    public class HandChangeObserver
+    internal class HandChangeObserver
     {
         readonly IHandDatabase handDatabase;
         
-        public IObservable<IReadOnlyPlayer> Observable => subject;
+        internal IObservable<IReadOnlyPlayer> Observable => subject;
         Subject<IReadOnlyPlayer> subject = new Subject<IReadOnlyPlayer>();
 
-        public HandChangeObserver(IHandDatabase handDatabase, IObservable<IReadOnlyPlayer> onTurnEnd)
+        //前回の役の保存、これでいいのか？
+        //IEnumerableから結果を引き出して格納されるように型を配列とした. IEnumerableの実態はクエリなのでこうしないとターンごとに中身が更新される.
+        IDictionary<IReadOnlyPlayer, IHand[]> previousHandsDictionary = new Dictionary<IReadOnlyPlayer, IHand[]>();
+
+        internal HandChangeObserver(IHandDatabase handDatabase, IObservable<IReadOnlyPlayer> onTurnEnd)
         {
             this.handDatabase = handDatabase;
             onTurnEnd.Where(CheckHandIncrease).Subscribe(subject);
         }
 
-        //前回の役の保存、これでいいのか？
-        IHand[] previousHands = new IHand[0];
         bool CheckHandIncrease(IReadOnlyPlayer currentPlayer)
         {
-            IHand[] currentHands = handDatabase.SearchHands(currentPlayer.GetPieceList());
-            HandDifference handDifference = HandDifferenceCalculator.Calculate(previousHands, currentHands);
-            return handDifference.IncreasedDifference.Length > 0;
+            if(!previousHandsDictionary.ContainsKey(currentPlayer))
+                previousHandsDictionary.Add(currentPlayer, Array.Empty<IHand>());
+
+            IEnumerable<IHand> currentHands = handDatabase.SearchHands(currentPlayer.GetPieceList());
+            HandDifference handDifference = HandDifferenceCalculator.Calculate(previousHandsDictionary[currentPlayer], currentHands);
+            
+            if(handDifference.IncreasedDifference.Any() || handDifference.IncreasedDifference.Any())
+                previousHandsDictionary[currentPlayer] = currentHands.ToArray();
+
+            return handDifference.IncreasedDifference.Any();
         }
 
-        public void Reset() => previousHands = new IHand[0];
+        internal void Reset() => previousHandsDictionary.Clear();
     }
 }

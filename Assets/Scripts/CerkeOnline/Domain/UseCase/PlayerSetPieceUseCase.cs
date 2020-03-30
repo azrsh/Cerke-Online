@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using Azarashi.CerkeOnline.Domain.Entities;
+﻿using Azarashi.CerkeOnline.Domain.Entities;
+using Azarashi.CerkeOnline.Domain.Entities.PublicDataType;
 
 namespace Azarashi.CerkeOnline.Domain.UseCase
 {
@@ -16,7 +16,7 @@ namespace Azarashi.CerkeOnline.Domain.UseCase
             this.logger = logger;
         }
 
-        public void RequestToSetPiece(Vector2Int position, IPiece piece)
+        public void RequestToSetPiece(IntegerVector2 position, IPiece piece)
         {
             if (game.CurrentPlayer != player)
             {

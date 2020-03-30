@@ -2,7 +2,7 @@
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
 {
-    public class ScoreCalculator
+    internal class ScoreCalculator
     {
         readonly IHandDatabase handDatabase;
 

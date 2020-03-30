@@ -2,9 +2,9 @@
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Hands.PieceStackProviders
 {
-    public class LaPhertarsadElmss : DefaultPieceStacksProviderr
+    internal class LaPhertarsadElmss : DefaultPieceStacksProviderr
     {
-        public LaPhertarsadElmss()
+        internal LaPhertarsadElmss()
         {
             pieceStacks = new PieceStack[] { new PieceStack(PieceName.Elmer, 5) };
         }

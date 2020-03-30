@@ -1,6 +1,5 @@
 ﻿using System;
-using UnityEngine;
-using Azarashi.CerkeOnline.Domain.Entities;
+using Azarashi.CerkeOnline.Domain.Entities.PublicDataType;
 using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
 
 namespace Azarashi.CerkeOnline.Presentation.Presenter.Commands
@@ -39,10 +38,10 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.Commands
             if (!analyzer.CheckFormat(words, 4)/* || words[0] != CommandEnum.move.ToString()*/)
                 return null;
 
-            Vector2Int startPosition = analyzer.GetPosition(words[1]);
+            IntegerVector2 startPosition = analyzer.GetPosition(words[1]);
             PieceName pieceName = PieceName.None;
             Enum.TryParse(words[2], true, out pieceName);
-            Vector2Int endPosition = analyzer.GetPosition(words[3]);
+            IntegerVector2 endPosition = analyzer.GetPosition(words[3]);
             return new MoveCommand(startPosition, pieceName, endPosition);
         }
 

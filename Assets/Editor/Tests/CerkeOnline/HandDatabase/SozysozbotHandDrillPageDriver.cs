@@ -9,7 +9,7 @@ using Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Pieces;
 
 namespace Azarashi.CerkeOnline.Tests.HandDatabaseTest
 {
-    public class SozysozbotHandDrillPageDriver
+    internal class SozysozbotHandDrillPageDriver
     {
         const string url = "https://sozysozbot.github.io/cerke_calculate_hands/calculate_hand_contest.html";
 
@@ -43,7 +43,7 @@ namespace Azarashi.CerkeOnline.Tests.HandDatabaseTest
             questionElementsText.Select<string, (string color, string kind)>(text => (text[0].ToString(), text[1].ToString()))
                 .Select(pair => (IReadOnlyPiece)ConvertPieceNameToPieceInstance(ConvertColorTextToColorId(pair.color), pair.kind)).ToArray();
 
-        public void PostAnswers(IHand[] answers)
+        public void PostAnswers(IEnumerable<IHand> answers)
         {
             IReadOnlyCollection<IWebElement> labelElements = driver.FindElementsByTagName("label");
             foreach (IHand hand in answers)

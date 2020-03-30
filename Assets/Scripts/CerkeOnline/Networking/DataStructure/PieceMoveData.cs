@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using Azarashi.CerkeOnline.Domain.Entities;
+using Azarashi.CerkeOnline.Domain.Entities.PublicDataType;
 
 namespace Azarashi.CerkeOnline.Networking.DataStructure
 {
@@ -11,12 +12,12 @@ namespace Azarashi.CerkeOnline.Networking.DataStructure
     public struct PieceMoveData
     {
         public readonly string senderId;
-        public readonly Vector2 start;
+        public readonly IntegerVector2 start;
         public readonly Terminologies.PieceName piece;
-        public readonly Vector2 end;
+        public readonly IntegerVector2 end;
         public readonly byte numberOfstick;
 
-        public PieceMoveData(string senderId, Vector2Int start, Terminologies.PieceName piece, Vector2Int end, byte numberOfstick = byte.MaxValue)
+        public PieceMoveData(string senderId, IntegerVector2 start, Terminologies.PieceName piece, IntegerVector2 end, byte numberOfstick = byte.MaxValue)
         {
             this.senderId = senderId;
             this.start = start;

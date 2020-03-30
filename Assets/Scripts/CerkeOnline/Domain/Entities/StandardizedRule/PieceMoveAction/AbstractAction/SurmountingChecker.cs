@@ -5,7 +5,7 @@ using Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.Data
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.AbstractAction
 {
-    public class SurmountingChecker
+    internal class SurmountingChecker
     {
         readonly Mover pieceMover;
 

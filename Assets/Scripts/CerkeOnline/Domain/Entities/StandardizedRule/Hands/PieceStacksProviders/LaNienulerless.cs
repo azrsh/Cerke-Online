@@ -2,9 +2,9 @@
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Hands.PieceStackProviders
 {
-    public class LaNienulerless : DefaultPieceStacksProviderr
+    internal class LaNienulerless : DefaultPieceStacksProviderr
     {
-        public LaNienulerless()
+        internal LaNienulerless()
         {
             pieceStacks = new PieceStack[] { new PieceStack(PieceName.Felkana,1), new PieceStack(PieceName.Vadyrd,1), new PieceStack(PieceName.Dodor,1) };
         }

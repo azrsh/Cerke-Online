@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-
+﻿
 namespace Azarashi.CerkeOnline.Domain.Entities
 {
     public interface IPiece : IReadOnlyPiece
@@ -9,7 +8,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         /// </summary>
         /// <param name="position"></param>
         /// <returns></returns>
-        bool MoveTo(Vector2Int position, bool isForceMove = false);
+        bool MoveTo(PublicDataType.IntegerVector2 position, bool isForceMove = false);
 
         /// <summary>
         /// 駒の所有者を変更する. この情報は駒が持つべきではない気もする.
@@ -26,6 +25,6 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         /// ボードの外から駒をボード上に配置する.
         /// </summary>
         /// <param name="position"></param>
-        void SetOnBoard(Vector2Int position);
+        void SetOnBoard(PublicDataType.IntegerVector2 position);
     }
 }

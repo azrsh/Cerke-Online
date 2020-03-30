@@ -7,23 +7,21 @@ namespace Azarashi.CerkeOnline.Domain.Entities
     /// <summary>
     /// 同色役
     /// </summary>
-    public class FlashHand : IHand
+    internal class FlashHand : IHand
     {
-        readonly IPieceStacksProvider pieceStacksProvider;
         readonly HandSuccessChecker handSuccessChecker;
 
         public string Name { get; }
         public int Score { get; }
 
-        public FlashHand(IPieceStacksProvider pieceStacksProvider, int score)
+        internal FlashHand(IPieceStacksProvider pieceStacksProvider, int score)
         {
-            this.pieceStacksProvider = pieceStacksProvider;
             handSuccessChecker = new HandSuccessChecker(pieceStacksProvider);
             Name = "同色" + HandNameDictionary.PascalToJapanese[pieceStacksProvider.GetType().Name]; //TODO べた書きの排除
             Score = score;
         }
 
-        public int GetNumberOfSuccesses(IReadOnlyList<IReadOnlyPiece> holdingPieces)
+        public int GetNumberOfSuccesses(IEnumerable<IReadOnlyPiece> holdingPieces)
         {
             IEnumerable<IReadOnlyPiece> blackPieces = holdingPieces.Where(piece => piece.Color == PieceColor.Black);
             if (handSuccessChecker.Check(blackPieces)) return 1;

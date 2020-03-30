@@ -1,16 +1,15 @@
-﻿using UnityEngine;
-using Azarashi.Utilities.Collections;
+﻿using Azarashi.CerkeOnline.Domain.Entities.PublicDataType;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.DataStructure
 {
-    public struct ColumnData
+    internal struct ColumnData
     {
-        public Vector2Int Positin { get; }
+        public PublicDataType.IntegerVector2 Positin { get; }
         public IPiece Piece { get { return pieces.Read(Positin); } }
 
-        readonly Vector2YXArrayAccessor<IPiece> pieces;
+        readonly PositionArrayAccessor<IPiece> pieces;
 
-        public ColumnData(Vector2Int positin, Vector2YXArrayAccessor<IPiece> pieces)
+        public ColumnData(PublicDataType.IntegerVector2 positin, PositionArrayAccessor<IPiece> pieces)
         {
             Positin = positin;
             this.pieces = pieces;

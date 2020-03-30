@@ -7,7 +7,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Hands
     /// <summary>
     /// 撃皇
     /// </summary>
-    public class LaTamadSemorkovo : IHand
+    internal class LaTamadSemorkovo : IHand
     {
         public string Name { get; }
         public int Score { get; }
@@ -21,7 +21,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Hands
             steppedObservable.OnStepped.Subscribe(_ => numberOfSurmounted++);
         }
 
-        public int GetNumberOfSuccesses(IReadOnlyList<IReadOnlyPiece> pieces)
+        public int GetNumberOfSuccesses(IEnumerable<IReadOnlyPiece> pieces)
         {
             return numberOfSurmounted;
         }

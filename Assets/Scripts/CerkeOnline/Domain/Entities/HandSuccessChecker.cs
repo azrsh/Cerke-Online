@@ -4,18 +4,18 @@ using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
 
 namespace Azarashi.CerkeOnline.Domain.Entities
 {
-    public class HandSuccessChecker
+    internal class HandSuccessChecker
     {
-        readonly IReadOnlyList<PieceStack> pieceStacks;
+        readonly IEnumerable<PieceStack> pieceStacks;
 
-        public HandSuccessChecker(IPieceStacksProvider pieceStacksProvider)
+        internal HandSuccessChecker(IPieceStacksProvider pieceStacksProvider)
         {
             pieceStacks = pieceStacksProvider.GetPieceStacks();
         }
 
-        public bool Check(IEnumerable<IReadOnlyPiece> holdingPieces)
+        internal bool Check(IEnumerable<IReadOnlyPiece> holdingPieces)
         {
-            if (holdingPieces.Count() < pieceStacks.Count) return false;
+            if (holdingPieces.Count() < pieceStacks.Count()) return false;
             
             IEnumerable<PieceName> holdingPieceNames = holdingPieces.Select(piece => piece.PieceName);
             int restAlesCount = holdingPieceNames.Where(name => name == PieceName.Ales).Count();

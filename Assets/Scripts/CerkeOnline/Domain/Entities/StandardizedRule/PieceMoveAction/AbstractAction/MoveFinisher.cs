@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using System;
-using UnityEngine;
 using Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.DataStructure;
 using Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.ActualAction;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.AbstractAction
 {
-    public class MoveFinisher
+    internal class MoveFinisher
     {
         readonly Mover mover;
         readonly Capturer capturer;
@@ -39,7 +38,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.
         }
 
 
-        public void FinishMove(IPlayer player, IPiece movingPiece, Vector2Int endWorldPosition, Action<PieceMoveResult> callback, bool isTurnEnd, bool isForceMove = false)
+        public void FinishMove(IPlayer player, IPiece movingPiece, PublicDataType.IntegerVector2 endWorldPosition, Action<PieceMoveResult> callback, bool isTurnEnd, bool isForceMove = false)
         {
             //移動先の駒を取る
             IPiece gottenPiece = capturer.CapturePiece(player, movingPiece, endWorldPosition);

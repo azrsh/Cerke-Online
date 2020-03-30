@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿using System;
 using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
 
 namespace Azarashi.CerkeOnline.Domain.Entities
@@ -38,13 +38,13 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         /// <summary>
         /// PieceStackから指定された数の駒を取す.
         /// </summary>
-        /// <param name="stackCount"></param>
+        /// <param name="popCount"></param>
         /// <returns>実際に取り出せた数.</returns>
-        public int Pop(int stackCount)
+        public int Pop(int popCount)
         {
-            stackCount = Mathf.Min(StackCount, stackCount);
-            StackCount -= stackCount;
-            return stackCount;
+            popCount = Math.Min(StackCount, popCount);
+            StackCount -= popCount;
+            return popCount;
         }
 
         public PieceStack Split(int splitCount)

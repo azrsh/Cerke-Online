@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
 
 namespace Azarashi.CerkeOnline.Domain.Entities
 {
@@ -15,14 +14,14 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         /// </summary>
         /// <param name="isExpanded"></param>
         /// <returns></returns>
-        IReadOnlyList<PieceMovement> GetMoveablePosition(bool isExpanded = false);
+        IEnumerable<PieceMovement> GetMoveablePosition(bool isExpanded = false);
 
         /// <summary>
         /// 指定座標(論理座標)に移動可能かどうかを返す.
         /// </summary>
         /// <param name="position"></param>
         /// <returns></returns>
-        bool IsMoveable(Vector2Int position);
+        bool IsMoveable(PublicDataType.IntegerVector2 position);
 
         /// <summary>
         /// 駒のアルファベットでの名前を返す. 不要なら消すかも.
@@ -32,7 +31,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         /// <summary>
         /// 駒の論理座標を返す.
         /// </summary>
-        Vector2Int Position { get; }
+        PublicDataType.IntegerVector2 Position { get; }
 
         /// <summary>
         /// 駒の色を返す. パイグ将棋特有のAPIなので, 分離したい.
@@ -51,7 +50,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         /// <param name="worldPosition">絶対論理座標を指定する.</param>
         /// <param name="pieceMovement"></param>
         /// <returns></returns>
-        bool TryToGetPieceMovement(Vector2Int worldPosition, out PieceMovement pieceMovement);
+        bool TryToGetPieceMovement(PublicDataType.IntegerVector2 worldPosition, out PieceMovement pieceMovement);
 
         /// <summary>
         /// PieceMovementの取得を試みる.
@@ -59,7 +58,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         /// <param name="relativePosition">駒を中心とした相対論理座標を指定する.</param>
         /// <param name="pieceMovement"></param>
         /// <returns></returns>
-        bool TryToGetPieceMovementByRelativePosition(Vector2Int relativePosition, out PieceMovement pieceMovement);
+        bool TryToGetPieceMovementByRelativePosition(PublicDataType.IntegerVector2 relativePosition, out PieceMovement pieceMovement);
 
         /// <summary>
         /// 引数のプレイヤーがオーナーであるかを返す
