@@ -13,7 +13,8 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         Subject<IReadOnlyPlayer> subject = new Subject<IReadOnlyPlayer>();
 
         //前回の役の保存、これでいいのか？
-        IDictionary<IReadOnlyPlayer, IEnumerable<IHand>> previousHandsDictionary = new Dictionary<IReadOnlyPlayer, IEnumerable<IHand>>();
+        //IEnumerableから結果を引き出して格納されるように型を配列とした. IEnumerableの実態はクエリなのでこうしないとターンごとに中身が更新される.
+        IDictionary<IReadOnlyPlayer, IHand[]> previousHandsDictionary = new Dictionary<IReadOnlyPlayer, IHand[]>();
 
         internal HandChangeObserver(IHandDatabase handDatabase, IObservable<IReadOnlyPlayer> onTurnEnd)
         {
@@ -24,14 +25,14 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         bool CheckHandIncrease(IReadOnlyPlayer currentPlayer)
         {
             if(!previousHandsDictionary.ContainsKey(currentPlayer))
-                previousHandsDictionary.Add(currentPlayer, Enumerable.Empty<IHand>());
+                previousHandsDictionary.Add(currentPlayer, Array.Empty<IHand>());
 
             IEnumerable<IHand> currentHands = handDatabase.SearchHands(currentPlayer.GetPieceList());
             HandDifference handDifference = HandDifferenceCalculator.Calculate(previousHandsDictionary[currentPlayer], currentHands);
             
             if(handDifference.IncreasedDifference.Any() || handDifference.IncreasedDifference.Any())
                 previousHandsDictionary[currentPlayer] = currentHands.ToArray();
-            
+
             return handDifference.IncreasedDifference.Any();
         }
 
