@@ -1,21 +1,24 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using Azarashi.Utilities.Collections;
 
 namespace Azarashi.CerkeOnline.Application.Language
 {
-    public interface ILanguageDictionary : IReadOnlyDictionary<string, string> { }
+    public interface ILanguageDictionary
+    {
+        string this[TranslatableKeys index] { get; }
+    }
     
     public class LanguageDictionaryFactory
     {
-        readonly IEnumerable<string> tranlatableNameCodes;
+        readonly IEnumerable<string> tranlatableKeys;
 
-        public LanguageDictionaryFactory(IEnumerable<string> tranlatableNameCodes)
+        public LanguageDictionaryFactory(IEnumerable<string> tranlatableKeys)
         {
-            this.tranlatableNameCodes = tranlatableNameCodes;
+            this.tranlatableKeys = tranlatableKeys;
         }
 
-        public ILanguageDictionary Create(IDictionary<string, string> source)
+        public ILanguageDictionary Create(IReadOnlyDictionary<string, string> source)
         {
             //LanguageDictionaryのKeyとtranlatableNameCodesが一致することを保証する
             if (!VerifyDictionary(source)) return null;
@@ -23,25 +26,25 @@ namespace Azarashi.CerkeOnline.Application.Language
             return new LanguageDictionary(source);
         }
 
-        private bool VerifyDictionary(IDictionary<string, string> source)
-            => tranlatableNameCodes.Count() == source.Count && tranlatableNameCodes.All(code => source.ContainsKey(code));
+        private bool VerifyDictionary(IReadOnlyDictionary<string, string> source)
+            => tranlatableKeys.SequenceMatch(source.Keys);
 
+        /// <summary>
+        /// TranslatableKeysが0 ~ Count - 1 であることが保証されている必要がある.
+        /// </summary>
         private class LanguageDictionary : ILanguageDictionary
         {
-            public string this[string key] => dictionary[key];
-            public IEnumerable<string> Keys => dictionary.Keys;
-            public IEnumerable<string> Values => dictionary.Values;
-            public int Count => dictionary.Count;
-            public bool ContainsKey(string key) => dictionary.ContainsKey(key);
-            public IEnumerator<KeyValuePair<string, string>> GetEnumerator() => dictionary.GetEnumerator();
-            public bool TryGetValue(string key, out string value) => dictionary.TryGetValue(key, out value);
-            IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)dictionary).GetEnumerator();
+            public string this[TranslatableKeys key] => dictionary[(int)key];
 
-            readonly Dictionary<string, string> dictionary;
+            readonly IReadOnlyList<string> dictionary;
 
-            public LanguageDictionary(IDictionary<string, string> source)
+            public LanguageDictionary(IReadOnlyDictionary<string, string> source)
             {
-                dictionary = new Dictionary<string, string>(source);
+                var array = new string[source.Count];
+                for (int i = 0; i < array.Length; i++)
+                    array[i] = source[((TranslatableKeys)i).ToString()];
+
+                dictionary = array;
             }
         }
     }

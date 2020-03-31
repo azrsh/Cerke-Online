@@ -39,3 +39,10 @@ MonoBehaviour:
   - PiecesGeneral
   - PiecesKing
   - PiecesMinds
+  - CurrentPlayerLabel
+  - MyScoreLabel
+  - EnemyScoreLabel
+  - CurrentSeasonLabel
+  - CastSticksButton
+  - HandCompleteMessage
+  - HandUncompleteMessage

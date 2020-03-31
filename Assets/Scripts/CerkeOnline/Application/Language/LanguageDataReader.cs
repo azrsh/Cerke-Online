@@ -15,7 +15,7 @@ namespace Azarashi.CerkeOnline.Application.Language
             readonly static string childFilePath = @"/words.json";
 
             public static string DirectoryPath { get { return UnityEngine.Application.dataPath + childDirectoryPath; } }
-            public static string GetFilePath(string directory) => directory + childFilePath;
+            public static string GetFilePath(string languageName) => DirectoryPath + "/" + languageName + childFilePath;
         }
 
         public LanguageDataReader(LanguageDictionaryFactory factory)
@@ -25,7 +25,13 @@ namespace Azarashi.CerkeOnline.Application.Language
         
         public ILanguageDictionary Read(string languageName)
         {
-            var dictionary = (Dictionary<string, string>)JsonSerializer.Deserialize<dynamic>(LanguageFilePath.GetFilePath(languageName));
+            string json = string.Empty;
+            using (StreamReader streamReader = new StreamReader(LanguageFilePath.GetFilePath(languageName)))
+            {
+                json = streamReader.ReadToEnd();
+            }
+
+            var dictionary = JsonSerializer.Deserialize<Dictionary<string, string>>(json);
             return factory.Create(dictionary);
         }
 

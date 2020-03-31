@@ -8,8 +8,8 @@ namespace Azarashi.CerkeOnline.Application.Language
     public class LanguageManager : MonoBehaviour
     {
         static LanguageManager instance;
-        public static LanguageManager Instance 
-        { 
+        public static LanguageManager Instance
+        {
             get
             {
                 if (instance == null)
@@ -23,7 +23,20 @@ namespace Azarashi.CerkeOnline.Application.Language
         public IEnumerable<string> TranslatableKeys => translatableKeysObject.TranslatableKeys;
         public IObservable<ILanguageTranslator> OnLanguageChanged { get; } = new Subject<ILanguageTranslator>();
 
-        [SerializeField] public TranslatableKeysObject translatableKeysObject;
+        ILanguageTranslator translator = default;
+        public ILanguageTranslator Translator 
+        {
+            get
+            {
+                if(translator == null)
+                    translator = LanguageTranlatorFactory.Create(languageSettingsObject.DefaultLanguageCode, TranslatableKeys);
+
+                return translator;
+            }
+        }
+
+        [SerializeField] TranslatableKeysObject translatableKeysObject = default;
+        [SerializeField] LanguageSettingsObject languageSettingsObject = default;
 
         private void Start()
         {
