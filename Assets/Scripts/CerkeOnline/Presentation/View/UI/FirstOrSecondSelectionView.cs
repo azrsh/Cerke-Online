@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UniRx;
 using static UnityEngine.UI.Dropdown;
+using Azarashi.CerkeOnline.Application.Language;
 using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
 
 namespace Azarashi.CerkeOnline.Presentation.View.UI
@@ -19,8 +20,11 @@ namespace Azarashi.CerkeOnline.Presentation.View.UI
         {
             if(dropdown == null) throw new NullReferenceException();
 
-            List<OptionData> options = Enum.GetNames(typeof(FirstOrSecond)).Select(name => new OptionData(name)).ToList();
-            options.Add(new OptionData("Random"));  //情報の受取先の実装依存なので変えたい
+            List<OptionData> options = Enum.GetNames(typeof(FirstOrSecond))
+                .Select(name => (TranslatableKeys)Enum.Parse(typeof(TranslatableKeys), name))
+                .Select(LanguageManager.Instance.Translator.Translate)
+                .Select(name => new OptionData(name)).ToList();
+            options.Add(new OptionData(LanguageManager.Instance.Translator.Translate(TranslatableKeys.Random)));
             dropdown.options = options;
         }
     }

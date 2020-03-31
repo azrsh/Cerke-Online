@@ -46,3 +46,30 @@ MonoBehaviour:
   - CastSticksButton
   - HandCompleteMessage
   - HandUncompleteMessage
+  - StartOnlineButton
+  - StartOfflineButton
+  - QuitButton
+  - TitleText
+  - RulesetDropdownLabel
+  - FirstOrSecondDropdownLabel
+  - EncampmentDropdownLabel
+  - ZeroMovementPermissionToggleLabel
+  - GameStartButton
+  - First
+  - Second
+  - Random
+  - EncampmentFront
+  - EncampmentBack
+  - GameResultMenuTitle
+  - ScoreLabel
+  - CompletedHandsLabel
+  - ReturnToTitleButton
+  - WinMessage
+  - LoseMessage
+  - DrawMessage
+  - SeasonResultMenuTitle
+  - NextSeasonButton
+  - PauseMenuTitle
+  - LogDisplayActivationToggle
+  - KeyboardInputActivationToggle
+  - CloseButton

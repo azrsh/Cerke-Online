@@ -45,4 +45,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   translatableKeysObject: {fileID: 11400000, guid: d33d47680713b244690e25fb32911071,
     type: 2}
-  defaultLanguageCode: empty
+  languageSettingsObject: {fileID: 11400000, guid: 394c7525ba3cc3f4aa9d0c46970609ec,
+    type: 2}

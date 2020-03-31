@@ -38,8 +38,12 @@ namespace Azarashi.CerkeOnline.Application.Language
         [SerializeField] TranslatableKeysObject translatableKeysObject = default;
         [SerializeField] LanguageSettingsObject languageSettingsObject = default;
 
-        private void Start()
+        private void Awake()
         {
+            if (LanguageManager.Instance != this)
+                Destroy(this);
+
+            translator = LanguageTranlatorFactory.Create(languageSettingsObject.DefaultLanguageCode, TranslatableKeys);
         }
     }
 }

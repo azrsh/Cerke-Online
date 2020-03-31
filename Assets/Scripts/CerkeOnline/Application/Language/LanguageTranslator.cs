@@ -13,7 +13,15 @@ namespace Azarashi.CerkeOnline.Application.Language
         {
             LanguageDictionaryFactory languageDictionaryFactory = new LanguageDictionaryFactory(TranslatableKeys);
             LanguageDataReader languageDataReader = new LanguageDataReader(languageDictionaryFactory);
-            return new LanguageTranslator(languageDataReader.Read(languageCode));
+            var dictionary = languageDataReader.Read(languageCode);
+
+            if (dictionary == null)
+            {
+                UnityEngine.Debug.LogError("Language translator generation failed");
+                return new EmptyTranslator();
+            }
+
+            return new LanguageTranslator(dictionary);
         }
 
         private class LanguageTranslator : ILanguageTranslator
@@ -21,6 +29,11 @@ namespace Azarashi.CerkeOnline.Application.Language
             readonly ILanguageDictionary dictionary;
             public LanguageTranslator(ILanguageDictionary dictionary) => this.dictionary = dictionary;
             public string Translate(TranslatableKeys key) => dictionary[key];
+        }
+
+        private class EmptyTranslator : ILanguageTranslator
+        {
+            public string Translate(TranslatableKeys key) => "EMPTY";
         }
     }
 }

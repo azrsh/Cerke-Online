@@ -11,11 +11,11 @@ namespace Azarashi.CerkeOnline.Application.Language
     
     public class LanguageDictionaryFactory
     {
-        readonly IEnumerable<string> tranlatableKeys;
+        readonly IEnumerable<string> translatableKeys;
 
-        public LanguageDictionaryFactory(IEnumerable<string> tranlatableKeys)
+        public LanguageDictionaryFactory(IEnumerable<string> translatableKeys)
         {
-            this.tranlatableKeys = tranlatableKeys;
+            this.translatableKeys = translatableKeys;
         }
 
         public ILanguageDictionary Create(IReadOnlyDictionary<string, string> source)
@@ -27,7 +27,22 @@ namespace Azarashi.CerkeOnline.Application.Language
         }
 
         private bool VerifyDictionary(IReadOnlyDictionary<string, string> source)
-            => tranlatableKeys.SequenceMatch(source.Keys);
+        {
+            var excess = translatableKeys.Except(source.Keys);
+            var shortage = source.Keys.Except(translatableKeys);
+
+            foreach (var item in excess)
+            {
+                UnityEngine.Debug.LogError(item + " is an extra element.");
+            }
+
+            foreach (var item in shortage)
+            {
+                UnityEngine.Debug.LogError(item + " is an missing element.");
+            }
+
+            return !excess.Any() && !shortage.Any();
+        }
 
         /// <summary>
         /// TranslatableKeysが0 ~ Count - 1 であることが保証されている必要がある.

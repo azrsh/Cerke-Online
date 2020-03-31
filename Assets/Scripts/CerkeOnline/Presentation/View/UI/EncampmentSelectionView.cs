@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UniRx;
 using static UnityEngine.UI.Dropdown;
+using Azarashi.CerkeOnline.Application.Language;
 using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
 
 namespace Azarashi.CerkeOnline.Presentation.View.UI
@@ -19,7 +20,11 @@ namespace Azarashi.CerkeOnline.Presentation.View.UI
         {
             if (dropdown == null) throw new NullReferenceException();
 
-            List<OptionData> options = Enum.GetNames(typeof(Encampment)).Select(name => new OptionData(name)).ToList();
+            List<OptionData> options = Enum.GetNames(typeof(Encampment))
+                .Select(name => "Encampment" + name)
+                .Select(name => (TranslatableKeys)Enum.Parse(typeof(TranslatableKeys), name))
+                .Select(key => LanguageManager.Instance.Translator.Translate(key))
+                .Select(name => new OptionData(name)).ToList();
             dropdown.options = options;
         }
 
