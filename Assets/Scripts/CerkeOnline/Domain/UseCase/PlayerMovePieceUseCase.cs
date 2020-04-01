@@ -22,7 +22,7 @@ namespace Azarashi.CerkeOnline.Domain.UseCase
         {
             if (game.CurrentPlayer != player)
             {
-                logger.Log("あなたのターンではありません.");
+                logger.Log(new NotYourTurnMessage());
                 return false;
             }
 
@@ -30,48 +30,46 @@ namespace Azarashi.CerkeOnline.Domain.UseCase
             var piece = board.GetPiece(startPosition);
             if (piece == null)
             {
-                logger.Log("駒が選択されていません.");
+                logger.Log(new NoPieceSelectedMessage());
                 return false;
             }
 
             if (piece.Owner != null && piece.Owner != player)
             {
-                logger.Log("あなたの駒ではありません.");
+                logger.Log(new NotYourPieceMessage());
                 return false;
             }
 
             return true;
         }
 
-        public void RequestToMovePiece(IntegerVector2 startPosition, IntegerVector2 viaPosition, IntegerVector2 lastPosition)
+        public void RequestToMovePiece(IntegerVector2 startPosition, IntegerVector2 viaPosition, IntegerVector2 endPosition)
         {
             if (!CommonCheck(startPosition)) return;
             if (game.Board.GetPiece(viaPosition) == null)
             {
-                logger.Log("経由点に駒がありません");
+                logger.Log(new NoPieceViaPointMessage());
                 return;
             }
 
             var board = game.Board;
-            logger.Log(startPosition + " " + board.GetPiece(startPosition)?.PieceName.ToString() + "を" + 
-                        viaPosition + "を経由して" + 
-                        lastPosition + "へ移動");
-            board.MovePiece(startPosition, viaPosition, lastPosition, player, inputProvider, OnPieceMoved);
+            logger.Log(new PieceViaMovementMessage(player, board.GetPiece(startPosition), startPosition, viaPosition, endPosition));
+            board.MovePiece(startPosition, viaPosition, endPosition, player, inputProvider, OnPieceMoved);
         }
 
-        public void RequestToMovePiece(IntegerVector2 startPosition, IntegerVector2 lastPosition)
+        public void RequestToMovePiece(IntegerVector2 startPosition, IntegerVector2 endPosition)
         {
             if (!CommonCheck(startPosition)) return;
 
             var board = game.Board;
-            logger.Log(startPosition + " " + board.GetPiece(startPosition)?.PieceName.ToString() + "を" + lastPosition + "へ移動");
-            board.MovePiece(startPosition, lastPosition, player, inputProvider, OnPieceMoved);
+            logger.Log(new PieceMovementMessage(player, board.GetPiece(startPosition), startPosition, endPosition));
+            board.MovePiece(startPosition, endPosition, player, inputProvider, OnPieceMoved);
         }
 
         void OnPieceMoved(PieceMoveResult pieceMoveResult)
         {
             player.GivePiece(pieceMoveResult.gottenPiece);
-            if (!pieceMoveResult.isSuccess) logger.Log("駒の移動に失敗しました.");
+            if (!pieceMoveResult.isSuccess) logger.Log(new PieceMovementFailureMessage());
             if (pieceMoveResult.isTurnEnd) game.TurnEnd();    //ターン処理は移動する
         }
     }

@@ -3,8 +3,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UniRx;
 using Azarashi.CerkeOnline.Domain.Entities;
-using Azarashi.CerkeOnline.Domain.UseCase;
 using Azarashi.CerkeOnline.Application;
+using Azarashi.CerkeOnline.Application.Language;
 
 namespace Azarashi.CerkeOnline.Presentation.Presenter.UI
 {
@@ -12,7 +12,7 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.UI
     {
         [SerializeField] Text scoreText = default;
         [SerializeField] Terminologies.FirstOrSecond firstOrSecond = default;
-        [SerializeField] string scoreTextTag = default;
+        [SerializeField] TranslatableKeys scoreTextLabel = default;
 
         void Start()
         {
@@ -32,7 +32,7 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.UI
             Action<Unit> onTurnChanged = _ =>
             {
                 var score = scoreUseCase.Score;
-                scoreText.text = scoreTextTag + " : " + score.ToString();
+                scoreText.text = LanguageManager.Instance.Translator.Translate(scoreTextLabel) + score.ToString();
             };
 
             scoreText.enabled = true;

@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using UniRx;
 using Azarashi.CerkeOnline.Application;
-using Azarashi.CerkeOnline.Domain.UseCase;
+using Azarashi.CerkeOnline.Application.Language;
 
 namespace Azarashi.CerkeOnline.Presentation.View.GameResultMenu
 {
@@ -24,11 +24,11 @@ namespace Azarashi.CerkeOnline.Presentation.View.GameResultMenu
             var remotePlayerScore  = ScoreeUseCaseFactory.Create(Domain.Entities.Terminologies.FirstOrSecond.Second).Score;
             string resultText;
             if (localPlayerScore == remotePlayerScore)
-                resultText = "引き分け";
+                resultText = LanguageManager.Instance.Translator.Translate(TranslatableKeys.DrawMessage);
             else if (localPlayerScore > remotePlayerScore)
-                resultText = "勝利";
+                resultText = LanguageManager.Instance.Translator.Translate(TranslatableKeys.WinMessage);
             else
-                resultText = "敗北";
+                resultText = LanguageManager.Instance.Translator.Translate(TranslatableKeys.LoseMessage);
             scoreText.text = resultText;
         }
     }

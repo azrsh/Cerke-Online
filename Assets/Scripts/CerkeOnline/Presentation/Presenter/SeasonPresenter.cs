@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Azarashi.CerkeOnline.Application;
+using Azarashi.CerkeOnline.Application.Language;
 using Azarashi.CerkeOnline.Domain.Entities;
 
 namespace Azarashi.CerkeOnline.Presentation.Presenter
@@ -23,7 +24,8 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter
 
         void UpdateSeasonView(Terminologies.Season current)
         {
-            seasonText.text = "現在の季 : " + Terminologies.SeasonDictionary.EnumToJapanese[current];
+            seasonText.text = LanguageManager.Instance.Translator.Translate(TranslatableKeys.CurrentSeasonLabel)
+                + Terminologies.SeasonDictionary.EnumToJapanese[current];
         }
     }
 }

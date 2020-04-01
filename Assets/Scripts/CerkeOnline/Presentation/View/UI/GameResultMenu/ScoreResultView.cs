@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using UniRx;
 using Azarashi.CerkeOnline.Application;
-using Azarashi.CerkeOnline.Domain.UseCase;
+using Azarashi.CerkeOnline.Application.Language;
 
 namespace Azarashi.CerkeOnline.Presentation.View.GameResultMenu
 {
@@ -21,7 +21,7 @@ namespace Azarashi.CerkeOnline.Presentation.View.GameResultMenu
         {
             //Domain.Entities.Terminologies.FirstOrSecond.Firstをローカルのプレイヤーを指すように変える
             var score  = ScoreeUseCaseFactory.Create(Domain.Entities.Terminologies.FirstOrSecond.First).Score;
-            scoreText.text = "得点 : " + score.ToString();
+            scoreText.text = LanguageManager.Instance.Translator.Translate(TranslatableKeys.ScoreLabel) + score.ToString();
         }
     }
 }

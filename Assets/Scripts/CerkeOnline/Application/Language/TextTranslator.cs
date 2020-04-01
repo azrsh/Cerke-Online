@@ -10,6 +10,15 @@ namespace Azarashi.CerkeOnline.Application.Language
     {
         [SerializeField] TranslatableKeys key = default;
         Text textComponent;
+        Text TextComponent 
+        {
+            get {
+                if (textComponent == null)
+                    textComponent = GetComponent<Text>();
+
+                return textComponent;
+            } 
+        }
         
         void Start() 
         {
@@ -19,7 +28,7 @@ namespace Azarashi.CerkeOnline.Application.Language
 
         private void UpdateText(ILanguageTranslator translator)
         {
-            textComponent.text = translator.Translate(key.ToString());
+            TextComponent.text = translator.Translate(key); 
         }
 
 #if UNITY_EDITOR
@@ -31,7 +40,7 @@ namespace Azarashi.CerkeOnline.Application.Language
                 return;
             }
 
-            //UpdateText();
+            UpdateText(LanguageManager.Instance.Translator);
         }
 #endif
     }

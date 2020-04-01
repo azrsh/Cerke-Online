@@ -4,6 +4,7 @@ using UniRx;
 using UniRx.Triggers;
 using Azarashi.CerkeOnline.Domain.Entities;
 using Azarashi.CerkeOnline.Application;
+using Azarashi.CerkeOnline.Application.Language;
 
 namespace Azarashi.CerkeOnline.Presentation.Presenter.UI
 {
@@ -21,7 +22,7 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.UI
             this.UpdateAsObservable().TakeUntilDestroy(this)
                 .Select(_ => game.CurrentTurn).DistinctUntilChanged().Subscribe(value =>
                 {
-                    currentTurnText.text = "現在のターン : " + value.ToString();
+                    currentTurnText.text = LanguageManager.Instance.Translator.Translate(TranslatableKeys.CurrentPlayerLabel) + value.ToString();
                 });
         }
     }

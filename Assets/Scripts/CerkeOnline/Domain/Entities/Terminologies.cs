@@ -56,8 +56,8 @@ namespace Azarashi.CerkeOnline.Domain.Entities
 
         public enum RulesetName
         {
-            celterno = 0,   //官定
-            tamajtel = 1,   //硬皇力
+            StandardizedRule = 0,   //官定
+            Tamajtel = 1,   //硬皇力
             NoRule = 2,     //ルール無し
         }
 

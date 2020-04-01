@@ -31,7 +31,7 @@ public class TestModeLoader : MonoBehaviour
     {   
         yield return null;
 
-        preGameSettings.rulesetName = Azarashi.CerkeOnline.Domain.Entities.Terminologies.RulesetName.celterno;
+        preGameSettings.rulesetName = Azarashi.CerkeOnline.Domain.Entities.Terminologies.RulesetName.StandardizedRule;
         preGameSettings.OnStartButton();
     }
 #endif
