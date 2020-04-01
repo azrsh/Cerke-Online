@@ -9,14 +9,14 @@ namespace Libraries.Tests
         [Test]
         public void SeleniumTestSimplePasses()
         {
-            var path = Application.dataPath + "/Libraries/Selenium";
+            /*var path = Application.dataPath + "/Libraries/Selenium";
             var options = new ChromeOptions();
             options.AddArgument("--headless");
             using (ChromeDriver driver = new ChromeDriver(path, options))
             {
                 driver.Navigate().GoToUrl("https://yahoo.co.jp");
                 driver.FindElementByXPath("//*[@id=\"tabTopics2\"]/a").Click();
-            }
+            }*/
         }
     }
 }
