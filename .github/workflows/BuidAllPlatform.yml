@@ -1,0 +1,48 @@
+name: Build project
+
+on:
+  push:
+    tags:
+      - alpha*
+      - beta*
+      - v*
+
+env:
+  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+
+jobs:
+  buildForSomePlatforms:
+    name: Build for ${{ matrix.targetPlatform }} on version ${{ matrix.unityVersion }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        unityVersion:
+          - 2019.3.5f1
+        targetPlatform:
+          - StandaloneOSX # Build a macOS standalone (Intel 64-bit).
+          - StandaloneWindows # Build a Windows standalone.
+          - StandaloneWindows64 # Build a Windows 64-bit standalone.
+          - StandaloneLinux64 # Build a Linux 64-bit standalone.
+          - WebGL # WebGL.
+      
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          lfs: true
+      - uses: actions/cache@v1.1.0
+        with:
+          path: ${{ matrix.projectPath }}/Library
+          key: Library-${{ matrix.targetPlatform }}
+          restore-keys: |
+            Library-
+      - uses: webbertakken/unity-builder@v0.11
+        with:
+          unityVersion: ${{ matrix.unityVersion }}
+          targetPlatform: ${{ matrix.targetPlatform }}
+          buildName: cerke-online
+          buildPath: build/${{ matrix.targetPlatform }}  
+      - uses: actions/upload-artifact@v1
+        with:
+          name: ${{ matrix.targetPlatform }}
+          path: build/${{ matrix.targetPlatform }}
