@@ -79,3 +79,12 @@ MonoBehaviour:
   - RulesetStandardizedRule
   - RulesetTamajtel
   - RulesetNoRule
+  - NotYourTurnMessage
+  - NotYourPieceMessage
+  - PieceMovementMessage
+  - PieceViaMovementMessage
+  - PieceMovementFailureMessage
+  - NoPieceViaPointMessage
+  - NoPieceSelectedMessage
+  - SetPieceMessage
+  - SetPieceFailureMessage

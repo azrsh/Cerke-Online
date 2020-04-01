@@ -20,20 +20,20 @@ namespace Azarashi.CerkeOnline.Domain.UseCase
         {
             if (game.CurrentPlayer != player)
             {
-                logger.Log("あなたのターンではありません.");
+                logger.Log(new NotYourTurnMessage());
                 return;
             }
 
             if (piece == null)
             {
-                logger.Log("駒が選択されていません.");
+                logger.Log(new NoPieceSelectedMessage());
                 return;
             }
 
             IBoard board = game.Board;
-            logger.Log(piece.PieceName.ToString() + "を" + position + "に配置.");
+            logger.Log(new SetPieceMessage(player, piece, position));
             bool result = board.SetPiece(position, piece);
-            if (!result) logger.Log("駒の設置に失敗しました.");
+            if (!result) logger.Log(new SetPieceFailureMessage());
             else
             {
                 player.UseCapturedPiece(piece);

@@ -72,6 +72,15 @@ namespace Azarashi.CerkeOnline.Application.Language
 		DeclaringToEndButton = 62,
 		RulesetStandardizedRule = 63,
 		RulesetTamajtel = 64,
-		RulesetNoRule = 65
+		RulesetNoRule = 65,
+		NotYourTurnMessage = 66,
+		NotYourPieceMessage = 67,
+		PieceMovementMessage = 68,
+		PieceViaMovementMessage = 69,
+		PieceMovementFailureMessage = 70,
+		NoPieceViaPointMessage = 71,
+		NoPieceSelectedMessage = 72,
+		SetPieceMessage = 73,
+		SetPieceFailureMessage = 74
 	}
 }
