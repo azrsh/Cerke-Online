@@ -24,6 +24,7 @@ namespace Azarashi.CerkeOnline.Application.Language
         {
             textComponent = GetComponent<Text>();
             LanguageManager.Instance.OnLanguageChanged.TakeUntilDestroy(this).Subscribe(UpdateText);
+            UpdateText(LanguageManager.Instance.Translator);
         }
 
         private void UpdateText(ILanguageTranslator translator)
