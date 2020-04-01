@@ -32,7 +32,7 @@ namespace Azarashi.CerkeOnline.Application.Language
             TextComponent.text = translator.Translate(key); 
         }
 
-#if UNITY_EDITOR
+#if false
         private void OnValidate()
         {
             if (!LanguageManager.Instance.TranslatableKeys.Contains(key.ToString()))
