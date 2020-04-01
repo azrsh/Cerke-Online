@@ -1,3 +1,5 @@
+![Run editor test](https://github.com/azarashi2931/Cerke-Online/workflows/Run%20editor%20test/badge.svg?branch=master)
+
 English readme is [here](README.en.md)
 
 # Cerke-Online
