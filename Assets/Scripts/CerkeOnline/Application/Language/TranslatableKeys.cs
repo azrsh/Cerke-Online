@@ -66,6 +66,12 @@ namespace Azarashi.CerkeOnline.Application.Language
 		PauseMenuTitle = 56,
 		LogDisplayActivationToggle = 57,
 		KeyboardInputActivationToggle = 58,
-		CloseButton = 59
+		CloseButton = 59,
+		EndOrContinueQuestionText = 60,
+		DeclaringToContinueButton = 61,
+		DeclaringToEndButton = 62,
+		RulesetStandardizedRule = 63,
+		RulesetTamajtel = 64,
+		RulesetNoRule = 65
 	}
 }

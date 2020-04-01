@@ -1854,6 +1854,7 @@ GameObject:
   - component: {fileID: 372747972}
   - component: {fileID: 372747974}
   - component: {fileID: 372747973}
+  - component: {fileID: 372747975}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -1911,7 +1912,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u7D42\u5B63"
+  m_Text: EMPTY
 --- !u!222 &372747974
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1920,6 +1921,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 372747971}
   m_CullTransparentMesh: 0
+--- !u!114 &372747975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 372747971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f357c46ebcfc464e8b39e369e64696d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: 62
 --- !u!1 &379940393
 GameObject:
   m_ObjectHideFlags: 0
@@ -2046,7 +2060,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 
+  m_Text: EMPTY
 --- !u!222 &399389514
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2522,7 +2536,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 
+  m_Text: EMPTY
 --- !u!222 &481164881
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2726,6 +2740,7 @@ GameObject:
   - component: {fileID: 574039789}
   - component: {fileID: 574039791}
   - component: {fileID: 574039790}
+  - component: {fileID: 574039792}
   m_Layer: 5
   m_Name: QuestionText
   m_TagString: Untagged
@@ -2783,7 +2798,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u7D42\u5B63\u307E\u305F\u306F\u518D\u884C\u3092\u9078\u629E\u3057\u3066\u304F\u3060\u3055\u3044\u3002"
+  m_Text: EMPTY
 --- !u!222 &574039791
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2792,6 +2807,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 574039788}
   m_CullTransparentMesh: 0
+--- !u!114 &574039792
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 574039788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f357c46ebcfc464e8b39e369e64696d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: 60
 --- !u!1 &579047623
 GameObject:
   m_ObjectHideFlags: 0
@@ -2975,7 +3003,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 
+  m_Text: EMPTY
 --- !u!222 &605091722
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3384,7 +3412,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 
+  m_Text: EMPTY
 --- !u!222 &780514259
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3532,7 +3560,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 
+  m_Text: EMPTY
 --- !u!222 &784996154
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5143,6 +5171,7 @@ GameObject:
   - component: {fileID: 1191339992}
   - component: {fileID: 1191339994}
   - component: {fileID: 1191339993}
+  - component: {fileID: 1191339995}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -5200,7 +5229,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u518D\u884C"
+  m_Text: EMPTY
 --- !u!222 &1191339994
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5209,6 +5238,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1191339991}
   m_CullTransparentMesh: 0
+--- !u!114 &1191339995
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1191339991}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f357c46ebcfc464e8b39e369e64696d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: 61
 --- !u!1 &1204784007
 GameObject:
   m_ObjectHideFlags: 0

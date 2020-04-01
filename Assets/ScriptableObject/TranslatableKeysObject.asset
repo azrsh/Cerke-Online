@@ -73,3 +73,9 @@ MonoBehaviour:
   - LogDisplayActivationToggle
   - KeyboardInputActivationToggle
   - CloseButton
+  - EndOrContinueQuestionText
+  - DeclaringToContinueButton
+  - DeclaringToEndButton
+  - RulesetStandardizedRule
+  - RulesetTamajtel
+  - RulesetNoRule

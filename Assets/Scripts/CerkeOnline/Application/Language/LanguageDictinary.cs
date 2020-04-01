@@ -28,8 +28,8 @@ namespace Azarashi.CerkeOnline.Application.Language
 
         private bool VerifyDictionary(IReadOnlyDictionary<string, string> source)
         {
-            var excess = translatableKeys.Except(source.Keys);
-            var shortage = source.Keys.Except(translatableKeys);
+            var shortage = translatableKeys.Except(source.Keys);
+            var excess = source.Keys.Except(translatableKeys);
 
             foreach (var item in excess)
             {
@@ -57,7 +57,9 @@ namespace Azarashi.CerkeOnline.Application.Language
             {
                 var array = new string[source.Count];
                 for (int i = 0; i < array.Length; i++)
+                {
                     array[i] = source[((TranslatableKeys)i).ToString()];
+                }
 
                 dictionary = array;
             }

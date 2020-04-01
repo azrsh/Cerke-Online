@@ -58,5 +58,11 @@
   "PauseMenuTitle": "",
   "LogDisplayActivationToggle": "",
   "KeyboardInputActivationToggle": "",
-  "CloseButton": ""
+  "CloseButton": "",
+  "EndOrContinueQuestionText": "",
+  "DeclaringToContinueButton": "",
+  "DeclaringToEndButton": "",
+  "RulesetStandardizedRule": "",
+  "RulesetTamajtel": "",
+  "RulesetNoRule": ""
 }

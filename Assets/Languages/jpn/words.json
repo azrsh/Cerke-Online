@@ -58,5 +58,11 @@
   "PauseMenuTitle": "一時停止",
   "LogDisplayActivationToggle": "ログを表示する",
   "KeyboardInputActivationToggle": "キーボードによる入力を有効にする",
-  "CloseButton": "閉じる"
+  "CloseButton": "閉じる",
+  "EndOrContinueQuestionText": "終季または再行を選択してください。",
+  "DeclaringToContinueButton": "再行",
+  "DeclaringToEndButton": "終季",
+  "RulesetStandardizedRule": "官定",
+  "RulesetTamajtel": "皇硬力",
+  "RulesetNoRule": "ルール無し"
 }
