@@ -12,17 +12,21 @@ namespace Azarashi.CerkeOnline.Networking.DataStructure
     public struct PieceMoveData
     {
         public readonly string senderId;
-        public readonly IntegerVector2 start;
+        public readonly int startX;
+        public readonly int startY;
         public readonly Terminologies.PieceName piece;
-        public readonly IntegerVector2 end;
+        public readonly int endX;
+        public readonly int endY;
         public readonly byte numberOfstick;
 
         public PieceMoveData(string senderId, IntegerVector2 start, Terminologies.PieceName piece, IntegerVector2 end, byte numberOfstick = byte.MaxValue)
         {
             this.senderId = senderId;
-            this.start = start;
+            this.startX = start.x;
+            this.startY = start.y;
             this.piece = piece;
-            this.end = end;
+            this.endX = end.x;
+            this.endY = end.y;
             this.numberOfstick = numberOfstick;
         }
     }

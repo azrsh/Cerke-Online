@@ -6,12 +6,12 @@ using Azarashi.CerkeOnline.Presentation;
 
 public class TestModeLoader : MonoBehaviour
 {
+#if UNITY_EDITOR
     [SerializeField] GameObject cameraPrefab = default;
     [SerializeField] GameObject eventSystemPrefab = default;
     [SerializeField] GameObject gameControllerPrefab = default;
     [SerializeField] PreGameSettings preGameSettings = default;
 
-#if UNITY_EDITOR
     void Awake()
     {
         if (SceneManager.sceneCount > 1)
