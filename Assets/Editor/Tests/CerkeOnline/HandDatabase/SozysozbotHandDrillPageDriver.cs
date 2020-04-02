@@ -9,7 +9,7 @@ using Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Pieces;
 
 namespace Azarashi.CerkeOnline.Tests.HandDatabaseTest
 {
-    internal class SozysozbotHandDrillPageDriver
+    /*internal class SozysozbotHandDrillPageDriver
     {
         const string url = "https://sozysozbot.github.io/cerke_calculate_hands/calculate_hand_contest.html";
 
@@ -129,5 +129,5 @@ namespace Azarashi.CerkeOnline.Tests.HandDatabaseTest
 
             return handName;
         }
-    }
+    }*/
 }
