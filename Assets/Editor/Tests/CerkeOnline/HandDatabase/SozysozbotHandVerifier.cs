@@ -1,11 +1,11 @@
-﻿using System;
+﻿/*using System;
 using System.Collections.Generic;
 using OpenQA.Selenium.Chrome;
 using Azarashi.CerkeOnline.Domain.Entities;
 
 namespace Azarashi.CerkeOnline.Tests.HandDatabaseTest
 {
-    /*internal class SozysozbotHandVerifier
+    internal class SozysozbotHandVerifier
     {
         readonly Func<IReadOnlyPiece[], IEnumerable<IHand>> solveFunction;
         readonly int drillCount;
@@ -46,5 +46,5 @@ namespace Azarashi.CerkeOnline.Tests.HandDatabaseTest
 
             if (!drillPageDriver.IsCorrect()) drillPageDriver.ShowErrorMessage(questionPieces);
         }
-    }*/
-}
+    }
+}*/
