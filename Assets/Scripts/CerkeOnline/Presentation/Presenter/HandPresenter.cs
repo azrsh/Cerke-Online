@@ -30,19 +30,19 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter
 
         void NotifyHandDifference(HandDifference handDifference)
         {
+            var translator = LanguageManager.Instance.Translator;
+
             foreach (IHand hand in handDifference.IncreasedDifference)
             {
-                TranslatableKeys handNameKey = (TranslatableKeys)System.Enum.Parse(typeof(TranslatableKeys), "Hands" + hand.Name.ToString());
-                string handName = LanguageManager.Instance.Translator.Translate(handNameKey);
-                string message = LanguageManager.Instance.Translator.Translate(TranslatableKeys.HandCompleteMessage)
+                string handName = HandNameTranslator.Translate(hand.Name, translator);
+                string message = translator.Translate(TranslatableKeys.HandCompleteMessage)
                     .Replace("#HAND_NAME#",handName);  //キーワードの置き換えはここでやるべきではない
                 logger.Log(message);
             }
             foreach (IHand hand in handDifference.DecreasedDifference)
             {
-                TranslatableKeys handNameKey = (TranslatableKeys)System.Enum.Parse(typeof(TranslatableKeys), "Hands" + hand.Name.ToString());
-                string handName = LanguageManager.Instance.Translator.Translate(handNameKey);
-                string message = LanguageManager.Instance.Translator.Translate(TranslatableKeys.HandUncompleteMessage)
+                string handName = HandNameTranslator.Translate(hand.Name, translator);
+                string message = translator.Translate(TranslatableKeys.HandUncompleteMessage)
                     .Replace("#HAND_NAME#", handName);  //キーワードの置き換えはここでやるべきではない
                 logger.Log(message);
             }

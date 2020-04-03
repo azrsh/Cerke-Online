@@ -23,10 +23,7 @@ namespace Azarashi.CerkeOnline.Presentation.View.GameResultMenu
             var hands  = HandUseCaseFactory.Create(Domain.Entities.Terminologies.FirstOrSecond.First).GetCurrentHands();
             handText.text = LanguageManager.Instance.Translator.Translate(TranslatableKeys.CompletedHandsLabel)
                 + hands.Select(hand => hand.Name)
-                .Select(handName => handName.ToString())
-                .Select(handName => "Hands" + handName)
-                .Select(keyString => (TranslatableKeys)System.Enum.Parse(typeof(TranslatableKeys), keyString))
-                .Select(LanguageManager.Instance.Translator.Translate)
+                .Select(name => HandNameTranslator.Translate(name, LanguageManager.Instance.Translator))
                 .DefaultIfEmpty().Aggregate((previous, next) => previous + next + System.Environment.NewLine);
         }
     }
