@@ -44,8 +44,10 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.UI
             };
 
             Open();
-            quitButton.OnClickAsObservable().First().TakeUntilDestroy(this).Subscribe(_ => action(SeasonContinueOrEnd.End));
-            continueButton.OnClickAsObservable().First().TakeUntilDestroy(this).Subscribe(_ => action(SeasonContinueOrEnd.Continue));
+            var quitButtonAsObservable = quitButton.OnClickAsObservable().TakeUntilDestroy(this).Select(_ => SeasonContinueOrEnd.End);
+            var continueButtonAsObservable = continueButton.OnClickAsObservable().TakeUntilDestroy(this).Select(_ => SeasonContinueOrEnd.Continue);
+            quitButtonAsObservable.Merge(continueButtonAsObservable).First().Subscribe(action);
+
         }
     }
 }
