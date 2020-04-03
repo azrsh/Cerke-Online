@@ -19,8 +19,8 @@ namespace Azarashi.CerkeOnline.Tests
         [Test]
         public void Case1()
         {
-            var difference = new IHand[] { new DefaultHand(new LaElmss(), 0) };
-            var previous = new IHand[] { new DefaultHand(new LaAls(), 0) };
+            var difference = new IHand[] { new DefaultHand(new TheArmy(), 0) };
+            var previous = new IHand[] { new DefaultHand(new TheUnbeatable(), 0) };
             var next = previous.Concat(difference);
 
             var differenceHandName = difference.Select(hand => hand.Name);
@@ -38,8 +38,8 @@ namespace Azarashi.CerkeOnline.Tests
         [Test]
         public void Case2()
         {
-            var difference = new IHand[] { new DefaultHand(new LaElmss(), 0) };
-            var next = new IHand[] { new DefaultHand(new LaNermetixaler(), 0) };
+            var difference = new IHand[] { new DefaultHand(new TheArmy(), 0) };
+            var next = new IHand[] { new DefaultHand(new TheKing(), 0) };
             var previous = next.Concat(difference);
 
             var differenceHandName = difference.Select(hand => hand.Name).OrderBy(name => name);

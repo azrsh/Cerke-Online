@@ -2,9 +2,9 @@
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Hands.PieceStackProviders
 {
-    internal class LaPysess : DefaultPieceStacksProviderr
+    internal class TheAnimals : DefaultPieceStacksProviderr
     {
-        internal LaPysess()
+        public TheAnimals()
         {
             HandName = HandName.TheAnimals;
             pieceStacks = new PieceStack[] { new PieceStack(PieceName.Stistyst, 1), new PieceStack(PieceName.Dodor, 1) };

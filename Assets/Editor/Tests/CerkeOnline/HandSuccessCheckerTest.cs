@@ -13,8 +13,8 @@ namespace Azarashi.CerkeOnline.Tests.HandSuccessCheckerTest
         [Test]
         public void HandSuccessCheckerTestSimplePasses()
         {
-            IPieceStacksProvider[] pieceStacksProviders = { new LaAls(), new LaCeldinerss(), new LaElmss(), new LaMeunerfergal(),
-                new LaNermetixaler(), new LaNienulerless(), new LaNyAnknish(), new LaPhertarsadElmss(), new LaPysess(), new LaVefisait()};
+            IPieceStacksProvider[] pieceStacksProviders = { new TheUnbeatable(), new TheComrades(), new TheArmy(), new TheCulture(),
+                new TheKing(), new TheAttack(), new TheSocialOrder(), new TheDeadlyArmy(), new TheAnimals(), new TheCavalry()};
 
             foreach (var item in pieceStacksProviders)
             {

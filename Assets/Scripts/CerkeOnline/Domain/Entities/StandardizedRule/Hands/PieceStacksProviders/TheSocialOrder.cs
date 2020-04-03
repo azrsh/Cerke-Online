@@ -2,9 +2,9 @@
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Hands.PieceStackProviders
 {
-    internal class LaNyAnknish : DefaultPieceStacksProviderr
+    internal class TheSocialOrder : DefaultPieceStacksProviderr
     {
-        internal LaNyAnknish()
+        public TheSocialOrder()
         {
             HandName = HandName.TheSocialOrder;
             pieceStacks = new PieceStack[] { new PieceStack(PieceName.Elmer,1), new PieceStack(PieceName.Gustuer,1),

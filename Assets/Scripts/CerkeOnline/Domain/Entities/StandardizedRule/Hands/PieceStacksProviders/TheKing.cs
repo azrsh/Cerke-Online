@@ -2,9 +2,9 @@
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Hands.PieceStackProviders
 {
-    internal class LaNermetixaler : DefaultPieceStacksProviderr
+    internal class TheKing : DefaultPieceStacksProviderr
     {
-        internal LaNermetixaler()
+        public TheKing()
         {
             HandName = HandName.TheKing;
             pieceStacks = new PieceStack[] { new PieceStack(PieceName.Ales, 1) };

@@ -2,9 +2,9 @@
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Hands.PieceStackProviders
 {
-    internal class LaAls : DefaultPieceStacksProviderr
+    internal class TheUnbeatable : DefaultPieceStacksProviderr
     {
-        internal LaAls()
+        public TheUnbeatable()
         {
             HandName = HandName.TheUnbeatable;
             pieceStacks = new PieceStack[] { new PieceStack(PieceName.Felkana,1), new PieceStack(PieceName.Elmer,1), new PieceStack(PieceName.Gustuer,1),

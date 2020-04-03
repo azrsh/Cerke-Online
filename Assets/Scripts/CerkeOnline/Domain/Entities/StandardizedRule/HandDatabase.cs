@@ -33,8 +33,8 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
         {
             const int NumberOfPieceStacksProviders = 10;
             IPieceStacksProvider[] pieceStacksProviders = new IPieceStacksProvider[NumberOfPieceStacksProviders]
-                        { new LaAls(), new LaNyAnknish(), new LaMeunerfergal(), new LaNienulerless(), new LaNermetixaler(), new LaPysess(),
-                          new LaPhertarsadElmss(), new LaVefisait(), new LaElmss(), new LaCeldinerss()};
+                        { new TheUnbeatable(), new TheSocialOrder(), new TheCulture(), new TheAttack(), new TheKing(), new TheAnimals(),
+                          new TheDeadlyArmy(), new TheCavalry(), new TheArmy(), new TheComrades()};
             int[] baseScores = new int[NumberOfPieceStacksProviders]
                         {          50,                10,                    7,                    5,                    3,              3,
                                                 3,                5,             3,                  3};
@@ -51,8 +51,8 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
 
             var tam = board.SearchPiece(Terminologies.PieceName.Tam);
             var tamObserver = new TamObserver(onTurnChanged, board.OnEveruValueChanged, tam);
-            hands[NumberOfPieceStacksProviders * 2] = new LaTamadSemorkovo(-5, (ISteppedObservable)tam);     //Unsafe
-            hands[NumberOfPieceStacksProviders * 2 + 1] = new TamenMako(-3, tamObserver);
+            hands[NumberOfPieceStacksProviders * 2] = new TheStepping(-5, (ISteppedObservable)tam);     //Unsafe
+            hands[NumberOfPieceStacksProviders * 2 + 1] = new TheFutileMove(-3, tamObserver);
         }
 
         public IEnumerable<IHand> SearchHands(IEnumerable<IReadOnlyPiece> pieces)
