@@ -91,6 +91,10 @@ namespace Azarashi.CerkeOnline.Application.Language
 		HandsTheAnimalsFlash = 81,
 		HandsTheArmyFlash = 82,
 		HandsTheComradesFlash = 83,
-		HandsTheDeadlyArmyFlash = 84
+		HandsTheDeadlyArmyFlash = 84,
+		SeasonsSpring = 85,
+		SeasonsSummer = 86,
+		SeasonsAutumn = 87,
+		SeasonsWinter = 88
 	}
 }

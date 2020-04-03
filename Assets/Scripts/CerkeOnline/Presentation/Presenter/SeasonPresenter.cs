@@ -24,8 +24,8 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter
 
         void UpdateSeasonView(Terminologies.Season current)
         {
-            seasonText.text = LanguageManager.Instance.Translator.Translate(TranslatableKeys.CurrentSeasonLabel)
-                + Terminologies.SeasonDictionary.EnumToJapanese[current];
+            var translator = LanguageManager.Instance.Translator;
+            seasonText.text = translator.Translate(TranslatableKeys.CurrentSeasonLabel) + SeasonTranslator.Translate(current, translator);
         }
     }
 }

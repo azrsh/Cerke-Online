@@ -6,12 +6,10 @@ namespace Azarashi.CerkeOnline.Domain.Entities
     /// </summary>
     internal class DefaultSeason : ISeason
     {
-        public string Name { get; }
         public Terminologies.Season Season { get; }
 
         internal DefaultSeason(Terminologies.Season season)
         {
-            Name = Terminologies.SeasonDictionary.EnumToJapanese[season];
             Season = season;
         }
     }

@@ -152,18 +152,6 @@ namespace Azarashi.CerkeOnline.Domain.Entities
             None = 0, Spring = 1, Summer = 2, Autumn = 3, Winter = 4
         };
 
-        public static class SeasonDictionary
-        {
-            public static readonly IReadOnlyDictionary<string, string> PascalToJapanese = new Dictionary<string, string>()
-            {
-                {"Spring", "春"}, {"Summer", "夏"}, {"Autumn", "秋"}, {"Winter", "冬"}
-            };
-            public static readonly IReadOnlyDictionary<Season, string> EnumToJapanese = new Dictionary<Season, string>()
-            {
-                {Season.Spring, "春"}, {Season.Summer, "夏"}, {Season.Autumn, "秋"}, {Season.Winter, "冬"}
-            };
-        }
-
         public static Season GetNextSeason(Season season)
         {
             switch (season)
