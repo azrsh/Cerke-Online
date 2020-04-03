@@ -82,7 +82,31 @@ namespace Azarashi.CerkeOnline.Domain.Entities
 
         public static HandName ToFlash(HandName handName)
         {
-            return (HandName)System.Enum.Parse(typeof(HandName), handName.ToString() + "Flash");
+            switch (handName)
+            {
+                case HandName.TheUnbeatable:
+                    return HandName.TheUnbeatableFlash;
+                case HandName.TheSocialOrder:
+                    return HandName.TheSocialOrderFlash;
+                case HandName.TheCulture:
+                    return HandName.TheCultureFlash;
+                case HandName.TheCavalry:
+                    return HandName.TheCavalryFlash;
+                case HandName.TheAttack:
+                    return HandName.TheAttackFlash;
+                case HandName.TheKing:
+                    return HandName.TheKingFlash;
+                case HandName.TheAnimals:
+                    return HandName.TheAnimalsFlash;
+                case HandName.TheArmy:
+                    return HandName.TheArmyFlash;
+                case HandName.TheComrades:
+                    return HandName.TheComradesFlash;
+                case HandName.TheDeadlyArmy:
+                    return HandName.TheDeadlyArmyFlash;
+                default:
+                    return handName;
+            }
         }
 
         public enum RulesetName
