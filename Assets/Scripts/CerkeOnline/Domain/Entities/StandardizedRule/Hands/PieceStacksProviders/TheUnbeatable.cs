@@ -7,10 +7,10 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Hands.PieceStack
         public TheUnbeatable()
         {
             HandName = HandName.TheUnbeatable;
-            pieceStacks = new PieceStack[] { new PieceStack(PieceName.Felkana,1), new PieceStack(PieceName.Elmer,1), new PieceStack(PieceName.Gustuer,1),
-                new PieceStack(PieceName.Vadyrd,1),new PieceStack(PieceName.Stistyst,1),new PieceStack(PieceName.Dodor,1),
-                new PieceStack(PieceName.Kua,1),new PieceStack(PieceName.Terlsk,1),new PieceStack(PieceName.Varxle,1),
-                new PieceStack(PieceName.Ales,1),new PieceStack(PieceName.Tam,1)};
+            pieceStacks = new PieceStack[] { new PieceStack(PieceName.Vessel,1), new PieceStack(PieceName.Pawn,1), new PieceStack(PieceName.Archer,1),
+                new PieceStack(PieceName.Chariot,1),new PieceStack(PieceName.Tiger,1),new PieceStack(PieceName.Horse,1),
+                new PieceStack(PieceName.Officer,1),new PieceStack(PieceName.Shaman,1),new PieceStack(PieceName.General,1),
+                new PieceStack(PieceName.King,1),new PieceStack(PieceName.Minds,1)};
         }
     }
 }

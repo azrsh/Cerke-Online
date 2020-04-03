@@ -7,8 +7,8 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Hands.PieceStack
         public TheSocialOrder()
         {
             HandName = HandName.TheSocialOrder;
-            pieceStacks = new PieceStack[] { new PieceStack(PieceName.Elmer,1), new PieceStack(PieceName.Gustuer,1),
-                new PieceStack(PieceName.Kua,1), new PieceStack(PieceName.Terlsk,1),new PieceStack(PieceName.Varxle,1)};
+            pieceStacks = new PieceStack[] { new PieceStack(PieceName.Pawn,1), new PieceStack(PieceName.Archer,1),
+                new PieceStack(PieceName.Officer,1), new PieceStack(PieceName.Shaman,1),new PieceStack(PieceName.General,1)};
         }
     }
 }

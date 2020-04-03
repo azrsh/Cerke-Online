@@ -48,7 +48,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
                 for (int j = 0; j < pieces.Height; j++)
                 {
                     IReadOnlyPiece piece = pieces.Read(new PublicDataType.IntegerVector2(i, j));
-                    if (piece != null && piece.PieceName == pieceName)
+                    if (piece != null && piece.Name == pieceName)
                         return piece;
                 }
             }

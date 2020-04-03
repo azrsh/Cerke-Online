@@ -49,7 +49,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
                 overwriteHandPairs[i] = new OverwriteHandPair(hands[i * 2], hands[i * 2 + 1]);
             }
 
-            var tam = board.SearchPiece(Terminologies.PieceName.Tam);
+            var tam = board.SearchPiece(Terminologies.PieceName.Minds);
             var tamObserver = new TamObserver(onTurnChanged, board.OnEveruValueChanged, tam);
             hands[NumberOfPieceStacksProviders * 2] = new TheStepping(-5, (ISteppedObservable)tam);     //Unsafe
             hands[NumberOfPieceStacksProviders * 2 + 1] = new TheFutileMove(-3, tamObserver);

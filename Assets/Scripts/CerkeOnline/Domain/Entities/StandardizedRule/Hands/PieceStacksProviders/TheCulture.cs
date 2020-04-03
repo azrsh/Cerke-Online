@@ -7,7 +7,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Hands.PieceStack
         public TheCulture()
         {
             HandName = HandName.TheCulture;
-            pieceStacks = new PieceStack[] { new PieceStack(PieceName.Kua, 1), new PieceStack(PieceName.Terlsk, 1), new PieceStack(PieceName.Varxle, 1) };
+            pieceStacks = new PieceStack[] { new PieceStack(PieceName.Officer, 1), new PieceStack(PieceName.Shaman, 1), new PieceStack(PieceName.General, 1) };
         }
     }
 }

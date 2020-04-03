@@ -4,7 +4,7 @@ using UniRx;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Pieces
 {
-    internal class Tam : DefaultPiece, ISteppedObservable, ISteppedObserver
+    internal class Minds : DefaultPiece, ISteppedObservable, ISteppedObserver
     {
         public override int NumberOfMoves => 2;
 
@@ -15,7 +15,8 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Pieces
         readonly PieceMovement[] normalPieceMovements;
         readonly PieceMovement[] expansionPieceMovements;
 
-        public Tam(Terminologies.PieceColor color, PublicDataType.IntegerVector2 position, IPlayer owner, IExpandingMoveFieldChecker fieldChecker) : base(position, color, owner, Terminologies.PieceName.Tam, fieldChecker)
+        public Minds(Terminologies.PieceColor color, PublicDataType.IntegerVector2 position, IPlayer owner, IExpandingMoveFieldChecker fieldChecker)
+            : base(position, color, owner, Terminologies.PieceName.Minds, fieldChecker)
         {
             normalPieceMovements = new PieceMovement[]
             {

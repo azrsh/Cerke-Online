@@ -3,12 +3,13 @@ using System.Collections.Generic;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Pieces
 {
-    internal class Vadyrd : DefaultPiece
+    internal class Chariot : DefaultPiece
     {
         protected readonly PieceMovement[] normalPieceMovements;
         protected readonly PieceMovement[] expansionPieceMovements;
 
-        public Vadyrd(Terminologies.PieceColor color, PublicDataType.IntegerVector2 position, IPlayer owner, IExpandingMoveFieldChecker fieldChecker) : base(position, color, owner, Terminologies.PieceName.Vadyrd, fieldChecker)
+        public Chariot(Terminologies.PieceColor color, PublicDataType.IntegerVector2 position, IPlayer owner, IExpandingMoveFieldChecker fieldChecker) 
+            : base(position, color, owner, Terminologies.PieceName.Chariot, fieldChecker)
         {
             normalPieceMovements = new PieceMovement[]
             {

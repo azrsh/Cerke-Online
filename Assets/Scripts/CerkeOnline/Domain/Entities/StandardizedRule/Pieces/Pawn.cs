@@ -3,12 +3,13 @@ using System.Linq;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Pieces
 {
-    internal class Felkana : DefaultPiece
+    internal class Vessel : DefaultPiece
     {
         protected readonly PieceMovement[] normalPieceMovements;
         protected readonly PieceMovement[] expansionPieceMovements;
 
-        public Felkana(Terminologies.PieceColor color, PublicDataType.IntegerVector2 position, IPlayer owner, IExpandingMoveFieldChecker fieldChecker) : base(position, color, owner, Terminologies.PieceName.Felkana, fieldChecker)
+        public Vessel(Terminologies.PieceColor color, PublicDataType.IntegerVector2 position, IPlayer owner, IExpandingMoveFieldChecker fieldChecker) 
+            : base(position, color, owner, Terminologies.PieceName.Vessel, fieldChecker)
         {
             normalPieceMovements = new PieceMovement[]
             {

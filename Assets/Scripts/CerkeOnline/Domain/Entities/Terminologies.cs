@@ -41,17 +41,17 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         {
             None         = -1,
 
-            Felkana      = 0,
-            Elmer        = 1,
-            Gustuer      = 2,
-            Vadyrd       = 3,
-            Stistyst     = 4,
-            Dodor        = 5,
-            Kua          = 6,
-            Terlsk       = 7,
-            Varxle       = 8,
-            Ales         = 9,
-            Tam          = 10
+            Vessel       = 0,
+            Pawn         = 1,
+            Archer       = 2,
+            Chariot      = 3,
+            Tiger        = 4,
+            Horse        = 5,
+            Officer      = 6,
+            Shaman       = 7,
+            General      = 8,
+            King         = 9,
+            Minds        = 10
         }
 
         public enum HandName

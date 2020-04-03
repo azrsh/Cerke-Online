@@ -16,7 +16,7 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.Columns
             if (game == null)
                 return;
 
-            PieceName pieceName = game.Board.GetPiece(start).PieceName;
+            PieceName pieceName = game.Board.GetPiece(start).Name;
             PieceMoveData pieceMoveData = new PieceMoveData(string.Empty, start, pieceName, last);
             GameController.Instance.ServerDelegate.PostMoveData(pieceMoveData);
         }

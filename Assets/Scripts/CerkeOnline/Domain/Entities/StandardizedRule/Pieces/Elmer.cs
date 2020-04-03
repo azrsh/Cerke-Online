@@ -3,12 +3,13 @@ using System.Collections.Generic;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Pieces
 {
-    internal class Elmer : DefaultPiece
+    internal class Pawn : DefaultPiece
     {
         protected readonly PieceMovement[] normalPieceMovements;
         protected readonly PieceMovement[] expansionPieceMovements;
 
-        public Elmer(Terminologies.PieceColor color, PublicDataType.IntegerVector2 position, IPlayer owner, IExpandingMoveFieldChecker fieldChecker) : base(position, color, owner, Terminologies.PieceName.Elmer, fieldChecker)
+        public Pawn(Terminologies.PieceColor color, PublicDataType.IntegerVector2 position, IPlayer owner, IExpandingMoveFieldChecker fieldChecker)
+            : base(position, color, owner, Terminologies.PieceName.Pawn, fieldChecker)
         {
             normalPieceMovements = new PieceMovement[]
             {

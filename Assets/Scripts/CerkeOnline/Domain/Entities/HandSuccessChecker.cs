@@ -17,8 +17,8 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         {
             if (holdingPieces.Count() < pieceStacks.Count()) return false;
             
-            IEnumerable<PieceName> holdingPieceNames = holdingPieces.Select(piece => piece.PieceName);
-            int restAlesCount = holdingPieceNames.Where(name => name == PieceName.Ales).Count();
+            IEnumerable<PieceName> holdingPieceNames = holdingPieces.Select(piece => piece.Name);
+            int restAlesCount = holdingPieceNames.Where(name => name == PieceName.King).Count();
             bool isSuccess = pieceStacks.All(stack =>
             {
                 int appropriateHoldingPieceCount = holdingPieceNames.Count(pieceName => stack.PieceName == PieceName.None || pieceName == stack.PieceName);

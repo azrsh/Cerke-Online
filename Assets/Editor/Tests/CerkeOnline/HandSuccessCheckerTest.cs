@@ -33,14 +33,14 @@ namespace Azarashi.CerkeOnline.Tests.HandSuccessCheckerTest
         private class MockPiece : IReadOnlyPiece
         {
             public IPlayer Owner => throw new System.NotImplementedException();
-            public Terminologies.PieceName PieceName { get; }
+            public Terminologies.PieceName Name { get; }
             public IntegerVector2 Position => throw new System.NotImplementedException();
             public Terminologies.PieceColor Color => throw new System.NotImplementedException();
             public int NumberOfMoves => throw new System.NotImplementedException();
 
             public MockPiece(Terminologies.PieceName pieceName)
             {
-                PieceName = pieceName;
+                Name = pieceName;
             }
 
             public bool CanLittuaWithoutJudge() => throw new System.NotImplementedException();

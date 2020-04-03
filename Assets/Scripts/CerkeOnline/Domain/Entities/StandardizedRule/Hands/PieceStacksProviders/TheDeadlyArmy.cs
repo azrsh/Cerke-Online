@@ -7,7 +7,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Hands.PieceStack
         public TheDeadlyArmy()
         {
             HandName = HandName.TheDeadlyArmy;
-            pieceStacks = new PieceStack[] { new PieceStack(PieceName.Elmer, 5) };
+            pieceStacks = new PieceStack[] { new PieceStack(PieceName.Pawn, 5) };
         }
     }
 }

@@ -2,12 +2,13 @@
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Pieces
 {
-    internal class Terlsk : DefaultPiece
+    internal class Shaman : DefaultPiece
     {
         readonly PieceMovement[] normalPieceMovements;
         readonly PieceMovement[] expansionPieceMovements;
 
-        public Terlsk(Terminologies.PieceColor color, PublicDataType.IntegerVector2 position, IPlayer owner, IExpandingMoveFieldChecker fieldChecker) : base(position, color, owner, Terminologies.PieceName.Terlsk, fieldChecker)
+        public Shaman(Terminologies.PieceColor color, PublicDataType.IntegerVector2 position, IPlayer owner, IExpandingMoveFieldChecker fieldChecker)
+            : base(position, color, owner, Terminologies.PieceName.Shaman, fieldChecker)
         {
             normalPieceMovements = new PieceMovement[]
             {

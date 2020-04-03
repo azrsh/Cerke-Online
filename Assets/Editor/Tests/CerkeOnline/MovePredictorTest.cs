@@ -30,7 +30,7 @@ namespace Azarashi.CerkeOnline.Tests
                         .PredictMoveableColumns
                         (   
                             randomPosition1, 
-                            new Ales(
+                            new King(
                                 PieceColor.Black,randomPosition2, new MockPlayer(Encampment.Front), new MockFieldEffectChecker()
                             )
                         );
@@ -38,7 +38,7 @@ namespace Azarashi.CerkeOnline.Tests
             var example = PredictMoveableColumns
                 (
                     randomPosition1,
-                    new Ales
+                    new King
                     (
                         PieceColor.Black, randomPosition2, new MockPlayer(Encampment.Front), new MockFieldEffectChecker()
                     )

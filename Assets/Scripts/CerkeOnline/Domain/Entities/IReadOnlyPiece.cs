@@ -26,7 +26,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         /// <summary>
         /// 駒のアルファベットでの名前を返す. 不要なら消すかも.
         /// </summary>
-        Terminologies.PieceName PieceName { get; }
+        Terminologies.PieceName Name { get; }
 
         /// <summary>
         /// 駒の論理座標を返す.

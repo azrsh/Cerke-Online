@@ -6,7 +6,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
     {
         //駒の情報
         public IPlayer Owner { get; private set; }
-        public Terminologies.PieceName PieceName { get; }
+        public Terminologies.PieceName Name { get; }
         public PublicDataType.IntegerVector2 Position { get; private set; }
         public Terminologies.PieceColor Color { get; }
         public virtual int NumberOfMoves { get { return 1; } }
@@ -20,9 +20,9 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         /// <param name="position"></param>
         /// <param name="normalPieceMovements"></param>
         /// <param name="expansionPieceMovements"></param>
-        internal DefaultPiece(PublicDataType.IntegerVector2 position, Terminologies.PieceColor color, IPlayer owner, Terminologies.PieceName pieceName, IExpandingMoveFieldChecker fieldChecker)
+        public DefaultPiece(PublicDataType.IntegerVector2 position, Terminologies.PieceColor color, IPlayer owner, Terminologies.PieceName name, IExpandingMoveFieldChecker fieldChecker)
         {
-            this.PieceName = pieceName;
+            this.Name = name;
             this.Position = position;
             this.Color = color;
             this.Owner = owner;
