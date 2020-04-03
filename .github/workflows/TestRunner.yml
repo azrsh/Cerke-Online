@@ -1,7 +1,6 @@
 name: Run editor test
 
 on:
-  pull_request: {}
   push: {}
 
 env:
