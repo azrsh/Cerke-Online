@@ -47,7 +47,7 @@ namespace Azarashi.CerkeOnline.Application
 
                     var message = (PieceMovementMessage)systemMessage;
                     return translator.Translate(TranslatableKeys.PieceMovementMessage)
-                        .Replace("#PIECE_NAME#", message.Piece.Name.ToString())
+                        .Replace("#PIECE_NAME#", translator.Translate((TranslatableKeys)System.Enum.Parse(typeof(TranslatableKeys), "Pieces" + message.Piece.Name.ToString())))
                         .Replace("#START_POSITION#", message.StartPosition.ToString())
                         .Replace("#END_POSITION#", message.EndPosition.ToString());
                 }
@@ -61,7 +61,7 @@ namespace Azarashi.CerkeOnline.Application
 
                     var message = (PieceViaMovementMessage)systemMessage;
                     return translator.Translate(TranslatableKeys.PieceViaMovementMessage)
-                        .Replace("#PIECE_NAME#", message.Piece.Name.ToString())
+                        .Replace("#PIECE_NAME#", translator.Translate((TranslatableKeys)System.Enum.Parse(typeof(TranslatableKeys), "Pieces" + message.Piece.Name.ToString())))
                         .Replace("#START_POSITION#", message.StartPosition.ToString())
                         .Replace("#VIA_POSITION#", message.ViaPosition.ToString())
                         .Replace("#END_POSITION#", message.EndPosition.ToString());
@@ -86,7 +86,7 @@ namespace Azarashi.CerkeOnline.Application
 
                     var message = (SetPieceMessage)systemMessage;
                     return translator.Translate(TranslatableKeys.SetPieceMessage)
-                        .Replace("#PIECE_NAME#", message.Piece.Name.ToString())
+                        .Replace("#PIECE_NAME#", translator.Translate((TranslatableKeys)System.Enum.Parse(typeof(TranslatableKeys), "Pieces" + message.Piece.Name.ToString())))
                         .Replace("#POSITION#", message.SetPosition.ToString()); 
                 }
                 else if (type == typeof(SetPieceFailureMessage))
