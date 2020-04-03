@@ -6,6 +6,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Hands.PieceStack
     {
         internal LaElmss()
         {
+            HandName = HandName.TheArmy;
             pieceStacks = new PieceStack[] { new PieceStack(PieceName.Varxle, 1), new PieceStack(PieceName.Elmer, 2) };
         }
     }

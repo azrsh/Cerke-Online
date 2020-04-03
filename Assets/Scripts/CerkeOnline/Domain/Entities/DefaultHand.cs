@@ -10,13 +10,13 @@ namespace Azarashi.CerkeOnline.Domain.Entities
     {
         readonly HandSuccessChecker handSuccessChecker;
 
-        public string Name { get; }
+        public Terminologies.HandName Name { get; }
         public int Score { get; }
 
         internal DefaultHand(IPieceStacksProvider pieceStacksProvider, int score)
         {
             handSuccessChecker = new HandSuccessChecker(pieceStacksProvider);
-            Name = HandNameDictionary.PascalToJapanese[pieceStacksProvider.GetType().Name];
+            Name = pieceStacksProvider.HandName;
             Score = score;
         }
 

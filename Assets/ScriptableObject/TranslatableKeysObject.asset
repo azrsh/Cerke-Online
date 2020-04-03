@@ -88,3 +88,13 @@ MonoBehaviour:
   - NoPieceSelectedMessage
   - SetPieceMessage
   - SetPieceFailureMessage
+  - HandsTheUnbeatableFlash
+  - HandsTheSocialOrderFlash
+  - HandsTheCultureFlash
+  - HandsTheCavalryFlash
+  - HandsTheAttackFlash
+  - HandsTheKingFlash
+  - HandsTheAnimalsFlash
+  - HandsTheArmyFlash
+  - HandsTheComradesFlash
+  - HandsTheDeadlyArmyFlash

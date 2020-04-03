@@ -31,15 +31,21 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter
         void NotifyHandDifference(HandDifference handDifference)
         {
             foreach (IHand hand in handDifference.IncreasedDifference)
-                logger.Log(
-                    LanguageManager.Instance.Translator.Translate(TranslatableKeys.HandCompleteMessage)
-                        .Replace("#HAND_NAME#", hand.Name)  //キーワードの置き換えはここでやるべきではない
-                );
+            {
+                TranslatableKeys handNameKey = (TranslatableKeys)System.Enum.Parse(typeof(TranslatableKeys), "Hands" + hand.Name.ToString());
+                string handName = LanguageManager.Instance.Translator.Translate(handNameKey);
+                string message = LanguageManager.Instance.Translator.Translate(TranslatableKeys.HandCompleteMessage)
+                    .Replace("#HAND_NAME#",handName);  //キーワードの置き換えはここでやるべきではない
+                logger.Log(message);
+            }
             foreach (IHand hand in handDifference.DecreasedDifference)
-                logger.Log(
-                    LanguageManager.Instance.Translator.Translate(TranslatableKeys.HandUncompleteMessage)
-                        .Replace("#HAND_NAME#", hand.Name)  //キーワードの置き換えはここでやるべきではない
-                );
+            {
+                TranslatableKeys handNameKey = (TranslatableKeys)System.Enum.Parse(typeof(TranslatableKeys), "Hands" + hand.Name.ToString());
+                string handName = LanguageManager.Instance.Translator.Translate(handNameKey);
+                string message = LanguageManager.Instance.Translator.Translate(TranslatableKeys.HandUncompleteMessage)
+                    .Replace("#HAND_NAME#", handName);  //キーワードの置き換えはここでやるべきではない
+                logger.Log(message);
+            }
 
             notifiedHands = handUseCase.GetCurrentHands().ToArray(); //コピーのためのToArray
         }

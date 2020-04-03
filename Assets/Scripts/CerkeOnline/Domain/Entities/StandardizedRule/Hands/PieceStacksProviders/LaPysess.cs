@@ -6,6 +6,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Hands.PieceStack
     {
         internal LaPysess()
         {
+            HandName = HandName.TheAnimals;
             pieceStacks = new PieceStack[] { new PieceStack(PieceName.Stistyst, 1), new PieceStack(PieceName.Dodor, 1) };
         }
     }

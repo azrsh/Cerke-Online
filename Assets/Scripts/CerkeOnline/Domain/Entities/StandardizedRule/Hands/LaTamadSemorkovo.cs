@@ -9,14 +9,14 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Hands
     /// </summary>
     internal class LaTamadSemorkovo : IHand
     {
-        public string Name { get; }
+        public HandName Name { get; }
         public int Score { get; }
 
         int numberOfSurmounted = 0;
 
         public LaTamadSemorkovo(int score, ISteppedObservable steppedObservable)
         {
-            Name = HandNameDictionary.PascalToJapanese[GetType().Name];
+            Name = HandName.TheStepping;
             Score = score;
             steppedObservable.OnStepped.Subscribe(_ => numberOfSurmounted++);
         }

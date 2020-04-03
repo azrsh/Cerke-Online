@@ -8,14 +8,14 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Hands
     /// </summary>
     public class TamenMako : IHand
     {
-        public string Name { get; }
+        public HandName Name { get; }
         public int Score { get; }
 
         readonly TamObserver tamObserver;
 
         public TamenMako(int score, TamObserver tamObserver)
         {
-            Name = HandNameDictionary.PascalToJapanese[GetType().Name];
+            Name = HandName.TheFutileMove;
             Score = score;
 
             this.tamObserver = tamObserver;

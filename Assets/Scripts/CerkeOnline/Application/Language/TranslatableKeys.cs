@@ -81,6 +81,16 @@ namespace Azarashi.CerkeOnline.Application.Language
 		NoPieceViaPointMessage = 71,
 		NoPieceSelectedMessage = 72,
 		SetPieceMessage = 73,
-		SetPieceFailureMessage = 74
+		SetPieceFailureMessage = 74,
+		HandsTheUnbeatableFlash = 75,
+		HandsTheSocialOrderFlash = 76,
+		HandsTheCultureFlash = 77,
+		HandsTheCavalryFlash = 78,
+		HandsTheAttackFlash = 79,
+		HandsTheKingFlash = 80,
+		HandsTheAnimalsFlash = 81,
+		HandsTheArmyFlash = 82,
+		HandsTheComradesFlash = 83,
+		HandsTheDeadlyArmyFlash = 84
 	}
 }

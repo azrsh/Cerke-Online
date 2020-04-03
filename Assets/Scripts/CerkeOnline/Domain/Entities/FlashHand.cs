@@ -11,13 +11,13 @@ namespace Azarashi.CerkeOnline.Domain.Entities
     {
         readonly HandSuccessChecker handSuccessChecker;
 
-        public string Name { get; }
+        public HandName Name { get; }
         public int Score { get; }
 
         internal FlashHand(IPieceStacksProvider pieceStacksProvider, int score)
         {
             handSuccessChecker = new HandSuccessChecker(pieceStacksProvider);
-            Name = "同色" + HandNameDictionary.PascalToJapanese[pieceStacksProvider.GetType().Name]; //TODO べた書きの排除
+            Name = ToFlash(pieceStacksProvider.HandName);
             Score = score;
         }
 

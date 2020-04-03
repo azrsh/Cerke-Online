@@ -7,7 +7,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
     /// </summary>
     public interface IHand
     {
-        string Name { get; }
+        Terminologies.HandName Name { get; }
         int Score { get; }
         int GetNumberOfSuccesses(IEnumerable<IReadOnlyPiece> pieces);
     }

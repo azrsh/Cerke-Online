@@ -54,6 +54,37 @@ namespace Azarashi.CerkeOnline.Domain.Entities
             Tam          = 10
         }
 
+        public enum HandName
+        {
+            TheUnbeatable,
+            TheSocialOrder,
+            TheCulture,
+            TheCavalry,
+            TheAttack,
+            TheKing,
+            TheAnimals,
+            TheArmy,
+            TheComrades,
+            TheDeadlyArmy,
+            TheUnbeatableFlash,
+            TheSocialOrderFlash,
+            TheCultureFlash,
+            TheCavalryFlash,
+            TheAttackFlash,
+            TheKingFlash,
+            TheAnimalsFlash,
+            TheArmyFlash,
+            TheComradesFlash,
+            TheDeadlyArmyFlash,
+            TheStepping,
+            TheFutileMove
+        }
+
+        public static HandName ToFlash(HandName handName)
+        {
+            return (HandName)System.Enum.Parse(typeof(HandName), handName.ToString() + "Flash");
+        }
+
         public enum RulesetName
         {
             StandardizedRule = 0,   //官定
@@ -61,93 +92,9 @@ namespace Azarashi.CerkeOnline.Domain.Entities
             NoRule = 2,     //ルール無し
         }
 
-        public static class PieceNameDictionary
-        {
-            public static IReadOnlyDictionary<string, string> PieceNameChineseCharacters2Alphabet
-                        => new Dictionary<string, string>()
-                        {
-                            {"felkana", "船"},
-                            {"elmer", "兵"},
-                            {"gustuer", "弓"},
-                            {"vadyrd", "車"},
-                            {"stistyst", "虎"},
-                            {"dodor", "馬"},
-                            {"kua", "筆"},
-                            {"terlsk", "巫"},
-                            {"varxle", "将"},
-                            {"ales", "王"},
-                            {"tam", "皇"}
-                        };
-            public static IReadOnlyDictionary<string, string> PieceNameAlphabet2ChineseCharacters
-                        => new Dictionary<string, string>()
-                        {
-                            {"船", "felkana"},
-                            {"兵", "elmer"},
-                            {"弓", "gustuer"},
-                            {"車", "vadyrd"},
-                            {"虎", "stistyst"},
-                            {"馬", "dodor"},
-                            {"筆", "kua"},
-                            {"巫", "terlsk"},
-                            {"将", "varxle"},
-                            {"王", "ales"},
-                            {"皇", "tam"}
-                        };
-        }
-
-        public static class Pieces
-        {
-            public const string Felkana = "船";
-            public const string Elmer = "兵";
-            public const string Gustuer = "弓";
-            public const string Vadyrd = "車";
-            public const string Stistyst = "虎";
-            public const string Dodor = "馬";
-            public const string Kua = "筆";
-            public const string Terlsk = "巫";
-            public const string Varxle = "将";
-            public const string Ales = "王";
-            public const string Tam = "皇";
-        }
-
         public enum PieceColor
         {
             Black=278,Red=378
-        }
-
-        public static class HandNameDictionary
-        {
-            /*
-            理日辞書より引用
-
-            《役名》　役はvoklisolと言う。
-            -加点役　il vynut voklisol
-            無抗行処(la als)、筆兵無傾(la ny anknish)、地心(la meunerfergal)、行行(la nienulerless)、王(la nermetixaler)、獣(la pysess)、
-            闇戦之集(la phertarsa'd elmss)、馬弓兵(la vefisait)、戦集(la elmss)、助友(la celdinerss)
-
-            -減点役
-            撃皇(la tama'd semorkovo)、皇再来(tamen mako)
-
-            -複合役
-            同色(la dejixece)
-
-            -官定ルールで採用されていない役
-            声無行処(la ytartanerfergal) 
-            */
-            public static readonly IReadOnlyDictionary<string, string> PascalToLineparine = new Dictionary<string, string>()
-            {
-                {"LaAls", "la als"}, {"LaNyAnknish", "la ny anknish"}, {"LaMeunerfergal", "la meunerfergal"}, {"LaNienulerless", "la nienulerless" }, {"LaNermetixaler", "la nermetixaler"}, {"LaPysess", "la pysess"},
-                {"LaPhertarsadElmss", "la phertarsa'd elmss" }, {"LaVefisait", "la vefisait"}, {"LaElmss", "la elmss"}, {"LaCeldinerss", "la celdinerss" },
-                {"LaTamadSemorkovo", "la tama'd semorkovo" }, {"TamenMako", "tamen mako" },
-                {"LaYtartanerfergal", "la ytartanerfergal" }
-            };
-            public static readonly IReadOnlyDictionary<string, string> PascalToJapanese = new Dictionary<string, string>()
-            {
-                {"LaAls", "無抗行処"}, {"LaNyAnknish", "筆兵無傾"}, {"LaMeunerfergal", "地心"}, {"LaNienulerless", "行行" }, {"LaNermetixaler", "王"}, {"LaPysess", "獣"},
-                {"LaPhertarsadElmss", "闇戦之集" }, {"LaVefisait", "馬弓兵"}, {"LaElmss", "戦集"}, {"LaCeldinerss", "助友" },
-                {"LaTamadSemorkovo", "撃皇" }, {"TamenMako", "皇再来" },
-                {"LaYtartanerfergal", "声無行処" }
-            };
         }
 
         public static FirstOrSecond GetReversal(FirstOrSecond firstOrSecond)

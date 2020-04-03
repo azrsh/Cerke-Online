@@ -6,6 +6,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Hands.PieceStack
     {
         internal LaNermetixaler()
         {
+            HandName = HandName.TheKing;
             pieceStacks = new PieceStack[] { new PieceStack(PieceName.Ales, 1) };
         }
     }
