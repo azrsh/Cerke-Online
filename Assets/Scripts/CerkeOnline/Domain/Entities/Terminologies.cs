@@ -17,7 +17,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         }
 
         /// <summary>
-        /// 先攻後攻を区別する.
+        /// 先手後手を区別する.
         /// </summary>
         public enum FirstOrSecond
         {
