@@ -57,4 +57,6 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.Columns
                 onViaPositionSelected.Invoke(viaPosition);
         }
     }
+
+    [System.Serializable] public class IntegerVector2UnityEvent : UnityEngine.Events.UnityEvent<IntegerVector2> { }
 }
