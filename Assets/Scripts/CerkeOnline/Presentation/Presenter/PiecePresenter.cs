@@ -57,9 +57,7 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter
             IReadOnlyPiece piece = board.GetPiece(position);
             if (piece == null) return;
 
-            Terminologies.PieceName pieceName;
-            System.Enum.TryParse(piece.GetType().Name, out pieceName);
-            GameObject pieceViewObject = Instantiate(pieceViewPrefabs.Prefabs[(int)pieceName]);
+            GameObject pieceViewObject = Instantiate(pieceViewPrefabs.Prefabs[(int)piece.Name]);
             pieceViewObject.transform.position = new Vector3(0, 0, -10);    //描画優先度の設定
 
             PieceView pieceViewComponent = pieceViewObject.GetComponent<PieceView>();
