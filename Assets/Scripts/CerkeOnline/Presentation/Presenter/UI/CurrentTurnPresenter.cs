@@ -22,7 +22,9 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.UI
             this.UpdateAsObservable().TakeUntilDestroy(this)
                 .Select(_ => game.CurrentTurn).DistinctUntilChanged().Subscribe(value =>
                 {
-                    currentTurnText.text = LanguageManager.Instance.Translator.Translate(TranslatableKeys.CurrentPlayerLabel) + value.ToString();
+                    var translator = LanguageManager.Instance.Translator;
+                    currentTurnText.text = translator.Translate(TranslatableKeys.CurrentPlayerLabel)
+                    + FirstOrSecondTranslator.Translate(value, translator);
                 });
         }
     }
