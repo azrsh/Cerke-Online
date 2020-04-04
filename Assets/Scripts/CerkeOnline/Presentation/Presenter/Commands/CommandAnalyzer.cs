@@ -33,12 +33,12 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.Commands
         }
 
         int EnumNameToInt<T>(Func<string, bool> compare, int exception = -1)
-            where T : struct
+            where T : struct, Enum
         {
             foreach (string name in Enum.GetNames(typeof(T)))
             {
-                if (!compare(name)) continue;
-                return (int)Enum.Parse(typeof(T), name, true);
+                if (compare(name))
+                    return (int)Enum.Parse(typeof(T), name, true);
             }
 
             return exception;
