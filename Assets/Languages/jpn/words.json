@@ -25,7 +25,7 @@
   "PiecesGeneral": "将",
   "PiecesKing": "王",
   "PiecesMinds": "皇",
-  "CurrentPlayerLabel": "現在のターン : ",
+  "CurrentPlayerLabel": "現在の手番 : ",
   "MyScoreLabel": "自分の得点 : ",
   "EnemyScoreLabel": "相手の得点 : ",
   "CurrentSeasonLabel": "現在の季 : ",
