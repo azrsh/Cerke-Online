@@ -1,9 +1,12 @@
-![Run editor test](https://github.com/azarashi2931/Cerke-Online/workflows/Run%20editor%20test/badge.svg?branch=master)
-![Build project](https://github.com/azarashi2931/Cerke-Online/workflows/Build%20project/badge.svg?branch=master)
-
 English readme is [here](README.en.md)
 
 # Cerke-Online
+[![MIT License](https://img.shields.io/github/license/azarashi2931/Cerke-Online)](LICENSE)
+[![Tag](https://img.shields.io/github/v/tag/azarashi2931/Cerke-Online)](../../releases)
+[![Platform](https://img.shields.io/badge/platform-win--32%20|%20win--64%20|%20linux--64%20|%20osx--64-brightgreen)](LICENSE)
+![Run editor test](https://github.com/azarashi2931/Cerke-Online/workflows/Run%20editor%20test/badge.svg?branch=master)
+![Build project](https://github.com/azarashi2931/Cerke-Online/workflows/Build%20project/badge.svg?branch=master)
+  
 Cerke-Onlineはcerke（机戦/パイグ将棋/cet2kaik）のためのデスクトップアプリケーションです。  
 cerkeの詳細は[日本机戦連盟公式サイト](https://sites.google.com/view/cet2kaik/トップページ?authuser=0)をご覧ください。  
 なお本プロジェクトはα版であり、多くの機能が未実装です。
