@@ -21,9 +21,7 @@ namespace Azarashi.CerkeOnline.Presentation.View.GameResultMenu
         void Bind()
         {    //Domain.Entities.Terminologies.FirstOrSecond.Firstをローカルのプレイヤーを指すように変える
             var hands  = HandUseCaseFactory.Create(Domain.Entities.Terminologies.FirstOrSecond.First).GetCurrentHands();
-            handText.text = LanguageManager.Instance.Translator.Translate(TranslatableKeys.CompletedHandsLabel)
-                + hands.Select(hand => hand.Name)
-                .Select(name => HandNameTranslator.Translate(name, LanguageManager.Instance.Translator))
+            handText.text = hands.Select(hand => hand.Name).Select(name => HandNameTranslator.Translate(name, LanguageManager.Instance.Translator))
                 .DefaultIfEmpty().Aggregate((previous, next) => previous + next + System.Environment.NewLine);
         }
     }
