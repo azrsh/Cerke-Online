@@ -13,7 +13,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         }
     }
 
-    public struct HandDifference
+    public readonly struct HandDifference
     {
         public IEnumerable<IHand> IncreasedDifference { get; }
         public IEnumerable<IHand> DecreasedDifference { get; }

@@ -2,7 +2,7 @@
 
 namespace Azarashi.CerkeOnline.Domain.Entities.PublicDataType
 {
-    public struct IntegerVector2 : IEquatable<IntegerVector2>
+    public readonly struct IntegerVector2 : IEquatable<IntegerVector2>
     {
         #region StaticMethod
         public static int Dot(IntegerVector2 right,IntegerVector2 left)

@@ -1,6 +1,6 @@
 ﻿namespace Azarashi.CerkeOnline.Domain.Entities
 {
-    public struct PieceMoveResult
+    public readonly struct PieceMoveResult
     {
         public readonly bool isSuccess;
         public readonly bool isTurnEnd;

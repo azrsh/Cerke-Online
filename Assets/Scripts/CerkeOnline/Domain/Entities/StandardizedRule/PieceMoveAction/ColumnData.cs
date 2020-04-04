@@ -2,7 +2,7 @@
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.DataStructure
 {
-    internal struct ColumnData
+    internal readonly struct ColumnData
     {
         public PublicDataType.IntegerVector2 Positin { get; }
         public IPiece Piece { get { return pieces.Read(Positin); } }

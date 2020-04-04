@@ -6,7 +6,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
     /// <summary>
     /// 方向と距離の情報を保持する. distance = -1は無限扱い. directionが一つ飛ばしなら一つ飛ばしでしか動けない.
     /// </summary>
-    public struct PieceMovement
+    public readonly struct PieceMovement
     {
         public readonly bool surmountable;
         public readonly int numberOfMove;
