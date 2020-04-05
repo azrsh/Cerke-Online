@@ -11,9 +11,25 @@ env:
   UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
 
 jobs:
+  createRelease:
+    name: Create Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: true
+      
   buildForSomePlatforms:
     name: Build for ${{ matrix.targetPlatform }} on version ${{ matrix.unityVersion }}
     runs-on: ubuntu-latest
+    needs: [createRelease]
     strategy:
       fail-fast: false
       matrix:
@@ -40,8 +56,15 @@ jobs:
           unityVersion: ${{ matrix.unityVersion }}
           targetPlatform: ${{ matrix.targetPlatform }}
           buildName: cerke-online
-          buildPath: build/${{ matrix.targetPlatform }}  
-      - uses: actions/upload-artifact@v1
+          buildPath: build/${{ matrix.targetPlatform }}
+      - run: zip -r ${{ matrix.targetPlatform }}.zip build/${{ matrix.targetPlatform }}
+      - name: Upload Release Asset
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: ${{ matrix.targetPlatform }}
-          path: build/${{ matrix.targetPlatform }}
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./${{ matrix.targetPlatform }}.zip
+          asset_name: ${{ matrix.targetPlatform }}.zip
+          asset_content_type: application/zip 
