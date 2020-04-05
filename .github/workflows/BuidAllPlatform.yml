@@ -15,7 +15,7 @@ jobs:
     name: Create Release
     runs-on: ubuntu-latest
     steps:
-      - name: Create Release
+      - name: Create release
         id: create_release
         uses: actions/create-release@v1
         env:
@@ -25,6 +25,19 @@ jobs:
           release_name: Release ${{ github.ref }}
           draft: false
           prerelease: true
+      
+      - name: Get url to upload to share
+        env:
+          url: ${{ steps.create_release.outputs.upload_url }}
+        run: |
+          mkdir artifact
+          echo $url > artifact/url.txt
+      - name: Share url
+        uses: actions/upload-artifact@v1
+        with:
+          name: artifact
+          path: artifact/url.txt
+
   buildForSomePlatforms:
     name: Build for ${{ matrix.targetPlatform }} on version ${{ matrix.unityVersion }}
     runs-on: ubuntu-latest
@@ -39,31 +52,47 @@ jobs:
           - StandaloneWindows # Build a Windows standalone.
           - StandaloneWindows64 # Build a Windows 64-bit standalone.
           - StandaloneLinux64 # Build a Linux 64-bit standalone.
-      
     steps:
       - uses: actions/checkout@v2
         with:
           lfs: true
+      
       - uses: actions/cache@v1.1.0
         with:
           path: ${{ matrix.projectPath }}/Library
           key: Library-${{ matrix.targetPlatform }}
           restore-keys: |
             Library-
-      - uses: webbertakken/unity-builder@v0.11
+      
+      - name: Build Binary
+        uses: webbertakken/unity-builder@v0.11
         with:
           unityVersion: ${{ matrix.unityVersion }}
           targetPlatform: ${{ matrix.targetPlatform }}
           buildName: cerke-online
           buildPath: build/${{ matrix.targetPlatform }}
-      - run: zip -r ${{ matrix.targetPlatform }}.zip build/${{ matrix.targetPlatform }}
+      
+      - name: Zip Binary
+        run: zip -r ${{ matrix.targetPlatform }}.zip build/${{ matrix.targetPlatform }}
+      
+      - name: Download artifact to get url
+        uses: actions/download-artifact@v1
+        with:
+          name: artifact
+
+      - name: Get url from artifact
+        id: get_url
+        run: |
+          url=$(cat artifact/url.txt)
+          echo "##[set-output name=upload_url;]$url"
+      
       - name: Upload Release Asset
         id: upload-release-asset 
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ jobs.createRelease.steps.create_release.outputs.upload_url }}
+          upload_url: ${{ steps.get_url.outputs.upload_url }}
           asset_path: ./${{ matrix.targetPlatform }}.zip
           asset_name: ${{ matrix.targetPlatform }}.zip
           asset_content_type: application/zip 
