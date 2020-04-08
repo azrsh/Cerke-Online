@@ -14,6 +14,7 @@ namespace Azarashi.CerkeOnline.Application.Language
             readonly static string childDirectoryPath = @"/Languages";
             readonly static string childFilePath = @"/words.json";
 
+            //スマホ対応にあたって変更する必要がある
             public static string DirectoryPath { get { return UnityEngine.Application.dataPath + childDirectoryPath; } }
             public static string GetFilePath(string languageName) => DirectoryPath + "/" + languageName + childFilePath;
         }
