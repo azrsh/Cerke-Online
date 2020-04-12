@@ -8,14 +8,14 @@
   
 Cerke-Online is a desktop application for cerke（机戦/パイグ将棋/cet2kaik）.  
 See [The standardized rule in english](https://sites.google.com/view/cet2kaik/the-standardized-rule-in-english?authuser=0) for details of cerke.  
-Sorry, This project is still α version, and many features are not implemented.
+Sorry, This project is still an alpha version, and many features are not implemented.
 
 # Download
 Build by yourself：Load this repository as a Unity Project.  
 Binary：Download zip from the release tab.  
 
 # Usage
-Unzip a zip file downloaded from release tab, and run an executable file, which is named Cerke-Online.*, in unzipped folder.  
+Unzip a zip file downloaded from the release tab, and run an executable file, which is named Cerke-Online.*, in the unzipped folder.  
 
 # License
 [MIT](LICENSE)
@@ -50,7 +50,7 @@ Unzip a zip file downloaded from release tab, and run an executable file, which 
 + Link : https://github.com/sozysozbot/cerke
 
 # URL
-[The Standerdized Rule of Cetkaik in English](https://github.com/sozysozbot/cerke/blob/master/y1_huap1_summary_en.pdf)  
+[The Standardized Rule of Cetkaik in English](https://github.com/sozysozbot/cerke/blob/master/y1_huap1_summary_en.pdf)  
 [Cet2kaik Union of Japan Official Website](https://sites.google.com/view/cet2kaik/トップページ?authuser=0)  
 [Cet2kaik Union of Japan Official Youtube Channel](https://www.youtube.com/channel/UCdjFUR1MvJ-oExWUKlY2M8A)  
 [Cet2kaik Union of Japan Official Twitter](https://twitter.com/cet2kaik)  
