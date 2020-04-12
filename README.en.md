@@ -6,7 +6,7 @@
 ![Run editor test](https://github.com/azarashi2931/Cerke-Online/workflows/Run%20editor%20test/badge.svg?branch=master)
 ![Build project](https://github.com/azarashi2931/Cerke-Online/workflows/Build%20project/badge.svg?branch=master)
   
-Cerke-Online is a desktop application for cerke（机戦/パイグ将棋/cet2kaik）.  
+Cerke-Online is a desktop application for cerke(机戦/パイグ将棋/cet2kaik).  
 See [The standardized rule in english](https://sites.google.com/view/cet2kaik/the-standardized-rule-in-english?authuser=0) for details of cerke.  
 Sorry, This project is still an alpha version, and many features are not implemented.
 
