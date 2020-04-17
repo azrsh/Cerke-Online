@@ -1,0 +1,17 @@
+{
+    "name": "Azarashi.CerkeOnline.Data.DataStore",
+    "references": [
+        "GUID:52816b1218d733747a9f1b556956ae09",
+        "GUID:01c476c94ef72b44bb1e3d162b62df9f",
+        "GUID:66568b5b492a38645953eb040b9ec357"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

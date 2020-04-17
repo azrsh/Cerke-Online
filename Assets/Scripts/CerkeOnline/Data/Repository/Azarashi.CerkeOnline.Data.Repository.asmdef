@@ -1,0 +1,16 @@
+{
+    "name": "Azarashi.CerkeOnline.Data.Repository",
+    "references": [
+        "GUID:66568b5b492a38645953eb040b9ec357",
+        "GUID:743de335e43f9fe429673fbd4e8e9e88"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

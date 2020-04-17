@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Azarashi.Utilities;
 using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
 
-namespace Azarashi.CerkeOnline.Application
+namespace Azarashi.CerkeOnline.Domain.Entities
 {
     public class RulesetList
     {
@@ -13,9 +13,9 @@ namespace Azarashi.CerkeOnline.Application
             //RulesetNameとの相互依存関係を明確化する
             IGameInstanceFactory[] factories = new IGameInstanceFactory[]
             {
-                new DefaultGameInstanceFactory<Domain.Entities.StandardizedRule.StandardizedRuleGame>(firstPlayerEncampment => new Domain.Entities.StandardizedRule.StandardizedRuleGame(firstPlayerEncampment, serviceLocator)),
-                new DefaultGameInstanceFactory<Domain.Entities.StandardizedRule.StandardizedRuleGame>(firstPlayerEncampment => new Domain.Entities.StandardizedRule.StandardizedRuleGame(firstPlayerEncampment, serviceLocator)),
-                new DefaultGameInstanceFactory<Domain.Entities.NoRule.NoRuleGame>(firstPlayerEncampment => new Domain.Entities.NoRule.NoRuleGame(firstPlayerEncampment)),
+                new DefaultGameInstanceFactory<StandardizedRule.StandardizedRuleGame>(firstPlayerEncampment => new StandardizedRule.StandardizedRuleGame(firstPlayerEncampment, serviceLocator)),
+                new DefaultGameInstanceFactory<StandardizedRule.StandardizedRuleGame>(firstPlayerEncampment => new StandardizedRule.StandardizedRuleGame(firstPlayerEncampment, serviceLocator)),
+                new DefaultGameInstanceFactory<NoRule.NoRuleGame>(firstPlayerEncampment => new NoRule.NoRuleGame(firstPlayerEncampment)),
             };
             
             int i = 0;
@@ -35,6 +35,6 @@ namespace Azarashi.CerkeOnline.Application
             return ruleset;
         }
 
-        public string[] GetNames() => rulesets.Select(ruleset => ruleset.Value.name).ToArray();
+        public IEnumerable<string> GetNames() => rulesets.Select(ruleset => ruleset.Value.name);
     }
 }

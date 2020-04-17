@@ -95,6 +95,7 @@ namespace Azarashi.CerkeOnline.Application.Language
 		SeasonsSpring = 85,
 		SeasonsSummer = 86,
 		SeasonsAutumn = 87,
-		SeasonsWinter = 88
+		SeasonsWinter = 88,
+		ReplayNoteButton = 89
 	}
 }

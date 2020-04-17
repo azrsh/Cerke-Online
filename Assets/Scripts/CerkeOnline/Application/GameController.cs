@@ -3,6 +3,9 @@ using UnityEngine;
 using UniRx;
 using Azarashi.Utilities;
 using Azarashi.CerkeOnline.Domain.Entities;
+using Azarashi.CerkeOnline.Domain.UseCase;
+using Azarashi.CerkeOnline.Data.Repository;
+using Azarashi.CerkeOnline.Data.DataStore;
 using Azarashi.CerkeOnline.Networking.Client;
 using Azarashi.CerkeOnline.Networking.Components;
 
@@ -34,7 +37,7 @@ namespace Azarashi.CerkeOnline.Application
         }
         IServerDelegate serverDelegate;
 
-        public ILogger SystemLogger { get; } = new Logger(new SystemLogHandler());
+        public UnityEngine.ILogger SystemLogger { get; } = new Logger(new SystemLogHandler());
 
         public IReadOnlyServiceLocator ServiceLocator { get; } = new DefaultServiceLocator();
 
@@ -56,21 +59,30 @@ namespace Azarashi.CerkeOnline.Application
         private void Start()
         {
             rulesetList = new RulesetList(ServiceLocator);
-            preGameSettings.OnStartButtonClicked.TakeUntilDestroy(this).Subscribe(_ => NewGame());
+            preGameSettings.OnStartButtonClicked.TakeUntilDestroy(this).Where(_ => Game != null).Subscribe(OnStartButtonClicked);
         }
 
-        void NewGame()
+        void OnStartButtonClicked(Unit unit)
+        {
+            Game = NewGame(preGameSettings);
+            onGameReset.OnNext(Game);
+        }
+
+        IGame NewGame(PreGameSettings preGameSettings)
         {
             var ruleset = rulesetList.GetRuleset((int)preGameSettings.rulesetName);
             var localPlayerFirstOrSecond = GetFirstOrSecond(preGameSettings.firstOrSecond);
             var localPlayerEncampment = GetEncampment(preGameSettings.encampment);
-            var remotePlayerEncampment = Terminologies.GetReversal(localPlayerEncampment);
+            
+            return new NewGameUseCase(ruleset, localPlayerFirstOrSecond, localPlayerEncampment).NewGame();
+        }
 
-            var firstPlayerEncampment = localPlayerFirstOrSecond == Terminologies.FirstOrSecond.First ? localPlayerEncampment : remotePlayerEncampment;
-
-            Game = ruleset.CreateGameInstance(firstPlayerEncampment);
-            LocalPlayer = Game.GetPlayer(localPlayerFirstOrSecond);
-            onGameReset.OnNext(Game);
+        IGame ReplayNote()
+        {
+            var ruleset = rulesetList.GetRuleset(0);
+            var dataStore = new LocalNoteDataStore("note name");
+            var repository = new NoteRepository(dataStore);
+            return new NewNoteReplayGameUseCase(repository, ruleset.Factory).NewGame();
         }
 
         Terminologies.FirstOrSecond GetFirstOrSecond(Terminologies.FirstOrSecond firstOrSecond)
