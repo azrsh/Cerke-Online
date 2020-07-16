@@ -1,5 +1,6 @@
 ﻿using System;
 using UniRx;
+using UniRx.Async;
 using UnityEngine;
 using UnityEngine.UI;
 using Azarashi.CerkeOnline.Application;
@@ -14,8 +15,6 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.UI
         [SerializeField] Button quitButton = default;
         [SerializeField] Button continueButton = default;
 
-        public bool IsRequestCompleted { get; private set; }
-
         void Start()
         {
             //Awake以外からの呼び出し禁止とasをなくす
@@ -29,25 +28,20 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.UI
 
         void Close() => seasonContinueSelectCanvas.gameObject.SetActive(false);
 
-        public void RequestValue(Action<SeasonContinueOrEnd> callback)
+        public async UniTask<SeasonContinueOrEnd> RequestValue()
         {
-            IsRequestCompleted = false;
-
-            Action<SeasonContinueOrEnd> action = continueOrEnd =>
-            {
-                Close();
-                TranslatableKeys key = continueOrEnd == SeasonContinueOrEnd.Continue ? TranslatableKeys.DeclaringToContinueButton : TranslatableKeys.DeclaringToEndButton;
-                var message = LanguageManager.Instance.Translator.Translate(key);
-                GameController.Instance.SystemLogger.Log(message);
-                callback(continueOrEnd);
-                IsRequestCompleted = true;
-            };
-
             Open();
             var quitButtonAsObservable = quitButton.OnClickAsObservable().TakeUntilDestroy(this).Select(_ => SeasonContinueOrEnd.End);
             var continueButtonAsObservable = continueButton.OnClickAsObservable().TakeUntilDestroy(this).Select(_ => SeasonContinueOrEnd.Continue);
-            quitButtonAsObservable.Merge(continueButtonAsObservable).First().Subscribe(action);
+            
+            var result = await quitButtonAsObservable.Merge(continueButtonAsObservable).First();
 
+            Close();
+            TranslatableKeys key = result == SeasonContinueOrEnd.Continue ? TranslatableKeys.DeclaringToContinueButton : TranslatableKeys.DeclaringToEndButton;
+            var message = LanguageManager.Instance.Translator.Translate(key);
+            GameController.Instance.SystemLogger.Log(message);
+
+            return result;
         }
     }
 }

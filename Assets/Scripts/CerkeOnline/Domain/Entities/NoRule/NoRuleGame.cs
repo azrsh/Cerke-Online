@@ -1,5 +1,6 @@
 ﻿using System;
 using UniRx;
+using UniRx.Async;
 using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.NoRule
@@ -25,8 +26,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.NoRule
 
         class AnonymousSeasonDeclarationProvider : ISeasonDeclarationProvider
         {
-            public bool IsRequestCompleted => true;
-            public void RequestValue(Action<SeasonContinueOrEnd> callback) => callback(SeasonContinueOrEnd.End);
+            public UniTask<SeasonContinueOrEnd> RequestValue() => new UniTask<SeasonContinueOrEnd>(SeasonContinueOrEnd.End);
         }
         public NoRuleGame(Encampment firstPlayerEncampment)
         {

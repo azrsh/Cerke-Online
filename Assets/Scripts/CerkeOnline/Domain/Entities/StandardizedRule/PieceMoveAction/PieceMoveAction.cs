@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using UniRx;
+using UniRx.Async;
 using Azarashi.CerkeOnline.Domain.Entities.PublicDataType;
 using Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.DataStructure;
 using Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.ActualAction;
 using Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.AbstractAction;
+using System.Diagnostics;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction
 {
@@ -20,23 +24,21 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction
         readonly PositionArrayAccessor<IPiece> pieces;
         readonly LinkedList<ColumnData> worldPath;
         readonly PieceMovement viaPieceMovement;
-        readonly Action<PieceMoveResult> callback;
         readonly bool isTurnEnd;
-        bool surmounted = false;
 
         readonly PublicDataType.IntegerVector2 startPosition;
         readonly PublicDataType.IntegerVector2 viaPosition;
         readonly PublicDataType.IntegerVector2 endPosition;
 
         readonly Mover pieceMover;
-        readonly Capturer capturer;
         readonly WaterEntryChecker waterEntryChecker;
         readonly MoveFinisher moveFinisher;
-        readonly SurmountingChecker surmountingChecker;
-        readonly SteppingChecker steppingChecker;
+
+        IPiece movingPiece; //readonlyでキャッシュすべきかも
+        Option<CaptureResult> captureResult = new Option<CaptureResult>();
 
         public PieceMoveAction(MoveActionData moveActionData, PositionArrayAccessor<IPiece> pieces, IFieldEffectChecker fieldEffectChecker,
-            IValueInputProvider<int> valueProvider, PieceMovement start2ViaPieceMovement, PieceMovement via2EndPieceMovement, Action<PieceMoveResult> callback, Action onPiecesChanged, bool isTurnEnd)
+            IValueInputProvider<int> valueProvider, PieceMovement start2ViaPieceMovement, PieceMovement via2EndPieceMovement, bool isTurnEnd)
         {
             this.player = moveActionData?.Player ?? throw new ArgumentNullException("駒を操作するプレイヤーを指定してください.");
             this.pieces = pieces ?? throw new ArgumentNullException("盤面の情報を入力してください.");
@@ -49,71 +51,89 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction
             
             this.worldPath  = moveActionData.WorldPath;
             this.viaPieceMovement = start2ViaPieceMovement;
-            this.callback = callback;
             this.isTurnEnd = isTurnEnd;
 
-            capturer = new Capturer(pieces);
-            pieceMover = new Mover(pieces, onPiecesChanged);
-            waterEntryChecker = new WaterEntryChecker(3, fieldEffectChecker, valueProvider, OnFailure);
+            pieceMover = new Mover(pieces);
+            waterEntryChecker = new WaterEntryChecker(3, fieldEffectChecker, valueProvider);
             moveFinisher = new MoveFinisher(pieceMover, new Capturer(pieces));
-            surmountingChecker = new SurmountingChecker(pieceMover);
-            steppingChecker = new SteppingChecker(moveFinisher, capturer, pieceMover, callback);
         }
 
-        void OnFailure(IPiece movingPiece)
+        public void RollBack()
         {
             pieceMover.MovePiece(movingPiece, startPosition, true);
-            callback(new PieceMoveResult(isSuccess: false, isTurnEnd: false, gottenPiece: null));
+
+            if (captureResult.IsNone) return;
+
+            var result = captureResult.GetOrDefault(new CaptureResult());
+            if (result.Captured == null) return;
+
+            player.UseCapturedPiece(result.Captured); //ここで行うべきではないかも（駒の取得は外で行っているため）
+            result.Captured.SetOwner(result.FormerOwner);
+            result.Captured.SetOnBoard(result.From);
+            pieces.Write(result.From, result.Captured);
+
+            captureResult = new Option<CaptureResult>();
         }
 
-        public void StartMove()
+        public async UniTask<PieceMoveResult> StartMove()
         {
-            IPiece movingPiece = pieces.Read(startPosition);
+            movingPiece = pieces.Read(startPosition);
+            PieceMoveResult failureReasult = new PieceMoveResult(false, false, null);
 
-            //入水判定の必要があるか
-            if (!waterEntryChecker.CheckWaterEntry(movingPiece, startPosition, endPosition, () => Move(movingPiece, worldPath.First)))
-                return;
+            if (!await waterEntryChecker.CheckWaterEntry(movingPiece, startPosition, endPosition))
+                return failureReasult;
+
+            var surmountLimit = viaPieceMovement.Surmountable ? 1 : 0;
+            var noPieceOnPath = worldPath.Where(node => node.Positin != viaPosition).Where(node => node.Positin != endPosition)
+                .Select(node => node.Piece).Where(piece => piece != null)
+                .Count() <= surmountLimit;
+            if (!noPieceOnPath) return failureReasult;
             
-            Move(movingPiece, worldPath.First);
-        }
-
-        void Move(IPiece movingPiece, LinkedListNode<ColumnData> worldPathNode)
-        {
-            if (worldPathNode == null)
+            if (viaPosition != endPosition)
             {
-                moveFinisher.FinishMove(player, movingPiece, worldPath.Last.Value.Positin, callback, isTurnEnd);
-                return;
+                var steppedList = worldPath.SkipWhile(node => node.Positin != viaPosition);
+
+                var steppingNode = steppedList.First();
+
+                var nextNode = steppedList.Skip(1).First();
+                if (steppingNode.Piece is ISteppedObserver)
+                    (steppingNode.Piece as ISteppedObserver).OnSteppied.OnNext(Unit.Default);
+
+                const int afterStepLimit = 4567890;
+                if (steppedList.Skip(1).Count() > afterStepLimit)
+                    return failureReasult;
             }
 
-            IPiece nextPiece = worldPathNode.Value.Piece;
-
-            //経由点にいる場合
-            Action moveAfterNext = () => Move(movingPiece, worldPathNode.Next.Next);
-            if (!steppingChecker.CheckStepping(viaPosition, player, movingPiece, worldPathNode, moveAfterNext, OnFailure))
-                return;
-
-            //PieceMovementが踏み越えに対応しているか
-            Action surmountAction = () =>
-            {
-                surmounted = true;
-                if (worldPathNode.Next.Next == null)
-                {
-                    moveFinisher.FinishMove(player, movingPiece, worldPathNode.Next.Value.Positin, callback, isTurnEnd);
-                    return;
-                }
-
-                Move(movingPiece, worldPathNode.Next.Next);
-            };
-            if (!surmountingChecker.CheckSurmounting(viaPieceMovement, movingPiece, worldPathNode, surmounted, surmountAction))
-                return;
-
-            if (!moveFinisher.CheckIfContinuable(player, movingPiece, worldPathNode, callback, () => OnFailure(movingPiece), isTurnEnd))
-                return;
-
-            if (worldPathNode.Next == null)
-                moveFinisher.FinishMove(player, movingPiece, worldPathNode.Value.Positin, callback, isTurnEnd);
-            else
-                Move(movingPiece, worldPathNode.Next);
+            var result = moveFinisher.ConfirmMove(player, movingPiece, endPosition, isTurnEnd, true);
+            captureResult = new Option<CaptureResult>(result.captureResult);
+            
+            //ここで行うのではなく利用者側が責任を持つべきな気もする
+            if (!result.pieceMoveResult.isSuccess)
+                RollBack();
+            
+            return result.pieceMoveResult;
         }
+
+        //-------------------------------------------------------------------------------
+        private struct Option<T>
+        {
+            public bool IsNone { get; }
+            readonly T value;
+
+            public Option(T value)
+            {
+                IsNone = value == null;
+                this.value = value; ;
+            }
+
+            public T GetOrDefault(T def)
+            {
+                if (IsNone)
+                    return def;
+
+                return value;
+            }
+        }
+        //-------------------------------------------------------------------------------
     }
 }

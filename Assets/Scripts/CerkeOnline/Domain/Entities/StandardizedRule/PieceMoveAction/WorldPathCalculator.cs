@@ -9,7 +9,7 @@ using Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.Data
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction
 {
     //interface, straightPath, brockenPathでクラスを分けたい
-    internal static class PieceMovePathCalculator
+    internal static class WorldPathCalculator
     {
         /// <summary>
         /// 返却されるPathには開始地点は含まれない。
@@ -38,8 +38,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction
             var start2ViaPath = CalculateStraightPath(startPosition, viaPosition, pieces, start2ViaPieceMovement, isFrontPlayersPiece);
             var via2EndPath = CalculateStraightPath(viaPosition, endPosition, pieces, via2EndPieceMovement, isFrontPlayersPiece);
 
-            //順序は保証されていないにも関わらず保証されたものとして利用
-            var tempPath = start2ViaPath.Union(via2EndPath).ToList();   
+            var tempPath = start2ViaPath.Concat(via2EndPath);   //順序は保証されていないにも関わらず保証されたものとして利用
             return new LinkedList<ColumnData>(tempPath);
         }
 

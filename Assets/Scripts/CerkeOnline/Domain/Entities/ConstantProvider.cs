@@ -1,10 +1,9 @@
-﻿using System;
+﻿using UniRx.Async;
 
 namespace Azarashi.CerkeOnline.Domain.Entities
 {
     public class ConstantProvider : IValueInputProvider<int>
     {
-        public bool IsRequestCompleted { get { return true; } }
         readonly int value;
 
         public ConstantProvider(int value)
@@ -12,9 +11,9 @@ namespace Azarashi.CerkeOnline.Domain.Entities
             this.value = value;
         }
 
-        public void RequestValue(Action<int> callback)
+        public UniTask<int> RequestValue()
         {
-            callback(value);
+            return new UniTask<int>(value);
         }
     }
 }

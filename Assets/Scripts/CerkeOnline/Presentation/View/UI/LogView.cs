@@ -16,6 +16,9 @@ namespace Azarashi.CerkeOnline.Presentation.View.UI
 
         void OnSendLogMessage(string message, string stackTrace, LogType logType)
         {
+            if (!UnityEngine.Application.isPlaying)
+                return;
+
             if (string.IsNullOrEmpty(message))
                 return;
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using UniRx;
+using UniRx.Async;
 
 namespace Azarashi.CerkeOnline.Domain.Entities
 {
@@ -30,8 +31,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         /// <param name="endPosition">目標位置</param>
         /// <param name="player">移動したプレイヤー</param>
         /// <param name="valueProvider">賽による判定値の提供者</param>
-        /// <param name="callback">コールバック関数</param>
-        void MovePiece(PublicDataType.IntegerVector2 startPosition, PublicDataType.IntegerVector2 endPosition, IPlayer player, IValueInputProvider<int> valueProvider, Action<PieceMoveResult> callback);
+        UniTask<PieceMoveResult> MovePiece(PublicDataType.IntegerVector2 startPosition, PublicDataType.IntegerVector2 endPosition, IPlayer player, IValueInputProvider<int> valueProvider);
 
         /// <summary>
         /// 盤上の駒を指定された座標に移動する. 移動は引数に指定されたプレイヤーの権限で行われる.
@@ -41,8 +41,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         /// <param name="endPosition">目標位置</param>
         /// <param name="player">移動したプレイヤー</param>
         /// <param name="valueProvider">賽による判定値の提供者</param>
-        /// <param name="callback">コールバック関数</param>
-        void MovePiece(PublicDataType.IntegerVector2 startPosition, PublicDataType.IntegerVector2 viaPosition, PublicDataType.IntegerVector2 endPosition, IPlayer player, IValueInputProvider<int> valueProvider, Action<PieceMoveResult> callback);
+        UniTask<PieceMoveResult> MovePiece(PublicDataType.IntegerVector2 startPosition, PublicDataType.IntegerVector2 viaPosition, PublicDataType.IntegerVector2 endPosition, IPlayer player, IValueInputProvider<int> valueProvider);
 
         /// <summary>
         /// 指定座標の駒のインスタンスを取得する.
