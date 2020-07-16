@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UniRx;
-using UniRx.Triggers;
+using UniRx.Async;
 using Azarashi.CerkeOnline.Application;
 using Azarashi.CerkeOnline.Domain.Entities;
 using Azarashi.CerkeOnline.Domain.Entities.PublicDataType;
@@ -20,15 +20,14 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.Columns
         protected void Start()
         {   
             valueProvider = GetComponent<IValueInputProvider<int>>();
-            this.UpdateAsObservable().TakeUntilDestroy(this).Select(_ => valueProvider.IsRequestCompleted).DistinctUntilChanged().Subscribe(value => isLockSelecting = !value);
-
+            
             GameController.Instance.OnGameReset.TakeUntilDestroy(this).Subscribe(OnGameReset);
         }
 
         void OnGameReset(IGame game)
         {
             game.OnTurnChanged.TakeUntilDestroy(this).Subscribe(OnTurnChanged);
-            isLockSelecting = !valueProvider.IsRequestCompleted;
+            isLockSelecting = false;
             OnTurnChanged(Unit.Default);
         }
 
@@ -39,10 +38,18 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.Columns
 
         protected override void OnColumnSelected(IntegerVector2 start, IntegerVector2 via, IntegerVector2 last)
         {
-            if(via == last)
-                MovePieceUseCaseFactory.Create(firstOrSecond, valueProvider).RequestToMovePiece(start, last);
+            UniTaskVoid nowait = RequestToMove(start, via, last);
+        }
+
+        async UniTaskVoid RequestToMove(IntegerVector2 start, IntegerVector2 via, IntegerVector2 last)
+        {
+            isLockSelecting = true;
+            if (via == last)
+                await MovePieceUseCaseFactory.Create(firstOrSecond, valueProvider).RequestToMovePiece(start, last);
             else
-                MovePieceUseCaseFactory.Create(firstOrSecond, valueProvider).RequestToMovePiece(start, via, last);
+                await MovePieceUseCaseFactory.Create(firstOrSecond, valueProvider).RequestToMovePiece(start, via, last);
+
+            isLockSelecting = false;
         }
     }
 }

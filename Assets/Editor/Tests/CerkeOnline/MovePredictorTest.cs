@@ -7,6 +7,7 @@ using Azarashi.CerkeOnline.Domain.Entities;
 using Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Pieces;
 using Azarashi.CerkeOnline.Domain.Entities.PublicDataType;
 using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
+using UniRx.Async;
 
 namespace Azarashi.CerkeOnline.Tests
 {
@@ -91,12 +92,12 @@ namespace Azarashi.CerkeOnline.Tests
 
             public bool IsOnBoard(IntegerVector2 position) => position.x >= 0 && position.y >= 0 && position.x < Width && position.y < Height;
 
-            public void MovePiece(IntegerVector2 startPosition, IntegerVector2 endPosition, IPlayer player, IValueInputProvider<int> valueProvider, Action<PieceMoveResult> callback)
+            public UniTask<PieceMoveResult> MovePiece(IntegerVector2 startPosition, IntegerVector2 endPosition, IPlayer player, IValueInputProvider<int> valueProvider)
             {
                 throw new NotImplementedException();
             }
 
-            public void MovePiece(IntegerVector2 startPosition, IntegerVector2 viaPosition, IntegerVector2 endPosition, IPlayer player, IValueInputProvider<int> valueProvider, Action<PieceMoveResult> callback)
+            public UniTask<PieceMoveResult> MovePiece(IntegerVector2 startPosition, IntegerVector2 viaPosition, IntegerVector2 endPosition, IPlayer player, IValueInputProvider<int> valueProvider)
             {
                 throw new NotImplementedException();
             }

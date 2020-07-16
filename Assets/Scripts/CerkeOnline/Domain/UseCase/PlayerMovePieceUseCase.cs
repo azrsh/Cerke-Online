@@ -1,4 +1,5 @@
-﻿using Azarashi.CerkeOnline.Domain.Entities;
+﻿using UniRx.Async;
+using Azarashi.CerkeOnline.Domain.Entities;
 using Azarashi.CerkeOnline.Domain.Entities.PublicDataType;
 
 namespace Azarashi.CerkeOnline.Domain.UseCase
@@ -43,7 +44,7 @@ namespace Azarashi.CerkeOnline.Domain.UseCase
             return true;
         }
 
-        public void RequestToMovePiece(IntegerVector2 startPosition, IntegerVector2 viaPosition, IntegerVector2 endPosition)
+        public async UniTask RequestToMovePiece(IntegerVector2 startPosition, IntegerVector2 viaPosition, IntegerVector2 endPosition)
         {
             if (!CommonCheck(startPosition)) return;
             if (game.Board.GetPiece(viaPosition) == null)
@@ -54,16 +55,22 @@ namespace Azarashi.CerkeOnline.Domain.UseCase
 
             var board = game.Board;
             logger.Log(new PieceViaMovementMessage(player, board.GetPiece(startPosition), startPosition, viaPosition, endPosition));
-            board.MovePiece(startPosition, viaPosition, endPosition, player, inputProvider, OnPieceMoved);
+
+            var result = await board.MovePiece(startPosition, viaPosition, endPosition, player, inputProvider);
+
+            OnPieceMoved(result);
         }
 
-        public void RequestToMovePiece(IntegerVector2 startPosition, IntegerVector2 endPosition)
+        public async UniTask RequestToMovePiece(IntegerVector2 startPosition, IntegerVector2 endPosition)
         {
             if (!CommonCheck(startPosition)) return;
 
             var board = game.Board;
             logger.Log(new PieceMovementMessage(player, board.GetPiece(startPosition), startPosition, endPosition));
-            board.MovePiece(startPosition, endPosition, player, inputProvider, OnPieceMoved);
+            
+            var result = await board.MovePiece(startPosition, endPosition, player, inputProvider);
+
+            OnPieceMoved(result);
         }
 
         void OnPieceMoved(PieceMoveResult pieceMoveResult)

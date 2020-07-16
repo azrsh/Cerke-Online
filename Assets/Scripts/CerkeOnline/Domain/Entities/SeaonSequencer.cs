@@ -1,5 +1,6 @@
 ﻿using System;
 using UniRx;
+using UniRx.Async;
 
 namespace Azarashi.CerkeOnline.Domain.Entities
 {
@@ -31,10 +32,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         {
             CurrentSeason = new DefaultSeason(Terminologies.Season.Spring);
 
-            onSeasonChangeable.Subscribe(_ =>
-            {
-                seasonDeclarationProvider.RequestValue(OnDeclarated);
-            });
+            onSeasonChangeable.Subscribe(_ => seasonDeclarationProvider.RequestValue().ContinueWith(OnDeclarated));
 
             var startSubject = new Subject<ISeason>();
             startObserver = startSubject;

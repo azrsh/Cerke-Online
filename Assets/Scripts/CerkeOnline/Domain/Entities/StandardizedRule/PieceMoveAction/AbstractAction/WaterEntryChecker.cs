@@ -1,4 +1,5 @@
 ﻿using System;
+using UniRx.Async;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.AbstractAction
 {
@@ -7,26 +8,21 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.
         readonly int threshold;
         readonly IFieldEffectChecker fieldEffectChecker;
         readonly IValueInputProvider<int> valueProvider;
-        readonly Action<IPiece> onJudgementFailure;
 
         public WaterEntryChecker(int threshold, IFieldEffectChecker fieldEffectChecker, 
-            IValueInputProvider<int> valueProvider, Action<IPiece> onJudgementFailure)
+            IValueInputProvider<int> valueProvider)
         {
             this.threshold = threshold;
             this.fieldEffectChecker = fieldEffectChecker;
             this.valueProvider = valueProvider;
-            this.onJudgementFailure = onJudgementFailure;
         }
 
-        public bool CheckWaterEntry(IPiece movingPiece, PublicDataType.IntegerVector2 start, PublicDataType.IntegerVector2 end, Action onSuccess)
+        public async UniTask<bool> CheckWaterEntry(IPiece movingPiece, PublicDataType.IntegerVector2 start, PublicDataType.IntegerVector2 end)
         {
-            if (!IsJudgmentNecessary(movingPiece, start,end)) return true;
-
-            JudgeWaterEntry(movingPiece, onSuccess);
-            return false;
+            return !IsJudgmentNecessary(movingPiece, start, end) ||  await JudgeWaterEntry();
         }
 
-        public bool IsJudgmentNecessary(IPiece movingPiece,PublicDataType.IntegerVector2 start, PublicDataType.IntegerVector2 end)
+        bool IsJudgmentNecessary(IPiece movingPiece,PublicDataType.IntegerVector2 start, PublicDataType.IntegerVector2 end)
         {
             bool isInWater = fieldEffectChecker.IsInTammua(start);
             bool isIntoWater = fieldEffectChecker.IsInTammua(end);
@@ -35,18 +31,6 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.
             return isNecessaryWaterEntryJudgment;
         }
 
-        public void JudgeWaterEntry(IPiece movingPiece, Action onSuccess)
-        {
-            valueProvider.RequestValue(value =>
-            {
-                if (value < threshold)
-                {
-                    onJudgementFailure?.Invoke(movingPiece);
-                    return;
-                }
-
-                onSuccess?.Invoke();
-            });
-        }
+        UniTask<bool> JudgeWaterEntry() => valueProvider.RequestValue().ContinueWith(value => value >= threshold);
     }
 }

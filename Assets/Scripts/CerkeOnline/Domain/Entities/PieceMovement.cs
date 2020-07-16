@@ -8,11 +8,11 @@ namespace Azarashi.CerkeOnline.Domain.Entities
     /// </summary>
     public readonly struct PieceMovement
     {
-        public readonly bool surmountable;
-        public readonly int numberOfMove;
-        public readonly PublicDataType.IntegerVector2 direction;
-        public readonly int distance;
-        public readonly List<PublicDataType.IntegerVector2> calcuratedMoveablePositions;
+        public bool Surmountable { get; }
+        public int NumberOfMove { get; }
+        readonly PublicDataType.IntegerVector2 direction;
+        readonly int distance;
+        readonly List<PublicDataType.IntegerVector2> calcuratedMoveablePositions;
 
         public static PieceMovement Default { get { return default; } }
 
@@ -20,8 +20,8 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         {
             this.direction = direction;
             this.distance = distance;
-            this.surmountable = surmountable;
-            this.numberOfMove = numberOfMove;
+            this.Surmountable = surmountable;
+            this.NumberOfMove = numberOfMove;
             calcuratedMoveablePositions = new List<PublicDataType.IntegerVector2>();
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using UniRx;
+using UniRx.Async;
 using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
 using Azarashi.CerkeOnline.Domain.Entities.PublicDataType;
 
@@ -57,9 +58,12 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
         }
 
         bool isLocked = false;
-        public void MovePiece(PublicDataType.IntegerVector2 startPosition, PublicDataType.IntegerVector2 viaPosition, PublicDataType.IntegerVector2 endPosition, IPlayer player, IValueInputProvider<int> valueProvider, Action<PieceMoveResult> callback)
+        public async UniTask<PieceMoveResult> MovePiece(PublicDataType.IntegerVector2 startPosition,
+            PublicDataType.IntegerVector2 viaPosition, 
+            PublicDataType.IntegerVector2 endPosition,
+            IPlayer player, IValueInputProvider<int> valueProvider)
         {
-            if (isLocked) return;
+            if (isLocked) return new PieceMoveResult(false, false, null);
 
             if (!IsOnBoard(startPosition) || !IsOnBoard(endPosition))
                 throw new ArgumentException();
@@ -78,8 +82,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
             bool isMoveableToLast = !isTargetNull && (areViaAndLastSame || movingPiece.TryToGetPieceMovement(startPosition + endPosition - viaPosition, out via2EndPieceMovement));//
             if (isTargetNull || (!areViaAndLastSame && isViaPieceNull) || !isOwner || isSameOwner || !isMoveableToVia || ! isMoveableToLast)//
             {
-                callback(new PieceMoveResult(false, false, null));
-                return;
+                return new PieceMoveResult(false, false, null);
             }
 
             //1ターンに複数回動作する駒のためのロジック
@@ -92,8 +95,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
             {
                 if (operationStatus.PreviousPiece != null)
                 {
-                    callback(new PieceMoveResult(false, false, null));
-                    return;
+                    return new PieceMoveResult(false, false, null);
                 }
                 else
                 {
@@ -106,16 +108,20 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
 
 
             isLocked = true;
-            callback += (result) => { isLocked = false; };
             IPieceMoveAction pieceMoveAction = pieceMoveActionFactory.Create(player, startPosition, viaPosition, endPosition,
                             pieces, fieldChecker, valueProvider,
                             start2ViaPieceMovement, via2EndPieceMovement,
-                            callback, () => onEveryValueChanged.OnNext(Unit.Default), isTurnEnd);
-            pieceMoveAction.StartMove();
+                            isTurnEnd);
+            PieceMoveResult result = await pieceMoveAction.StartMove();
+            if (result.isSuccess)
+                onEveryValueChanged.OnNext(Unit.Default);
+            isLocked = false;
+
+            return result;
         }
 
-        public void MovePiece(PublicDataType.IntegerVector2 startPosition, PublicDataType.IntegerVector2 lastPosition, IPlayer player, IValueInputProvider<int> valueProvider, Action<PieceMoveResult> callback)
-            => MovePiece(startPosition, lastPosition, lastPosition, player, valueProvider, callback);
+        public UniTask<PieceMoveResult> MovePiece(PublicDataType.IntegerVector2 startPosition, PublicDataType.IntegerVector2 lastPosition, IPlayer player, IValueInputProvider<int> valueProvider)
+            => MovePiece(startPosition, lastPosition, lastPosition, player, valueProvider);
             
         
         public bool SetPiece(PublicDataType.IntegerVector2 position, IPiece piece)

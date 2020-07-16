@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UniRx;
+using UniRx.Async;
 using Azarashi.CerkeOnline.Domain.Entities;
 using Random = UnityEngine.Random;
 
@@ -9,8 +10,6 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter
 {
     public class StickThrower : MonoBehaviour, IValueInputProvider<int>
     {
-        public bool IsRequestCompleted { get; private set; } = true;
-
         [SerializeField] Button throwStickButton = default;
 
         void Awake()
@@ -24,21 +23,16 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter
             throwStickButton.gameObject.SetActive(false);
         }
 
-        public void RequestValue(Action<int> callback)
+        public async UniTask<int> RequestValue()
         {
-            IsRequestCompleted = false;
-
-            Action<Unit> action = _ =>
-            {
-                throwStickButton.gameObject.SetActive(false);
-                int number = Random.Range(0, 2) + Random.Range(0, 2) + Random.Range(0, 2) + Random.Range(0, 2) + Random.Range(0, 2);
-                Debug.Log("投げ棒の数 : " + number);
-                callback(number);
-                IsRequestCompleted = true;
-            };
-
             throwStickButton.gameObject.SetActive(true);
-            throwStickButton.OnClickAsObservable().First().TakeUntilDestroy(this).Subscribe(action);
+            
+            await throwStickButton.OnClickAsObservable().First().TakeUntilDestroy(this);
+
+            throwStickButton.gameObject.SetActive(false);
+            int number = Random.Range(0, 2) + Random.Range(0, 2) + Random.Range(0, 2) + Random.Range(0, 2) + Random.Range(0, 2);
+            Debug.Log("投げ棒の数 : " + number);
+            return number;
         }
     }
 }

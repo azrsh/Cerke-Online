@@ -11,7 +11,19 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
         {
             IPiece tam = new Minds(PieceColor.Black, new PublicDataType.IntegerVector2(4, 4), null, null); //fieldEffectCheckerに渡すため別途生成
 
-            FieldEffect[,] fieldEffectMap = new FieldEffect[,]
+            FieldEffectChecker fieldChecker = new StandardizedRule.FieldEffectChecker(new PositionArrayAccessor<FieldEffect>(BoardMapGenerator.GenerateFieldEffectMap()), tam);
+
+            IPiece[,] piece2DArray = BoardMapGenerator.GeneratePiece2DMap(frontPlayer,backPlayer,tam, fieldChecker);
+            PositionArrayAccessor<IPiece> pieceMap = new PositionArrayAccessor<IPiece>(piece2DArray);
+
+            IBoard board = new Board(pieceMap, fieldChecker, new PieceMoveActionFactory());
+            return board;
+        }
+    }
+
+    internal static class BoardMapGenerator
+    {
+        public static FieldEffect[,] GenerateFieldEffectMap() => new FieldEffect[,]
             {
                 { FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal },
                 { FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal },
@@ -23,9 +35,10 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
                 { FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal },
                 { FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal, FieldEffect.Normal },
             };
-            FieldEffectChecker fieldChecker = new StandardizedRule.FieldEffectChecker(new PositionArrayAccessor<FieldEffect>(fieldEffectMap), tam);
 
-            IPiece[,] piece2DArray = new IPiece[,]
+        public static IPiece[,] GeneratePiece2DMap(IPlayer frontPlayer, IPlayer backPlayer, IPiece tam, IFieldEffectChecker fieldChecker)
+        {
+            return new IPiece[,]
             {
                 {     new Officer(PieceColor.Black, new PublicDataType.IntegerVector2(0,0), backPlayer, fieldChecker),       new Horse(PieceColor.Black, new PublicDataType.IntegerVector2(1,0), backPlayer, fieldChecker),    new Chariot(PieceColor.Black, new PublicDataType.IntegerVector2(2,0), backPlayer, fieldChecker),      new General(PieceColor.Black, new PublicDataType.IntegerVector2(3,0), backPlayer, fieldChecker),         new King(PieceColor.Red, new PublicDataType.IntegerVector2(4,0), backPlayer, fieldChecker),        new General(PieceColor.Red, new PublicDataType.IntegerVector2(5,0), backPlayer, fieldChecker),      new Chariot(PieceColor.Red, new PublicDataType.IntegerVector2(6,0), backPlayer, fieldChecker),        new Horse(PieceColor.Red, new PublicDataType.IntegerVector2(7,0), backPlayer, fieldChecker),         new Officer(PieceColor.Red, new PublicDataType.IntegerVector2(8,0), backPlayer, fieldChecker) },
                 {    new Shaman(PieceColor.Red, new PublicDataType.IntegerVector2(0,1), backPlayer, fieldChecker),       new Archer(PieceColor.Red, new PublicDataType.IntegerVector2(1,1), backPlayer, fieldChecker),                                                                           null,      new Tiger(PieceColor.Red, new PublicDataType.IntegerVector2(3,1), backPlayer, fieldChecker),                                                                            null,    new Tiger(PieceColor.Black, new PublicDataType.IntegerVector2(5,1), backPlayer, fieldChecker),                                                                           null,      new Archer(PieceColor.Red, new PublicDataType.IntegerVector2(7,1), backPlayer, fieldChecker),      new Shaman(PieceColor.Red, new PublicDataType.IntegerVector2(8,1), backPlayer, fieldChecker) },
@@ -37,11 +50,6 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
                 {  new Shaman(PieceColor.Black, new PublicDataType.IntegerVector2(0,7), frontPlayer, fieldChecker),   new Archer(PieceColor.Black, new PublicDataType.IntegerVector2(1,7), frontPlayer, fieldChecker),                                                                           null,   new Tiger(PieceColor.Black, new PublicDataType.IntegerVector2(3,7), frontPlayer, fieldChecker),                                                                            null,     new Tiger(PieceColor.Red, new PublicDataType.IntegerVector2(5,7), frontPlayer, fieldChecker),                                                                           null,     new Archer(PieceColor.Red, new PublicDataType.IntegerVector2(7,7), frontPlayer, fieldChecker),     new Shaman(PieceColor.Red, new PublicDataType.IntegerVector2(8,7), frontPlayer, fieldChecker) },
                 {       new Officer(PieceColor.Red, new PublicDataType.IntegerVector2(0,8), frontPlayer, fieldChecker),       new Horse(PieceColor.Red, new PublicDataType.IntegerVector2(1,8), frontPlayer, fieldChecker),     new Chariot(PieceColor.Red, new PublicDataType.IntegerVector2(2,8), frontPlayer, fieldChecker),       new General(PieceColor.Red, new PublicDataType.IntegerVector2(3,8), frontPlayer, fieldChecker),      new King(PieceColor.Black, new PublicDataType.IntegerVector2(4,8), frontPlayer, fieldChecker),     new General(PieceColor.Black, new PublicDataType.IntegerVector2(5,8), frontPlayer, fieldChecker),   new Chariot(PieceColor.Black, new PublicDataType.IntegerVector2(6,8), frontPlayer, fieldChecker),     new Horse(PieceColor.Black, new PublicDataType.IntegerVector2(7,8), frontPlayer, fieldChecker),      new Officer(PieceColor.Black, new PublicDataType.IntegerVector2(8,8), frontPlayer, fieldChecker) }
             };
-            PositionArrayAccessor<IPiece> pieceMap = new PositionArrayAccessor<IPiece>(piece2DArray);
-
-            IBoard board = new Board(pieceMap, fieldChecker, new PieceMoveActionFactory());
-            return board;
         }
-
     }
 }

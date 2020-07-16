@@ -16,34 +16,14 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.
             this.capturer = capturer;
         }
 
-        public bool CheckIfContinuable(IPlayer player, IPiece movingPiece, LinkedListNode<ColumnData> worldPathNode, Action<PieceMoveResult> callback, Action onFailure, bool isTurnEnd)
+        public (PieceMoveResult pieceMoveResult, CaptureResult captureResult) ConfirmMove(IPlayer player, IPiece movingPiece, PublicDataType.IntegerVector2 endWorldPosition, bool isTurnEnd, bool isForceMove = false)
         {
-            var nextPiece = worldPathNode.Value.Piece;
-            var nextPosition = worldPathNode.Value.Positin;
-            var isLast = worldPathNode.Next == null;
-            if (nextPiece != null)
-            {
-                if (capturer.IsCapturable(player, movingPiece, nextPiece) && isLast)
-                {
-                    FinishMove(player, movingPiece, nextPosition, callback, isTurnEnd);
-                    return false;
-                }
+            var captureResult = capturer.CapturePiece(player, movingPiece, endWorldPosition);
+            if (!captureResult.IsSuccess)
+                return (new PieceMoveResult(false, false, captureResult.Captured), captureResult);
 
-                //取ることが出ない駒が移動ルート上にある場合は移動失敗として終了する
-                onFailure();
-                return false;
-            }
-
-            return true;
-        }
-
-
-        public void FinishMove(IPlayer player, IPiece movingPiece, PublicDataType.IntegerVector2 endWorldPosition, Action<PieceMoveResult> callback, bool isTurnEnd, bool isForceMove = false)
-        {
-            //移動先の駒を取る
-            IPiece gottenPiece = capturer.CapturePiece(player, movingPiece, endWorldPosition);
             mover.MovePiece(movingPiece, endWorldPosition, isForceMove);
-            callback(new PieceMoveResult(true, isTurnEnd, gottenPiece));
+            return (new PieceMoveResult(true, isTurnEnd, captureResult.Captured), captureResult);
         }
     }
 }
