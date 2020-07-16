@@ -1,5 +1,4 @@
-﻿using System;
-using UniRx.Async;
+﻿using UniRx.Async;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.AbstractAction
 {

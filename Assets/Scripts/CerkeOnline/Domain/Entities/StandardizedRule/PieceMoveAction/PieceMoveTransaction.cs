@@ -7,7 +7,6 @@ using Azarashi.CerkeOnline.Domain.Entities.PublicDataType;
 using Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.DataStructure;
 using Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.ActualAction;
 using Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.AbstractAction;
-using System.Diagnostics;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction
 {
