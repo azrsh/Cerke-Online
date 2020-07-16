@@ -16,7 +16,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
             IPiece[,] piece2DArray = BoardMapGenerator.GeneratePiece2DMap(frontPlayer,backPlayer,tam, fieldChecker);
             PositionArrayAccessor<IPiece> pieceMap = new PositionArrayAccessor<IPiece>(piece2DArray);
 
-            IBoard board = new Board(pieceMap, fieldChecker, new PieceMoveActionFactory());
+            IBoard board = new Board(pieceMap, fieldChecker, new PieceMoveTransactionFactory());
             return board;
         }
     }

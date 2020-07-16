@@ -38,7 +38,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.NoRule
             };
             PositionArrayAccessor<IPiece> pieceMap = new PositionArrayAccessor<IPiece>(piece2DArray);
 
-            IBoard board = new StandardizedRule.Board(pieceMap, fieldChecker, new StandardizedRule.PieceMoveAction.PieceMoveActionFactory());
+            IBoard board = new StandardizedRule.Board(pieceMap, fieldChecker, new StandardizedRule.PieceMoveAction.PieceMoveTransactionFactory());
             return board;
         }
 

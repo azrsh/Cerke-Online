@@ -219,10 +219,10 @@ namespace Azarashi.CerkeOnline.Tests
                 movingPiece.TryToGetPieceMovement(start + end - via, out via2EndPieceMovement);
 
             PieceMoveResult result = FailureResult;
-            IPieceMoveAction pieceMoveAction = null;
+            IPieceMoveTransaction pieceMoveAction = null;
             try
             {
-                pieceMoveAction = new PieceMoveActionFactory()
+                pieceMoveAction = new PieceMoveTransactionFactory()
                         .Create(movingPiece.Owner ?? new MockPlayer(Encampment.Front),  //Minds対策
                         start,
                         via,

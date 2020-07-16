@@ -4,10 +4,10 @@ using Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.Data
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction
 {
-    internal class PieceMoveActionFactory : IPieceMoveActionFactory
+    internal class PieceMoveTransactionFactory : IPieceMoveTransactionFactory
     {
         //PositionArrayAccessor<IPiece> pieces, IFieldEffectChecker fieldEffectCheckerをコンストラクタの引数にすることも検討
-        public IPieceMoveAction Create(IPlayer player, PublicDataType.IntegerVector2 startPosition, PublicDataType.IntegerVector2 viaPosition, PublicDataType.IntegerVector2 endPosition,
+        public IPieceMoveTransaction Create(IPlayer player, PublicDataType.IntegerVector2 startPosition, PublicDataType.IntegerVector2 viaPosition, PublicDataType.IntegerVector2 endPosition,
             PositionArrayAccessor<IPiece> pieces, IFieldEffectChecker fieldEffectChecker, IValueInputProvider<int> valueProvider,
             PieceMovement start2ViaPieceMovement, PieceMovement via2EndPieceMovement, bool isTurnEnd)
         {
@@ -17,7 +17,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction
             //worldPathに開始地点は含まれない
             var moveActionData = new MoveActionData(pieces.Read(startPosition), player, worldPath, viaPositionNode);
             
-            return new PieceMoveAction(moveActionData,
+            return new PieceMoveTransaction(moveActionData,
                 pieces, fieldEffectChecker, valueProvider, start2ViaPieceMovement, via2EndPieceMovement, isTurnEnd);
         }
     }

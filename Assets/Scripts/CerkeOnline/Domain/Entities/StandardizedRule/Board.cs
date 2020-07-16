@@ -13,7 +13,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
 
         readonly PositionArrayAccessor<IPiece> pieces;
         readonly IFieldEffectChecker fieldChecker;
-        readonly IPieceMoveActionFactory pieceMoveActionFactory;
+        readonly IPieceMoveTransactionFactory pieceMoveActionFactory;
 
         public IObservable<Unit> OnEveruValueChanged => onEveryValueChanged;
         readonly Subject<Unit> onEveryValueChanged = new Subject<Unit>();
@@ -22,7 +22,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
         //ターン管理をここでするな！
         readonly OperationStatus operationStatus = new OperationStatus();
 
-        internal Board(PositionArrayAccessor<IPiece> pieceMap, FieldEffectChecker fieldChecker, IPieceMoveActionFactory pieceMoveActionFactory)
+        internal Board(PositionArrayAccessor<IPiece> pieceMap, FieldEffectChecker fieldChecker, IPieceMoveTransactionFactory pieceMoveActionFactory)
         {
             this.pieces = pieceMap;
             this.fieldChecker = fieldChecker;
@@ -108,7 +108,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
 
 
             isLocked = true;
-            IPieceMoveAction pieceMoveAction = pieceMoveActionFactory.Create(player, startPosition, viaPosition, endPosition,
+            IPieceMoveTransaction pieceMoveAction = pieceMoveActionFactory.Create(player, startPosition, viaPosition, endPosition,
                             pieces, fieldChecker, valueProvider,
                             start2ViaPieceMovement, via2EndPieceMovement,
                             isTurnEnd);

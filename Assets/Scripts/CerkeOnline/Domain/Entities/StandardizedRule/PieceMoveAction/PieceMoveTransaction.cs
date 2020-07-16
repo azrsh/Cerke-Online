@@ -18,7 +18,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction
      という意味で使っています.
      */
 
-    internal class PieceMoveAction : IPieceMoveAction
+    internal class PieceMoveTransaction : IPieceMoveTransaction
     {
         readonly IPlayer player;
         readonly PositionArrayAccessor<IPiece> pieces;
@@ -37,7 +37,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction
         IPiece movingPiece; //readonlyでキャッシュすべきかも
         Option<CaptureResult> captureResult = new Option<CaptureResult>();
 
-        public PieceMoveAction(MoveActionData moveActionData, PositionArrayAccessor<IPiece> pieces, IFieldEffectChecker fieldEffectChecker,
+        public PieceMoveTransaction(MoveActionData moveActionData, PositionArrayAccessor<IPiece> pieces, IFieldEffectChecker fieldEffectChecker,
             IValueInputProvider<int> valueProvider, PieceMovement start2ViaPieceMovement, PieceMovement via2EndPieceMovement, bool isTurnEnd)
         {
             this.player = moveActionData?.Player ?? throw new ArgumentNullException("駒を操作するプレイヤーを指定してください.");
