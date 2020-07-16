@@ -95,6 +95,9 @@ namespace Azarashi.CerkeOnline.Application.Language
 		SeasonsSpring = 85,
 		SeasonsSummer = 86,
 		SeasonsAutumn = 87,
-		SeasonsWinter = 88
+		SeasonsWinter = 88,
+		SettingsButton = 89,
+		LanguageSettingsLabel = 90,
+		LanguageName = 91
 	}
 }

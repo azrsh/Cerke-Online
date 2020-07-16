@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Utf8Json;
@@ -23,10 +24,10 @@ namespace Azarashi.CerkeOnline.Application.Language
             this.factory = factory;
         }
         
-        public ILanguageDictionary Read(string languageName)
+        public ILanguageDictionary Read(string languageCode)
         {
             string json = string.Empty;
-            using (StreamReader streamReader = new StreamReader(LanguageFilePath.GetFilePath(languageName)))
+            using (StreamReader streamReader = new StreamReader(LanguageFilePath.GetFilePath(languageCode)))
             {
                 json = streamReader.ReadToEnd();
             }
@@ -35,17 +36,12 @@ namespace Azarashi.CerkeOnline.Application.Language
             return factory.Create(dictionary);
         }
 
-        public IEnumerable<ILanguageDictionary> ReadAll()
+        public IEnumerable<(string code, ILanguageDictionary dictionary)> ReadAll()
         {
-            string languageFolderPath = string.Empty;
-
-            var directories = EnumerateDirectories();
-            var dictionaries = directories.Where(directory => File.Exists(LanguageFilePath.GetFilePath(directory)))
-                .Select(directory => (Dictionary<string, string>)JsonSerializer.Deserialize<dynamic>(LanguageFilePath.GetFilePath(directory)));
-            return dictionaries.Select(dictionary => factory.Create(dictionary)).Where(x => x != null);
+            var names = Directory.EnumerateDirectories(LanguageFilePath.DirectoryPath).Select(Path.GetFileName);    //GetFileNameで末端のディレクトリ名を取得している.
+            return names.Where(name => File.Exists(LanguageFilePath.GetFilePath(name)))
+                .Select(name => (code : name, dictionary : Read(name)))
+                .Where(dictionary => dictionary.dictionary != null);
         }
-
-        static IEnumerable<string> EnumerateDirectories()
-            => Directory.EnumerateDirectories(LanguageFilePath.DirectoryPath);
     }
 }

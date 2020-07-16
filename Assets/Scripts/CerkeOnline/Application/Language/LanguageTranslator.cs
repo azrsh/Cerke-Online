@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Azarashi.CerkeOnline.Application.Language
 {
@@ -9,9 +10,9 @@ namespace Azarashi.CerkeOnline.Application.Language
 
     public static class LanguageTranlatorFactory
     {
-        public static ILanguageTranslator Create(string languageCode,IEnumerable<string> TranslatableKeys)
+        public static ILanguageTranslator Create(string languageCode, IEnumerable<string> translatableKeys)
         {
-            LanguageDictionaryFactory languageDictionaryFactory = new LanguageDictionaryFactory(TranslatableKeys);
+            LanguageDictionaryFactory languageDictionaryFactory = new LanguageDictionaryFactory(translatableKeys);
             LanguageDataReader languageDataReader = new LanguageDataReader(languageDictionaryFactory);
             var dictionary = languageDataReader.Read(languageCode);
 
@@ -22,6 +23,13 @@ namespace Azarashi.CerkeOnline.Application.Language
             }
 
             return new LanguageTranslator(dictionary);
+        }
+
+        public static IEnumerable<LanguageData> CreateAll(IEnumerable<string> translatableKeys)
+        {
+            LanguageDictionaryFactory languageDictionaryFactory = new LanguageDictionaryFactory(translatableKeys);
+            LanguageDataReader languageDataReader = new LanguageDataReader(languageDictionaryFactory);
+            return languageDataReader.ReadAll().Select(dictionary => new LanguageData(dictionary.code, new LanguageTranslator(dictionary.dictionary)));
         }
 
         private class LanguageTranslator : ILanguageTranslator

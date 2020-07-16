@@ -87,5 +87,8 @@
   "SeasonsSpring": "春",
   "SeasonsSummer": "夏",
   "SeasonsAutumn": "秋",
-  "SeasonsWinter": "冬"
+  "SeasonsWinter": "冬",
+  "SettingsButton": "設定",
+  "LanguageSettingsLabel": "使用言語",
+  "LanguageName": "日本語"
 }

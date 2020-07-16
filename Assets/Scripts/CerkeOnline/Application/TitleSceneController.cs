@@ -10,15 +10,17 @@ namespace Azarashi.CerkeOnline.Application
         [SerializeField] GameControllerInitilizeObject initilizeObject = default;
         [SerializeField] Button startOnlineButton = default;
         [SerializeField] Button startOfflineButton = default;
+        [SerializeField] Button settingsButton = default;
 
         SceneAsyncLoader sceneLoader;
 
         void Start()
         {
-            sceneLoader = new SceneAsyncLoader("Main");
+            sceneLoader = new SceneAsyncLoader(SceneName.Main);
 
             startOnlineButton.OnClickAsObservable().TakeUntilDestroy(this).Subscribe(OnStartOnlineButoon);
             startOfflineButton.OnClickAsObservable().TakeUntilDestroy(this).Subscribe(OnStartOfflineButoon);
+            settingsButton.OnClickAsObservable().TakeUntilDestroy(this).Subscribe(OnSettingsButoon);
 
             startOnlineButton.interactable = false;
         }
@@ -33,6 +35,11 @@ namespace Azarashi.CerkeOnline.Application
         {
             initilizeObject.isOnline = false;
             sceneLoader.ChangeScene();
+        }
+
+        void OnSettingsButoon(Unit unit)
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene(SceneName.Settings);
         }
     }
 }
