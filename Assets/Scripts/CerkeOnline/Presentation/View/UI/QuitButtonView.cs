@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Assertions;
 using UniRx;
 
 namespace Azarashi.CerkeOnline.Presentation.View
@@ -10,6 +11,8 @@ namespace Azarashi.CerkeOnline.Presentation.View
 
         void Start()
         {
+            Assert.IsNotNull(button);
+
             button.OnClickAsObservable().TakeUntilDestroy(this).Subscribe(_ =>
             {
                 //CerkeOnline.Application.GameController.OnQuit();

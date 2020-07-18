@@ -35,14 +35,14 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter
             foreach (IHand hand in handDifference.IncreasedDifference)
             {
                 string handName = HandNameTranslator.Translate(hand.Name, translator);
-                string message = translator.Translate(TranslatableKeys.HandCompleteMessage)
+                string message = translator.Translate(TranslatableKeys.HandCompleteMessage).Text
                     .Replace("#HAND_NAME#",handName);  //キーワードの置き換えはここでやるべきではない
                 logger.Log(message);
             }
             foreach (IHand hand in handDifference.DecreasedDifference)
             {
                 string handName = HandNameTranslator.Translate(hand.Name, translator);
-                string message = translator.Translate(TranslatableKeys.HandUncompleteMessage)
+                string message = translator.Translate(TranslatableKeys.HandUncompleteMessage).Text
                     .Replace("#HAND_NAME#", handName);  //キーワードの置き換えはここでやるべきではない
                 logger.Log(message);
             }

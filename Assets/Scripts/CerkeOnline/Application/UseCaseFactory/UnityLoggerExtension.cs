@@ -32,11 +32,11 @@ namespace Azarashi.CerkeOnline.Application
 
                 if (type == typeof(NotYourTurnMessage))
                 {
-                    return translator.Translate(TranslatableKeys.NotYourTurnMessage);
+                    return translator.Translate(TranslatableKeys.NotYourTurnMessage).Text;
                 }
                 else if (type == typeof(NotYourPieceMessage))
                 {
-                    return translator.Translate(TranslatableKeys.NotYourPieceMessage);
+                    return translator.Translate(TranslatableKeys.NotYourPieceMessage).Text;
                 }
                 else if (type == typeof(PieceMovementMessage))
                 {
@@ -46,7 +46,7 @@ namespace Azarashi.CerkeOnline.Application
                     //EndPosition = endPosition;
 
                     var message = (PieceMovementMessage)systemMessage;
-                    return translator.Translate(TranslatableKeys.PieceMovementMessage)
+                    return translator.Translate(TranslatableKeys.PieceMovementMessage).Text
                         .Replace("#PIECE_NAME#", PieceNameTranslator.Translate(message.Piece.Name, translator))
                         .Replace("#START_POSITION#", message.StartPosition.ToString())
                         .Replace("#END_POSITION#", message.EndPosition.ToString());
@@ -60,7 +60,7 @@ namespace Azarashi.CerkeOnline.Application
                     //EndPosition = endPosition;
 
                     var message = (PieceViaMovementMessage)systemMessage;
-                    return translator.Translate(TranslatableKeys.PieceViaMovementMessage)
+                    return translator.Translate(TranslatableKeys.PieceViaMovementMessage).Text
                         .Replace("#PIECE_NAME#", PieceNameTranslator.Translate(message.Piece.Name, translator))
                         .Replace("#START_POSITION#", message.StartPosition.ToString())
                         .Replace("#VIA_POSITION#", message.ViaPosition.ToString())
@@ -68,15 +68,15 @@ namespace Azarashi.CerkeOnline.Application
                 }
                 else if (type == typeof(PieceMovementFailureMessage))
                 {
-                    return translator.Translate(TranslatableKeys.PieceMovementFailureMessage);
+                    return translator.Translate(TranslatableKeys.PieceMovementFailureMessage).Text;
                 }
                 else if (type == typeof(NoPieceViaPointMessage))
                 {
-                    return translator.Translate(TranslatableKeys.NoPieceViaPointMessage);
+                    return translator.Translate(TranslatableKeys.NoPieceViaPointMessage).Text;
                 }
                 else if (type == typeof(NoPieceSelectedMessage))
                 {
-                    return translator.Translate(TranslatableKeys.NoPieceSelectedMessage);
+                    return translator.Translate(TranslatableKeys.NoPieceSelectedMessage).Text;
                 }
                 else if (type == typeof(SetPieceMessage))
                 {
@@ -85,13 +85,13 @@ namespace Azarashi.CerkeOnline.Application
                     //SetPosition = setPosition;
 
                     var message = (SetPieceMessage)systemMessage;
-                    return translator.Translate(TranslatableKeys.SetPieceMessage)
+                    return translator.Translate(TranslatableKeys.SetPieceMessage).Text
                         .Replace("#PIECE_NAME#", PieceNameTranslator.Translate(message.Piece.Name, translator))
                         .Replace("#POSITION#", message.SetPosition.ToString()); 
                 }
                 else if (type == typeof(SetPieceFailureMessage))
                 {
-                    return translator.Translate(TranslatableKeys.SetPieceFailureMessage);
+                    return translator.Translate(TranslatableKeys.SetPieceFailureMessage).Text;
                 }
 
                 return string.Empty;

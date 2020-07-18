@@ -49,6 +49,27 @@ Unzip a zip file downloaded from the release tab, and run an executable file, wh
 + License full text : https://github.com/sozysozbot/cerke/blob/master/LICENSE
 + Link : https://github.com/sozysozbot/cerke
 
+## M+ Fonts
+>M+ FONTS                                Copyright (C) 2002-2019 M+ FONTS PROJECT
+>
+>-
+>
+>LICENSE_E
+>
+>
+>
+>
+>These fonts are free software.
+>Unlimited permission is granted to use, copy, and distribute them, with
+>or without modification, either commercially or noncommercially.
+>THESE FONTS ARE PROVIDED "AS IS" WITHOUT WARRANTY.
+>
+>
+>http://mplus-fonts.osdn.jp
+>
++ License : Free
++ Link : http://mplus-fonts.osdn.jp
+
 # URL
 [The Standardized Rule of Cetkaik in English](https://github.com/sozysozbot/cerke/blob/master/y1_huap1_summary_en.pdf)  
 [Cet2kaik Union of Japan Official Website](https://sites.google.com/view/cet2kaik/トップページ?authuser=0)  

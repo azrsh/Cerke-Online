@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
-using UnityEngine.UI;
 using UniRx;
+using TMPro;
 using Azarashi.CerkeOnline.Domain.Entities;
 using Azarashi.CerkeOnline.Application;
 using Azarashi.CerkeOnline.Application.Language;
@@ -10,7 +10,7 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.UI
 {
     public class ScorePresenter : MonoBehaviour
     {
-        [SerializeField] Text scoreText = default;
+        [SerializeField] TMP_Text scoreText = default;
         [SerializeField] Terminologies.FirstOrSecond firstOrSecond = default;
         [SerializeField] TranslatableKeys scoreTextLabel = default;
 
@@ -32,7 +32,9 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.UI
             Action<Unit> onTurnChanged = _ =>
             {
                 var score = scoreUseCase.Score;
-                scoreText.text = LanguageManager.Instance.Translator.Translate(scoreTextLabel) + score.ToString();
+                var data = LanguageManager.Instance.Translator.Translate(scoreTextLabel);
+                scoreText.text = data.Text + score.ToString();
+                scoreText.font = data.FontAsset;
             };
 
             scoreText.enabled = true;

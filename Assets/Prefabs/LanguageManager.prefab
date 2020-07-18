@@ -47,3 +47,4 @@ MonoBehaviour:
     type: 2}
   languageSettingsObject: {fileID: 11400000, guid: 394c7525ba3cc3f4aa9d0c46970609ec,
     type: 2}
+  defaultFont: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}

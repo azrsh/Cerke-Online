@@ -31,7 +31,7 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter
 
             throwStickButton.gameObject.SetActive(false);
             int number = Random.Range(0, 2) + Random.Range(0, 2) + Random.Range(0, 2) + Random.Range(0, 2) + Random.Range(0, 2);
-            Debug.Log("投げ棒の数 : " + number);
+            Debug.Log("投げ棒の数 : " + number); //翻訳未対応
             return number;
         }
     }

@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Maching.unity
     guid: a708a6d195c6d7f439724cd33c5b3f99
   - enabled: 1
+    path: Assets/Scenes/Settings.unity
+    guid: 9ed5aa8e21957ee4fb54094623849c94
+  - enabled: 1
     path: Assets/Scenes/Main.unity
     guid: 5c16a8ca076bb174aaa9e4af2d348327
   - enabled: 1

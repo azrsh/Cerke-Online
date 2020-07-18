@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using UniRx;
+using TMPro;
 using Azarashi.CerkeOnline.Presentation.Presenter.Inputs;
 
 namespace Azarashi.CerkeOnline.Presentation.Presenter.Commands
@@ -8,14 +8,14 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.Commands
     [RequireComponent(typeof(IInputEventProvider))]
     public class CommandInputPresenter : MonoBehaviour
     {
-        [SerializeField] InputField commandInputField = default;
+        [SerializeField] TMP_InputField commandInputField = default;
 
         readonly CommandFactory factory = new CommandFactory();
 
         void Start()
         {
             commandInputField.gameObject.SetActive(false);
-            commandInputField.OnEndEditAsObservable().TakeUntilDestroy(this).Subscribe(OnEndEdit);
+            commandInputField.onEndEdit.AsObservable().TakeUntilDestroy(this).Subscribe(OnEndEdit);
             IInputEventProvider inputEventProvider = GetComponent<IInputEventProvider>();
             inputEventProvider.OnCommandButton.TakeUntilDestroy(this).Subscribe(OnCommandButton);
         }

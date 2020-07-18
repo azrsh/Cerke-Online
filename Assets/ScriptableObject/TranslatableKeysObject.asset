@@ -102,3 +102,6 @@ MonoBehaviour:
   - SeasonsSummer
   - SeasonsAutumn
   - SeasonsWinter
+  - SettingsButton
+  - LanguageSettingsLabel
+  - LanguageName

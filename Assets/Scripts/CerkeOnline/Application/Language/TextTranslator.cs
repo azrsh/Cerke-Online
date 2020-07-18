@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using UniRx;
 
@@ -29,7 +28,8 @@ namespace Azarashi.CerkeOnline.Application.Language
 
         private void UpdateText(ILanguageTranslator translator)
         {
-            TextComponent.text = translator.Translate(key); 
+            var data = translator.Translate(key);
+            TextComponent.text = data.Text;
         }
 
 #if false

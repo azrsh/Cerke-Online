@@ -4,6 +4,7 @@
     {
         public static readonly string Title = "Title";
         public static readonly string Matching = "Matching";
+        public static readonly string Settings = "Settings";
         public static readonly string Main = "Main";
 
         public static class MainSceneUI
