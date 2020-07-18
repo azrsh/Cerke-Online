@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
 using UniRx;
+using TMPro;
 using Azarashi.CerkeOnline.Application;
 using Azarashi.CerkeOnline.Application.Language;
 
@@ -9,13 +9,18 @@ namespace Azarashi.CerkeOnline.Presentation.View.GameResultMenu
 {
     public class HandResultView : MonoBehaviour
     {
-        [SerializeField] Text handText = default;
+        [SerializeField] TMP_Text handText = default;
 
         void Start()
         {
             GameController.Instance.OnGameReset.TakeUntilDestroy(this).Subscribe(_ => Bind());
             if (GameController.Instance.Game != null)
                 Bind();
+
+            // TODO: 途中でフォントを切り替えるとこれまでの表示が文字化けする可能性があるので修正する
+            LanguageManager.Instance.OnLanguageChanged.Subscribe(translator => 
+                handText.font = translator.Translate(TranslatableKeys.Hand).FontAsset
+            );
         }
 
         void Bind()

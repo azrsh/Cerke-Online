@@ -12,7 +12,7 @@ namespace Azarashi.CerkeOnline.Application.Language
              if (!System.Enum.TryParse(keyString, out key))
                 return string.Empty;
 #endif
-            return translator.Translate(key);
+            return translator.Translate(key).Text;
         }
     }
 }

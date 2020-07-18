@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
+﻿using TMPro;
 
 namespace Azarashi.CerkeOnline.Application.Language
 {
@@ -10,12 +7,13 @@ namespace Azarashi.CerkeOnline.Application.Language
         public string Code { get; }
         public string Name { get; }
         public ILanguageTranslator Translator { get; }
-        
+
         public LanguageData(string code, ILanguageTranslator translator)
         {
             Code = code;
             Translator = translator;
-            Name = translator.Translate(TranslatableKeys.LanguageName);
+
+            Name = translator.Translate(TranslatableKeys.LanguageName).Text;
         }
     }
 }

@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 
 namespace Azarashi.CerkeOnline.Application.Language
 {
     public interface ILanguageTranslator
     {
-        string Translate(TranslatableKeys key);
+        TextData Translate(TranslatableKeys key);
     }
 
     public static class LanguageTranlatorFactory
@@ -14,34 +15,40 @@ namespace Azarashi.CerkeOnline.Application.Language
         {
             LanguageDictionaryFactory languageDictionaryFactory = new LanguageDictionaryFactory(translatableKeys);
             LanguageDataReader languageDataReader = new LanguageDataReader(languageDictionaryFactory);
-            var dictionary = languageDataReader.Read(languageCode);
+            var pair = languageDataReader.Read(languageCode);
 
-            if (dictionary == null)
+            if (pair.dictionary == null)
             {
                 UnityEngine.Debug.LogError("Language translator generation failed");
                 return new EmptyTranslator();
             }
 
-            return new LanguageTranslator(dictionary);
+            return new LanguageTranslator(pair.dictionary, pair.fontAsset);
         }
 
         public static IEnumerable<LanguageData> CreateAll(IEnumerable<string> translatableKeys)
         {
             LanguageDictionaryFactory languageDictionaryFactory = new LanguageDictionaryFactory(translatableKeys);
             LanguageDataReader languageDataReader = new LanguageDataReader(languageDictionaryFactory);
-            return languageDataReader.ReadAll().Select(dictionary => new LanguageData(dictionary.code, new LanguageTranslator(dictionary.dictionary)));
+            return languageDataReader.ReadAll().Select(dictionary => new LanguageData(dictionary.code, new LanguageTranslator(dictionary.dictionary, dictionary.fontAsset)));
         }
 
         private class LanguageTranslator : ILanguageTranslator
         {
             readonly ILanguageDictionary dictionary;
-            public LanguageTranslator(ILanguageDictionary dictionary) => this.dictionary = dictionary;
-            public string Translate(TranslatableKeys key) => dictionary[key];
+            readonly TMP_FontAsset fontAsset;
+
+            public LanguageTranslator(ILanguageDictionary dictionary, TMP_FontAsset fontAsset)
+            {
+                this.dictionary = dictionary;
+                this.fontAsset = fontAsset;
+            }
+            public TextData Translate(TranslatableKeys key) => new TextData(dictionary[key], fontAsset);
         }
 
         private class EmptyTranslator : ILanguageTranslator
         {
-            public string Translate(TranslatableKeys key) => "EMPTY";
+            public TextData Translate(TranslatableKeys key) => new TextData("EMPTY", null);
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using UniRx;
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
 using Azarashi.CerkeOnline.Application;
 using Azarashi.CerkeOnline.Application.Language;
 using Azarashi.CerkeOnline.Domain.Entities;
@@ -9,7 +9,7 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter
 {
     public class SeasonPresenter : MonoBehaviour
     {
-        [SerializeField] Text seasonText = default;
+        [SerializeField] TMP_Text seasonText = default;
 
         void Start()
         {
@@ -25,7 +25,9 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter
         void UpdateSeasonView(Terminologies.Season current)
         {
             var translator = LanguageManager.Instance.Translator;
-            seasonText.text = translator.Translate(TranslatableKeys.CurrentSeasonLabel) + SeasonTranslator.Translate(current, translator);
+            var data = translator.Translate(TranslatableKeys.CurrentSeasonLabel);
+            seasonText.text = data.Text + SeasonTranslator.Translate(current, translator);
+            seasonText.font = data.FontAsset;
         }
     }
 }

@@ -38,7 +38,7 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.UI
 
             Close();
             TranslatableKeys key = result == SeasonContinueOrEnd.Continue ? TranslatableKeys.DeclaringToContinueButton : TranslatableKeys.DeclaringToEndButton;
-            var message = LanguageManager.Instance.Translator.Translate(key);
+            var message = LanguageManager.Instance.Translator.Translate(key).Text;
             GameController.Instance.SystemLogger.Log(message);
 
             return result;

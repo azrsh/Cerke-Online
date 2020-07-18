@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 using System.Linq;
+using TMPro;
 
 namespace Azarashi.CerkeOnline.Application.Language
 {
@@ -25,19 +26,19 @@ namespace Azarashi.CerkeOnline.Application.Language
         public IObservable<ILanguageTranslator> OnLanguageChanged { get { return currentLanguageData.AsObservable().Select(data => data.Translator); } }
 
         readonly IReactiveProperty<LanguageData> currentLanguageData = new ReactiveProperty<LanguageData>();
-        public ILanguageTranslator Translator 
+        public ILanguageTranslator Translator
         {
             get
             {
-                if(currentLanguageData.Value.Translator == null)
-                    currentLanguageData.Value = new LanguageData(languageSettingsObject.DefaultLanguageCode, LanguageTranlatorFactory.Create(languageSettingsObject.DefaultLanguageCode, TranslatableKeys));
+                if (currentLanguageData.Value.Translator == null)
+                    currentLanguageData.Value = GetDefaultLanguageData();
 
                 return currentLanguageData.Value.Translator;
             }
         }
 
         IEnumerable<LanguageData> translatableLanguages = default;
-        public IEnumerable<LanguageData> TranslatableLanguages 
+        public IEnumerable<LanguageData> TranslatableLanguages
         {
             get
             {
@@ -56,9 +57,20 @@ namespace Azarashi.CerkeOnline.Application.Language
             if (LanguageManager.Instance != this)
                 Destroy(this);
 
-            currentLanguageData.Value = new LanguageData(languageSettingsObject.DefaultLanguageCode, LanguageTranlatorFactory.Create(languageSettingsObject.DefaultLanguageCode, TranslatableKeys));
+            currentLanguageData.Value = GetDefaultLanguageData();
         }
 
         public void SetLanguage(LanguageData data) => currentLanguageData.Value = data;
+
+        LanguageData GetDefaultLanguageData()
+        {
+            return new LanguageData(
+                languageSettingsObject.DefaultLanguageCode, 
+                LanguageTranlatorFactory.Create(
+                    languageSettingsObject.DefaultLanguageCode, 
+                    TranslatableKeys
+                )
+            );
+        }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using UniRx;
 using UniRx.Triggers;
+using TMPro;
 using Azarashi.CerkeOnline.Domain.Entities;
 using Azarashi.CerkeOnline.Application;
 using Azarashi.CerkeOnline.Application.Language;
@@ -10,7 +10,7 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.UI
 {
     public class CurrentTurnPresenter : MonoBehaviour
     {
-        [SerializeField] Text currentTurnText = default;
+        [SerializeField] TMP_Text currentTurnText = default;
 
         void Start()
         {
@@ -23,8 +23,10 @@ namespace Azarashi.CerkeOnline.Presentation.Presenter.UI
                 .Select(_ => game.CurrentTurn).DistinctUntilChanged().Subscribe(value =>
                 {
                     var translator = LanguageManager.Instance.Translator;
-                    currentTurnText.text = translator.Translate(TranslatableKeys.CurrentPlayerLabel)
+                    var data = translator.Translate(TranslatableKeys.CurrentPlayerLabel);
+                    currentTurnText.text = data.Text
                     + FirstOrSecondTranslator.Translate(value, translator);
+                    currentTurnText.font = data.FontAsset;
                 });
         }
     }

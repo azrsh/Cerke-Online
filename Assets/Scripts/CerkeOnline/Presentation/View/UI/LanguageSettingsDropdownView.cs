@@ -2,32 +2,37 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
-using static UnityEngine.UI.Dropdown;
+using UnityEngine.Assertions;
 using UniRx;
+using TMPro;
+using static TMPro.TMP_Dropdown;
 using Azarashi.CerkeOnline.Application.Language;
 
 namespace Azarashi.CerkeOnline.Presentation.View
 {
     public class LanguageSettingsDropdownView : MonoBehaviour
     {
-        public IObservable<int> OnDropDownChanged => dropdown.OnValueChangedAsObservable().TakeUntilDestroy(this);
-
-        [SerializeField] Dropdown dropdown = default;
+        [SerializeField] TMP_Dropdown dropdown = default;
 
         void Start()
         {
-            if (dropdown == null) throw new NullReferenceException();
+            Assert.IsNotNull(dropdown);
 
             var languages = LanguageManager.Instance.TranslatableLanguages.Where(data => !string.IsNullOrEmpty(data.Name));
             List<OptionData> options = languages.Select(data => new OptionData(data.Name)).ToList();
             dropdown.options = options;
 
+            TextData textData = LanguageManager.Instance.Translator.Translate(TranslatableKeys.LanguageName);
             dropdown.value = options.Select(option => option.text)
                 .Select((text, index) => (text, index))
-                .FirstOrDefault(value => value.text == LanguageManager.Instance.Translator.Translate(TranslatableKeys.LanguageName))
+                .FirstOrDefault(value => value.text == textData.Text)
                 .index;
-            dropdown.OnValueChangedAsObservable().Select(value => languages.Skip(value).First()).Subscribe(LanguageManager.Instance.SetLanguage);
+            dropdown.itemText.font = textData.FontAsset;    //複数のフォントに対応できていない
+            dropdown.onValueChanged.AsObservable().TakeUntilDestroy(this).Select(value => languages.Skip(value).First()).Subscribe(data =>
+                {
+                    dropdown.captionText.font = data.Translator.Translate(TranslatableKeys.LanguageName).FontAsset;
+                    LanguageManager.Instance.SetLanguage(data); 
+                });
         }
     }
 }

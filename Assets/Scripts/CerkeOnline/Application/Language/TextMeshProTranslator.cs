@@ -1,19 +1,19 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using UniRx;
+using TMPro;
 
 namespace Azarashi.CerkeOnline.Application.Language
 {
-    [RequireComponent(typeof(Text))]
-    public class TextTranslator : MonoBehaviour
+    [RequireComponent(typeof(TextMeshProUGUI))]
+    public class TextMeshProTranslator : MonoBehaviour
     {
         [SerializeField] TranslatableKeys key = default;
-        Text textComponent;
-        Text TextComponent 
+        TextMeshProUGUI textComponent;
+        TextMeshProUGUI TextComponent 
         {
             get {
                 if (textComponent == null)
-                    textComponent = GetComponent<Text>();
+                    textComponent = GetComponent<TextMeshProUGUI>();
 
                 return textComponent;
             } 
@@ -21,15 +21,15 @@ namespace Azarashi.CerkeOnline.Application.Language
         
         void Start() 
         {
-            textComponent = GetComponent<Text>();
+            textComponent = GetComponent<TextMeshProUGUI>();
             LanguageManager.Instance.OnLanguageChanged.TakeUntilDestroy(this).Subscribe(UpdateText);
             UpdateText(LanguageManager.Instance.Translator);
         }
 
         private void UpdateText(ILanguageTranslator translator)
         {
-            var data = translator.Translate(key);
-            TextComponent.text = data.Text;
+            TextComponent.text = translator.Translate(key).Text;
+            TextComponent.font = translator.Translate(key).FontAsset;
         }
 
 #if false
