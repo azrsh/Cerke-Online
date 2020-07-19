@@ -27,10 +27,13 @@ namespace Azarashi.CerkeOnline.Presentation.View
                 .Select((text, index) => (text, index))
                 .FirstOrDefault(value => value.text == textData.Text)
                 .index;
+            dropdown.captionText.font = textData.FontAsset;
             dropdown.itemText.font = textData.FontAsset;    //複数のフォントに対応できていない
             dropdown.onValueChanged.AsObservable().TakeUntilDestroy(this).Select(value => languages.Skip(value).First()).Subscribe(data =>
                 {
-                    dropdown.captionText.font = data.Translator.Translate(TranslatableKeys.LanguageName).FontAsset;
+                    var fontAsset = data.Translator.Translate(TranslatableKeys.LanguageName).FontAsset;
+                    dropdown.captionText.font = fontAsset;
+                    dropdown.itemText.font = fontAsset;    //複数のフォントに対応できていない
                     LanguageManager.Instance.SetLanguage(data); 
                 });
         }
