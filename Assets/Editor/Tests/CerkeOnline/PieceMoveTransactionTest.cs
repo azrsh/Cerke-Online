@@ -235,12 +235,8 @@ namespace Azarashi.CerkeOnline.Tests
                         true);
                 result = await pieceMoveAction.StartMove();
             }
-            catch (Exception e)
-            {
-                //if (logCount < logLimit)
-                //    UnityEngine.Debug.LogError(e);
-                //logCount++;
-                
+            catch (Exception)
+            {   
                 result = FailureResult;
             }
             finally
