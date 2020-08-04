@@ -7,11 +7,11 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Hands
     /// 皇の動きを監視し, 皇再来を検出する.
     /// 皇が取られた場合の動作は未定義.
     /// </summary>
-    public class TamObserver
+    internal class TamObserver
     {
         int numberOfTamenMako = 0;              //皇再来の成立回数
-        bool isMoved = false;                   //現在のターン中に駒が動いたか
-        bool isPrevoiusMoved = false;           //前回のターンに駒が動いたか
+        bool isCurrentTurnMoved = false;                   //現在のターン中に駒が動いたか
+        bool isPrevoiusTurnMoved = false;           //前回のターンに駒が動いたか
         PublicDataType.IntegerVector2 previousTurnPosition;        //前回のターン終了時の皇の座標
         PublicDataType.IntegerVector2 currentPosition;             //現在のtamの座標
 
@@ -24,19 +24,19 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Hands
         
         void OnTamMoved(PublicDataType.IntegerVector2 position)
         {
-            if (isPrevoiusMoved || (isMoved && previousTurnPosition == position)) numberOfTamenMako++;
-            isMoved = true;
+            if (isPrevoiusTurnMoved || (isCurrentTurnMoved && previousTurnPosition == position)) numberOfTamenMako++;
+            isCurrentTurnMoved = true;
             currentPosition = position;
         }
 
         void OnTurnChanged(Unit unit)
         {
-            isPrevoiusMoved = isMoved;
-            isMoved = false;
+            isPrevoiusTurnMoved = isCurrentTurnMoved;
+            isCurrentTurnMoved = false;
             previousTurnPosition = currentPosition;
         }
 
-        public int GetNumberOfTamenMako()
+        public int GetNumberOfTheFutileMove()
         {
             return numberOfTamenMako;
         }

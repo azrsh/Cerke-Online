@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using UniRx;
 using Azarashi.Utilities;
+using Azarashi.Utilities.Assertions;
 using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
@@ -11,7 +12,8 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
     {
         public ISeasonSequencer SeasonSequencer => seasonSequencer;
         public IBoard Board { get; private set; }
-        public IHandDatabase HandDatabase { get; private set; }
+        public IHandDatabase HandDatabase => handDatabase;
+        HandDatabase handDatabase;
         public IScoreHolder ScoreHolder { get; }
         public int ScoreRate { get; private set; } = 1;
         public FirstOrSecond CurrentTurn { get; private set; }
@@ -45,9 +47,10 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
             ScoreHolder.GetScore(frontPlayer).Where(value => value == 0).Subscribe(_ => gameEndSubject.OnNext(Unit.Default));
             ScoreHolder.GetScore(backPlayer).Where(value => value == 0).Subscribe(_ => gameEndSubject.OnNext(Unit.Default));
 
+            handDatabase = new HandDatabase();
+
             //seasonSequencer.OnEndは季の開始の呼び出しと一体化している。
             //OnSeasonEndは季の開始前に呼び出されることが保証されている。
-
             StartNextSeason(); 
             handChangeObserver = new HandChangeObserver(HandDatabase, OnTurnEnd);
             seasonSequencer = new SeasonSequencer(handChangeObserver.Observable, serviceLocator.GetInstance<ISeasonDeclarationProvider>(), 4);
@@ -91,12 +94,16 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
 
         void StartNextSeason()
         {
+            Assert.IsNotNull(handDatabase);
+
             CurrentTurn = FirstOrSecond.First;
 
             var frontPlayer = GetPlayer(Encampment.Front);
             var backPlayer = GetPlayer(Encampment.Back);
-            Board = BoardFactory.Create(frontPlayer, backPlayer); 
-            HandDatabase = new HandDatabase(Board, OnTurnChanged);
+            Board = BoardFactory.Create(frontPlayer, backPlayer);
+
+            handDatabase.Reset(Board, onTurnChanged);
+
             handChangeObserver?.Reset();
 
             //PickOut All

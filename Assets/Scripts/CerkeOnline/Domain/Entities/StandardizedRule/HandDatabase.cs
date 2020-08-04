@@ -26,12 +26,14 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
     */
     internal class HandDatabase : IHandDatabase
     {
+        const int NumberOfPieceStacksProviders = 10;
+
         readonly IHand[] hands;
         readonly OverwriteHandPair[] overwriteHandPairs;
 
-        public HandDatabase(IBoard board, IObservable<Unit> onTurnChanged)
+        public HandDatabase()
         {
-            const int NumberOfPieceStacksProviders = 10;
+            //Stateless hands
             IPieceStacksProvider[] pieceStacksProviders = new IPieceStacksProvider[NumberOfPieceStacksProviders]
                         { new TheUnbeatable(), new TheSocialOrder(), new TheCulture(), new TheAttack(), new TheKing(), new TheAnimals(),
                           new TheDeadlyArmy(), new TheCavalry(), new TheArmy(), new TheComrades()};
@@ -48,7 +50,12 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
                 hands[i * 2 + 1] = new FlashHand(pieceStacksProviders[i], baseScores[i] + bounus);
                 overwriteHandPairs[i] = new OverwriteHandPair(hands[i * 2], hands[i * 2 + 1]);
             }
+        }
 
+        public void Reset(IBoard board, IObservable<Unit> onTurnChanged)
+        {
+            //Reset stateful hands
+            //外部に追い出して季ごとのResetを不要にすべきかも
             var tam = board.SearchPiece(Terminologies.PieceName.Minds);
             var tamObserver = new TamObserver(onTurnChanged, board.OnEveruValueChanged, tam);
             hands[NumberOfPieceStacksProviders * 2] = new TheStepping(-5, (ISteppedObservable)tam);     //Unsafe

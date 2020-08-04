@@ -6,7 +6,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Hands
     /// <summary>
     /// 皇再来
     /// </summary>
-    public class TheFutileMove : IHand
+    internal class TheFutileMove : IHand
     {
         public HandName Name { get; }
         public int Score { get; }
@@ -23,7 +23,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Hands
 
         public int GetNumberOfSuccesses(IEnumerable<IReadOnlyPiece> pieces)
         {
-            return tamObserver.GetNumberOfTamenMako();
+            return tamObserver.GetNumberOfTheFutileMove();
         }
     }
 }
