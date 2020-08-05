@@ -12,8 +12,10 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
     {
         public ISeasonSequencer SeasonSequencer => seasonSequencer;
         public IBoard Board { get; private set; }
+        
         public IHandDatabase HandDatabase => handDatabase;
-        HandDatabase handDatabase;
+        readonly HandDatabase handDatabase;
+
         public IScoreHolder ScoreHolder { get; }
         public int ScoreRate { get; private set; } = 1;
         public FirstOrSecond CurrentTurn { get; private set; }
