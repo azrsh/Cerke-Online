@@ -1,35 +1,34 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Pieces
 {
-    internal class Shaman : DefaultPiece
+    internal class Vessel : DefaultPiece
     {
-        readonly PieceMovement[] normalPieceMovements;
-        readonly PieceMovement[] expansionPieceMovements;
+        protected readonly PieceMovement[] normalPieceMovements;
+        protected readonly PieceMovement[] expansionPieceMovements;
 
-        public Shaman(Terminologies.PieceColor color, PublicDataType.IntegerVector2 position, IPlayer owner, IExpandingMoveFieldChecker fieldChecker)
-            : base(position, color, owner, Terminologies.PieceName.Shaman, fieldChecker)
+        public Vessel(Terminologies.PieceColor color, PublicDataType.IntegerVector2 position, IPlayer owner, IExpandingMoveFieldChecker fieldChecker) 
+            : base(position, color, owner, Terminologies.PieceName.Vessel, fieldChecker)
         {
             normalPieceMovements = new PieceMovement[]
             {
-                new PieceMovement(new PublicDataType.IntegerVector2(0, 1), 1), new PieceMovement(new PublicDataType.IntegerVector2(0, -1), 1),
-                new PieceMovement(new PublicDataType.IntegerVector2(1, 0), -1), new PieceMovement(new PublicDataType.IntegerVector2(-1, 0), -1)
+                new PieceMovement(new PublicDataType.IntegerVector2(0, 1), -1)
             };
-            expansionPieceMovements = new PieceMovement[]
+            expansionPieceMovements = normalPieceMovements.Union(new PieceMovement[]
             {
-                new PieceMovement(new PublicDataType.IntegerVector2(0, 1), -1, true), new PieceMovement(new PublicDataType.IntegerVector2(0, -1), -1, true),
-                new PieceMovement(new PublicDataType.IntegerVector2(1, 0), -1, true), new PieceMovement(new PublicDataType.IntegerVector2(-1, 0), -1, true),
-                new PieceMovement(new PublicDataType.IntegerVector2(1, 1), -1, true), new PieceMovement(new PublicDataType.IntegerVector2(1, -1), -1, true),
-                new PieceMovement(new PublicDataType.IntegerVector2(-1, 1), -1, true), new PieceMovement(new PublicDataType.IntegerVector2(-1, -1), -1, true)
-            };
+                new PieceMovement(new PublicDataType.IntegerVector2(0,-1), -1), new PieceMovement(new PublicDataType.IntegerVector2(1,0), 2), new PieceMovement(new PublicDataType.IntegerVector2(-1,0), 2)
+            }).ToArray();
         }
-
+        
         public override IEnumerable<PieceMovement> GetMoveablePosition(bool isExpanded)
         {
-            if (!isExpanded)
+            if(!isExpanded)
                 return normalPieceMovements;
 
             return expansionPieceMovements;
         }
+        
+        public override bool CanLittuaWithoutJudge() => true;
     }
 }
