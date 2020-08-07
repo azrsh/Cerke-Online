@@ -23,6 +23,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction
         readonly IPlayer player;
         readonly PositionArrayAccessor<IPiece> pieces;
         readonly LinkedList<ColumnData> worldPath;
+        readonly IValueInputProvider<int> valueProvider;
         readonly bool surmountableOnVia2End;
         readonly bool isTurnEnd;
 
@@ -48,6 +49,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction
 
             this.player = moveActionData.Player;
             this.pieces = pieces;
+            this.valueProvider = valueProvider;
 
             startPosition = moveActionData.MovingPiece.Position;    //worldPathに開始地点は含まれないのでこの方法で開始地点を取得
             viaPosition = moveActionData.ViaPositionNode.Value.Positin;
@@ -103,9 +105,9 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction
                 if (steppingNode.Piece is ISteppedObserver)
                     (steppingNode.Piece as ISteppedObserver).OnSteppied.OnNext(Unit.Default);
 
-                const int afterStepLimit = 4567890;
+                int afterStepLimit = await valueProvider.RequestValue();
                 if (steppedList.Skip(1).Count() > afterStepLimit)
-                    return failureReasult;
+                    return failureReasult;  //ここまでは駒を動かしていないので判定はいらない
             }
 
             var result = moveFinisher.ConfirmMove(player, movingPiece, endPosition, isTurnEnd, true);
