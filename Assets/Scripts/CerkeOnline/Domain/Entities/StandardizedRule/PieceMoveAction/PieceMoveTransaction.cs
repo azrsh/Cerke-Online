@@ -20,6 +20,9 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction
 
     internal class PieceMoveTransaction : IPieceMoveTransaction
     {
+        static readonly PieceMoveResult IllegalMoveReasult = new PieceMoveResult(false, false, null);
+        static readonly PieceMoveResult JudgeFailureReasult = new PieceMoveResult(false, true, null);
+
         readonly IPlayer player;
         readonly PositionArrayAccessor<IPiece> pieces;
         readonly LinkedList<ColumnData> worldPath;
@@ -84,17 +87,19 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction
         public async UniTask<PieceMoveResult> StartMove()
         {
             movingPiece = pieces.Read(startPosition);
-            PieceMoveResult failureReasult = new PieceMoveResult(false, false, null);
 
-            if (!await waterEntryChecker.CheckWaterEntry(movingPiece, startPosition, endPosition))
-                return failureReasult;
-
+            //---手の合法性判定--------
             var surmountLimit = surmountableOnVia2End ? 1 : 0;
             var noPieceOnPath = worldPath.Where(node => node.Positin != viaPosition).Where(node => node.Positin != endPosition)
                 .Select(node => node.Piece).Where(piece => piece != null)
                 .Count() <= surmountLimit;
-            if (!noPieceOnPath) return failureReasult;
-            
+            if (!noPieceOnPath) return IllegalMoveReasult;
+            //------------------------
+
+            //---投げ棒による判定-------
+            if (!await waterEntryChecker.CheckWaterEntry(movingPiece, startPosition, endPosition))
+                return JudgeFailureReasult;
+
             if (viaPosition != endPosition)
             {
                 var steppedList = worldPath.SkipWhile(node => node.Positin != viaPosition);
@@ -107,16 +112,25 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction
 
                 int afterStepLimit = await valueProvider.RequestValue();
                 if (steppedList.Skip(1).Count() > afterStepLimit)
-                    return failureReasult;  //ここまでは駒を動かしていないので判定はいらない
+                {
+                    //ここまでは駒を動かしていないので判定はいらない
+                    //判定失敗でターン終了
+                    return JudgeFailureReasult;
+                }
             }
+            //------------------------
 
+            //---駒の実際の移動--------
             var result = moveFinisher.ConfirmMove(player, movingPiece, endPosition, isTurnEnd, true);
             captureResult = new Option<CaptureResult>(result.captureResult);
-            
+            //------------------------
+
+            //---失敗時のロールバック---
             //ここで行うのではなく利用者側が責任を持つべきな気もする
             if (!result.pieceMoveResult.isSuccess)
                 RollBack();
-            
+            //------------------------
+
             return result.pieceMoveResult;
         }
 
