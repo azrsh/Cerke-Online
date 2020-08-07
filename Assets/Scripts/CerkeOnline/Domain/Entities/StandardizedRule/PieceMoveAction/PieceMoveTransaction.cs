@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UniRx;
 using UniRx.Async;
+using Azarashi.Utilities.Assertions;
 using Azarashi.CerkeOnline.Domain.Entities.PublicDataType;
 using Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.DataStructure;
 using Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.ActualAction;
@@ -22,7 +23,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction
         readonly IPlayer player;
         readonly PositionArrayAccessor<IPiece> pieces;
         readonly LinkedList<ColumnData> worldPath;
-        readonly PieceMovement viaPieceMovement;
+        readonly bool surmountableOnVia2End;
         readonly bool isTurnEnd;
 
         readonly PublicDataType.IntegerVector2 startPosition;
@@ -37,19 +38,23 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction
         Option<CaptureResult> captureResult = new Option<CaptureResult>();
 
         public PieceMoveTransaction(MoveActionData moveActionData, PositionArrayAccessor<IPiece> pieces, IFieldEffectChecker fieldEffectChecker,
-            IValueInputProvider<int> valueProvider, PieceMovement start2ViaPieceMovement, PieceMovement via2EndPieceMovement, bool isTurnEnd)
+            IValueInputProvider<int> valueProvider, bool surmountableOnVia2End, bool isTurnEnd)
         {
-            this.player = moveActionData?.Player ?? throw new ArgumentNullException("駒を操作するプレイヤーを指定してください.");
-            this.pieces = pieces ?? throw new ArgumentNullException("盤面の情報を入力してください.");
-            //fieldEffectChecker ?? throw new ArgumentNullException("フィールド効果の情報を入力してください.");
-            //valueProvider ?? throw new ArgumentNullException("投げ棒の値を提供するインスタンスを指定してください.");
+            Assert.IsNotNull(moveActionData);
+            Assert.IsNotNull(moveActionData.Player);
+            Assert.IsNotNull(pieces);
+            Assert.IsNotNull(fieldEffectChecker);
+            Assert.IsNotNull(valueProvider);
+
+            this.player = moveActionData.Player;
+            this.pieces = pieces;
 
             startPosition = moveActionData.MovingPiece.Position;    //worldPathに開始地点は含まれないのでこの方法で開始地点を取得
             viaPosition = moveActionData.ViaPositionNode.Value.Positin;
             endPosition = moveActionData.WorldPath.Last.Value.Positin;
             
             this.worldPath  = moveActionData.WorldPath;
-            this.viaPieceMovement = start2ViaPieceMovement;
+            this.surmountableOnVia2End = surmountableOnVia2End;
             this.isTurnEnd = isTurnEnd;
 
             pieceMover = new Mover(pieces);
@@ -82,7 +87,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction
             if (!await waterEntryChecker.CheckWaterEntry(movingPiece, startPosition, endPosition))
                 return failureReasult;
 
-            var surmountLimit = viaPieceMovement.Surmountable ? 1 : 0;
+            var surmountLimit = surmountableOnVia2End ? 1 : 0;
             var noPieceOnPath = worldPath.Where(node => node.Positin != viaPosition).Where(node => node.Positin != endPosition)
                 .Select(node => node.Piece).Where(piece => piece != null)
                 .Count() <= surmountLimit;
