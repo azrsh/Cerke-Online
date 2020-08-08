@@ -18,7 +18,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction
             var moveActionData = new MoveActionData(pieces.Read(startPosition), player, worldPath, viaPositionNode);
             
             return new PieceMoveTransaction(moveActionData,
-                pieces, fieldEffectChecker, valueProvider, start2ViaPieceMovement, via2EndPieceMovement, isTurnEnd);
+                pieces, fieldEffectChecker, valueProvider, via2EndPieceMovement.Surmountable, isTurnEnd);
         }
     }
 }
