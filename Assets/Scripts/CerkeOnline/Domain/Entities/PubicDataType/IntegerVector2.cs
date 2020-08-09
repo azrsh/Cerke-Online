@@ -71,7 +71,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.PublicDataType
     /// アクセスはYX型
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    internal class PositionArrayAccessor<T>
+    internal class PositionArrayAccessor<T> : IReadOnlyPositionArrayAccessor<T>
     {
         readonly T[,] array;
         public int Height { get { return array.GetLength(0); } }
@@ -91,5 +91,12 @@ namespace Azarashi.CerkeOnline.Domain.Entities.PublicDataType
         {
             array[position.y, position.x] = item;
         }
+    }
+
+    internal interface IReadOnlyPositionArrayAccessor<out T>
+    {
+        int Height { get; }
+        int Width { get; }
+        T Read(IntegerVector2 position);
     }
 }

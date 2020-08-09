@@ -4,12 +4,12 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.
 {
     internal readonly struct ColumnData
     {
-        public PublicDataType.IntegerVector2 Positin { get; }
+        public IntegerVector2 Positin { get; }
         public IPiece Piece { get { return pieces.Read(Positin); } }
 
-        readonly PositionArrayAccessor<IPiece> pieces;
+        readonly IReadOnlyPositionArrayAccessor<IPiece> pieces;
 
-        public ColumnData(PublicDataType.IntegerVector2 positin, PositionArrayAccessor<IPiece> pieces)
+        public ColumnData(IntegerVector2 positin, IReadOnlyPositionArrayAccessor<IPiece> pieces)
         {
             Positin = positin;
             this.pieces = pieces;

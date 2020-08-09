@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Azarashi.CerkeOnline.Domain.Entities.PublicDataType;
 using Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.DataStructure;
 
@@ -11,7 +13,9 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction
             PositionArrayAccessor<IPiece> pieces, IFieldEffectChecker fieldEffectChecker, IValueInputProvider<int> valueProvider,
             PieceMovement start2ViaPieceMovement, PieceMovement via2EndPieceMovement, bool isTurnEnd)
         {
-            var worldPath = WorldPathCalculator.CalculatePath(startPosition, viaPosition, endPosition, pieces, start2ViaPieceMovement, via2EndPieceMovement);
+            var worldPath = new LinkedList<ColumnData>(
+                WorldPathCalculator.CalculatePath(startPosition, viaPosition, endPosition, pieces, start2ViaPieceMovement, via2EndPieceMovement).Select(position => new ColumnData(position, pieces))
+                );
             var viaPositionNode = worldPath.Find(new ColumnData(viaPosition, pieces));  //経由点を通過するのが1回だけだということは保証されている.
 
             //worldPathに開始地点は含まれない
