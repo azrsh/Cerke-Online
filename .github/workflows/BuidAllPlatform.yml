@@ -65,7 +65,7 @@ jobs:
             Library-
       
       - name: Build Binary
-        uses: webbertakken/unity-builder@1.1
+        uses: webbertakken/unity-builder@v1.1
         with:
           unityVersion: ${{ matrix.unityVersion }}
           targetPlatform: ${{ matrix.targetPlatform }}
