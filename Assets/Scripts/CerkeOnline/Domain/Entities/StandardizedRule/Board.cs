@@ -3,6 +3,7 @@ using UniRx;
 using UniRx.Async;
 using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
 using Azarashi.CerkeOnline.Domain.Entities.PublicDataType;
+using Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
 {
@@ -12,8 +13,9 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
         public int Height { get; }
 
         readonly PositionArrayAccessor<IPiece> pieces;
-        readonly IFieldEffectChecker fieldChecker;
+        readonly IFieldEffectChecker fieldEffectChecker;
         readonly IPieceMoveTransactionFactory pieceMoveActionFactory;
+        readonly PieceMoveVerifier moveVerifier;
 
         public IObservable<Unit> OnEveruValueChanged => onEveryValueChanged;
         readonly Subject<Unit> onEveryValueChanged = new Subject<Unit>();
@@ -22,11 +24,12 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
         //ターン管理をここでするな！
         readonly OperationStatus operationStatus = new OperationStatus();
 
-        internal Board(PositionArrayAccessor<IPiece> pieceMap, FieldEffectChecker fieldChecker, IPieceMoveTransactionFactory pieceMoveActionFactory)
+        internal Board(PositionArrayAccessor<IPiece> pieceMap, FieldEffectChecker fieldEffectChecker, IPieceMoveTransactionFactory pieceMoveActionFactory)
         {
             this.pieces = pieceMap;
-            this.fieldChecker = fieldChecker;
+            this.fieldEffectChecker = fieldEffectChecker;
             this.pieceMoveActionFactory = pieceMoveActionFactory;
+            this.moveVerifier = new PieceMoveVerifier(pieces);
 
             Width = pieces.Width;
             Height = pieces.Height;
@@ -65,28 +68,14 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
         {
             if (isLocked) return new PieceMoveResult(false, false, null);
 
-            if (!IsOnBoard(startPosition) || !IsOnBoard(endPosition))
-                throw new ArgumentException();
-
-            bool areViaAndLastSame = viaPosition == endPosition;
-            IPiece movingPiece = pieces.Read(startPosition);
-            IPiece viaPiece = pieces.Read(viaPosition);
-            IPiece originalPiece = pieces.Read(endPosition);     //元からある駒の意味で使っているが, 英語があってるか不明.
-            bool isTargetNull = movingPiece == null;
-            bool isViaPieceNull = viaPiece == null;//
-            bool isOwner = !isTargetNull && movingPiece.IsOwner(player);
-            bool isSameOwner = !isTargetNull && originalPiece != null && originalPiece.Owner == movingPiece.Owner;
-            PieceMovement start2ViaPieceMovement = PieceMovement.Default;
-            PieceMovement via2EndPieceMovement = PieceMovement.Default;
-            bool isMoveableToVia = !isTargetNull && movingPiece.TryToGetPieceMovement(viaPosition, out start2ViaPieceMovement);//
-            bool isMoveableToLast = !isTargetNull && (areViaAndLastSame || movingPiece.TryToGetPieceMovement(startPosition + endPosition - viaPosition, out via2EndPieceMovement));//
-            if (isTargetNull || (!areViaAndLastSame && isViaPieceNull) || !isOwner || isSameOwner || !isMoveableToVia || ! isMoveableToLast)//
-            {
+            var verifiedMove = moveVerifier.VerifyMove(player, startPosition, viaPosition, endPosition);
+            if(verifiedMove == VerifiedMove.InvalidMove)
                 return new PieceMoveResult(false, false, null);
-            }
+
 
             //1ターンに複数回動作する駒のためのロジック
             //ターン管理をここでするな！
+            var movingPiece = verifiedMove.MovingPiece;
             if (movingPiece == operationStatus.PreviousPiece)
             {
                 operationStatus.AddCount();
@@ -106,12 +95,9 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule
             if (isTurnEnd)
                 operationStatus.Reset(null);
 
-
             isLocked = true;
-            IPieceMoveTransaction pieceMoveAction = pieceMoveActionFactory.Create(player, startPosition, viaPosition, endPosition,
-                            pieces, fieldChecker, valueProvider,
-                            start2ViaPieceMovement, via2EndPieceMovement,
-                            isTurnEnd);
+            IPieceMoveTransaction pieceMoveAction = pieceMoveActionFactory.Create(player, verifiedMove, pieces, fieldEffectChecker, valueProvider, isTurnEnd);
+
             PieceMoveResult result = await pieceMoveAction.StartMove();
             if (result.isSuccess)
                 onEveryValueChanged.OnNext(Unit.Default);

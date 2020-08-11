@@ -48,7 +48,7 @@ namespace Azarashi.CerkeOnline.Tests.HandSuccessCheckerTest
             public IEnumerable<PieceMovement> GetMoveablePosition(bool isExpanded = false) => throw new System.NotImplementedException();
             public bool IsCapturable() => throw new System.NotImplementedException();
             public bool IsMoveable(IntegerVector2 position) => throw new System.NotImplementedException();
-            public bool IsOwner(IPlayer player) => throw new System.NotImplementedException();
+            public bool IsOwner(IReadOnlyPlayer player) => throw new System.NotImplementedException();
             public bool TryToGetPieceMovement(IntegerVector2 worldPosition, out PieceMovement pieceMovement) => throw new System.NotImplementedException();
             public bool TryToGetPieceMovementByRelativePosition(IntegerVector2 relativePosition, out PieceMovement pieceMovement) => throw new System.NotImplementedException();
         }

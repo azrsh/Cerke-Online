@@ -65,7 +65,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
         /// </summary>
         /// <param name="player"></param>
         /// <returns></returns>
-        bool IsOwner(IPlayer player);
+        bool IsOwner(IReadOnlyPlayer player);
 
         /// <summary>
         /// この駒は取られることがあるかを返す.

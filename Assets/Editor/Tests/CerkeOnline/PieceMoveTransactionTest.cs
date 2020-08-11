@@ -212,27 +212,15 @@ namespace Azarashi.CerkeOnline.Tests
             if (movingPiece == null)
                 return FailureResult;
             
-            PieceMovement start2ViaPieceMovement = PieceMovement.Default;
-            PieceMovement via2EndPieceMovement = PieceMovement.Default;
-            movingPiece.TryToGetPieceMovement(via, out start2ViaPieceMovement);
-            if (!areViaAndLastSame)
-                movingPiece.TryToGetPieceMovement(start + end - via, out via2EndPieceMovement);
-
             PieceMoveResult result = FailureResult;
             IPieceMoveTransaction pieceMoveAction = null;
             try
             {
+                var player = movingPiece.Owner ?? new MockPlayer(Encampment.Front);
+                var verifiedMove = new PieceMoveVerifier(pieceMap).VerifyMove(player, start, via, end);
                 pieceMoveAction = new PieceMoveTransactionFactory()
-                        .Create(movingPiece.Owner ?? new MockPlayer(Encampment.Front),  //Minds対策
-                        start,
-                        via,
-                        end,
-                        pieceMap,
-                        effectChecker,
-                        new ConstantProvider(5),
-                        start2ViaPieceMovement,
-                        via2EndPieceMovement,
-                        true);
+                    .Create(player, verifiedMove, pieceMap, effectChecker, new ConstantProvider(5), true);
+
                 result = await pieceMoveAction.StartMove();
             }
             catch (Exception)
