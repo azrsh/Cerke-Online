@@ -1,28 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Azarashi.CerkeOnline.Domain.Entities.PublicDataType;
-using Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction.DataStructure;
+﻿using Azarashi.CerkeOnline.Domain.Entities.PublicDataType;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction
 {
     internal class PieceMoveTransactionFactory : IPieceMoveTransactionFactory
     {
         //PositionArrayAccessor<IPiece> pieces, IFieldEffectChecker fieldEffectCheckerをコンストラクタの引数にすることも検討
-        public IPieceMoveTransaction Create(IPlayer player, PublicDataType.IntegerVector2 startPosition, PublicDataType.IntegerVector2 viaPosition, PublicDataType.IntegerVector2 endPosition,
-            PositionArrayAccessor<IPiece> pieces, IFieldEffectChecker fieldEffectChecker, IValueInputProvider<int> valueProvider,
-            PieceMovement start2ViaPieceMovement, PieceMovement via2EndPieceMovement, bool isTurnEnd)
-        {
-            var worldPath = new LinkedList<ColumnData>(
-                WorldPathCalculator.CalculatePath(startPosition, viaPosition, endPosition, pieces, start2ViaPieceMovement, via2EndPieceMovement).Select(position => new ColumnData(position, pieces))
-                );
-            var viaPositionNode = worldPath.Find(new ColumnData(viaPosition, pieces));  //経由点を通過するのが1回だけだということは保証されている.
-
-            //worldPathに開始地点は含まれない
-            var moveActionData = new MoveActionData(pieces.Read(startPosition), player, worldPath, viaPositionNode);
-            
-            return new PieceMoveTransaction(moveActionData,
-                pieces, fieldEffectChecker, valueProvider, via2EndPieceMovement.Surmountable, isTurnEnd);
+        public IPieceMoveTransaction Create(IPlayer player, VerifiedMove verifiedMove, PositionArrayAccessor<IPiece> pieces, IFieldEffectChecker fieldEffectChecker, IValueInputProvider<int> valueProvider, bool isTurnEnd)
+        {            
+            return new PieceMoveTransaction(player, verifiedMove, pieces, fieldEffectChecker, valueProvider, isTurnEnd);
         }
     }
 }

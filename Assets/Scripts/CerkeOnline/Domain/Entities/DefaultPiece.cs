@@ -85,7 +85,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities
                 this.Position = position;
         }
 
-        public virtual bool IsOwner(IPlayer player)
+        public virtual bool IsOwner(IReadOnlyPlayer player)
         {
             return Owner == player;
         }

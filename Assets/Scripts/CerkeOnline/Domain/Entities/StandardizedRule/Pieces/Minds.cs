@@ -38,7 +38,7 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.Pieces
 
         public override void SetOwner(IPlayer owner) { }
         public override bool CaptureFromBoard() => false;
-        public override bool IsOwner(IPlayer player) => true;
+        public override bool IsOwner(IReadOnlyPlayer player) => true;
         public override bool IsCapturable() => false;
         public override bool CanLittuaWithoutJudge() => true;
         public override bool CanTakePiece() => false;
