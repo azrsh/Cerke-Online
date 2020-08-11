@@ -4,6 +4,7 @@ using System.Linq;
 using UniRx;
 using Azarashi.CerkeOnline.Domain.Entities.PublicDataType;
 using static Azarashi.CerkeOnline.Domain.Entities.Terminologies;
+using Azarashi.Utilities.Assertions;
 
 namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction
 {
@@ -27,22 +28,21 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction
             //インスタンス変数化？
             bool isFrontPlayersPiece = IsFrontPlayersPiece(pieces, startPosition);
 
-            if (viaPosition == endPosition) return CalculateStraightPath(startPosition, endPosition, pieces, start2ViaPieceMovement, isFrontPlayersPiece);
-            return CalculateBrockenPath(startPosition, viaPosition, endPosition, pieces, start2ViaPieceMovement, via2EndPieceMovement, isFrontPlayersPiece);
+            if (viaPosition == endPosition) return CalculateStraightPath(startPosition, endPosition, start2ViaPieceMovement, isFrontPlayersPiece);
+            return CalculateBrockenPath(startPosition, viaPosition, endPosition, start2ViaPieceMovement, via2EndPieceMovement, isFrontPlayersPiece);
         }
 
         static IEnumerable<IntegerVector2> CalculateBrockenPath(IntegerVector2 startPosition, IntegerVector2 viaPosition, IntegerVector2 endPosition,
-            IReadOnlyPositionArrayAccessor<IReadOnlyPiece> pieces, PieceMovement start2ViaPieceMovement, PieceMovement via2EndPieceMovement, bool isFrontPlayersPiece)
+            PieceMovement start2ViaPieceMovement, PieceMovement via2EndPieceMovement, bool isFrontPlayersPiece)
         {
-            var start2ViaPath = CalculateStraightPath(startPosition, viaPosition, pieces, start2ViaPieceMovement, isFrontPlayersPiece);
-            var via2EndPath = CalculateStraightPath(viaPosition, endPosition, pieces, via2EndPieceMovement, isFrontPlayersPiece);
+            var start2ViaPath = CalculateStraightPath(startPosition, viaPosition, start2ViaPieceMovement, isFrontPlayersPiece);
+            var via2EndPath = CalculateStraightPath(viaPosition, endPosition, via2EndPieceMovement, isFrontPlayersPiece);
 
             var tempPath = start2ViaPath.Concat(via2EndPath);   //順序は保証されていないにも関わらず保証されたものとして利用
             return tempPath;
         }
 
-        static IEnumerable<IntegerVector2> CalculateStraightPath(IntegerVector2 startPosition, IntegerVector2 endPosition,
-            IReadOnlyPositionArrayAccessor<IReadOnlyPiece> pieces, PieceMovement pieceMovement, bool isFrontPlayersPiece)
+        static IEnumerable<IntegerVector2> CalculateStraightPath(IntegerVector2 startPosition, IntegerVector2 endPosition, PieceMovement pieceMovement, bool isFrontPlayersPiece)
         {
             var relativeStart2EndPath = GetPath(startPosition, endPosition, isFrontPlayersPiece, pieceMovement);
             //順序は保証されていないにも関わらず保証されたものとして利用
@@ -56,7 +56,11 @@ namespace Azarashi.CerkeOnline.Domain.Entities.StandardizedRule.PieceMoveAction
         static IEnumerable<IntegerVector2> GetPath(IntegerVector2 from, IntegerVector2 to, bool isFrontPlayersPiece, PieceMovement pieceMovement)
         {
             IntegerVector2 relativePosition = (to - from) * (isFrontPlayersPiece ? -1 : 1);
-            return pieceMovement.GetPath(relativePosition) ?? throw new ArgumentException("移動不可能な移動先が指定されました.");
+            var result = pieceMovement.GetPath(relativePosition);
+
+            Assert.IsNotNull(result);
+
+            return result;
         }
 
     }
