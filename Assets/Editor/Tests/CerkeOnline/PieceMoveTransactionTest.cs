@@ -187,7 +187,6 @@ namespace Azarashi.CerkeOnline.Tests
 
         async UniTask<PieceMoveResult> Actual(PositionArrayAccessor<IPiece> pieceMap, FieldEffectChecker effectChecker, IntegerVector2 start, IntegerVector2 via, IntegerVector2 end)
         {   
-            bool areViaAndLastSame = via == end;
             IPiece movingPiece = pieceMap.Read(start);
 
             //------------------------------------------------
