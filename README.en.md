@@ -8,7 +8,7 @@
   
 Cerke-Online is a desktop application for cerke(机戦/パイグ将棋/cet2kaik).  
 See [The standardized rule in english](https://sites.google.com/view/cet2kaik/the-standardized-rule-in-english?authuser=0) for details of cerke.  
-Sorry, This project is still an alpha version, and many features are not implemented.
+Sorry, This project is still an beta version, and many features are not implemented.
 
 # Download
 Build by yourself：Load this repository as a Unity Project.  
