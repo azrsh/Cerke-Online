@@ -1,4 +1,4 @@
-日本語の[README](README.md)
+日本語のreadmeは[こちら](README.md)
 # Cerke-Online
 [![MIT License](https://img.shields.io/github/license/azarashi2931/Cerke-Online)](LICENSE)
 [![Tag](https://img.shields.io/github/v/tag/azarashi2931/Cerke-Online)](../../releases)
