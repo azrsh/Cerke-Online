@@ -76,7 +76,7 @@ jobs:
         run: zip -r ${{ matrix.targetPlatform }}.zip build/${{ matrix.targetPlatform }}
       
       - name: Download artifact to get url
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v4.1.7
         with:
           name: artifact
 
